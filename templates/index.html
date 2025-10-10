@@ -1,0 +1,482 @@
+{% extends "base.html" %}
+
+{% block title %}Dhirendra Yadav - Cybersecurity Expert & AI/ML Specialist{% endblock %}
+
+{% block description %}Dhirendra Yadav - BSc IT Graduate specializing in Cybersecurity, Machine Learning, and AI. Expert in threat detection, vulnerability assessment, and AI-powered security solutions. View my portfolio and projects.{% endblock %}
+
+{% block keywords %}cybersecurity expert, machine learning specialist, AI security, threat detection, vulnerability assessment, penetration testing, python developer, security automation, BSc IT graduate, portfolio{% endblock %}
+
+{% block extra_head %}
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
+{% endblock %}
+
+{% block content %}
+
+<!-- Hero Section with Modern 3D Design -->
+<section id="home" class="hero-section modern-hero">
+  <!-- 3D Background Canvas -->
+  <canvas id="space-scene" class="space-background"></canvas>
+
+  <!-- Shuttle-inspired Floating Elements -->
+  <div class="shuttle-elements">
+    <div class="shuttle-ring ring-1"></div>
+    <div class="shuttle-ring ring-2"></div>
+    <div class="shuttle-ring ring-3"></div>
+    <div class="orbital-path path-1">
+      <div class="orbital-dot"></div>
+    </div>
+    <div class="orbital-path path-2">
+      <div class="orbital-dot"></div>
+    </div>
+  </div>
+
+  <!-- 3D Logo Container -->
+  <div class="logo-3d-container">
+    <div class="logo-3d-cube">
+      <div class="cube-face front">DY</div>
+      <div class="cube-face back">DY</div>
+      <div class="cube-face right">DY</div>
+      <div class="cube-face left">DY</div>
+      <div class="cube-face top">DY</div>
+      <div class="cube-face bottom">DY</div>
+    </div>
+  </div>
+
+  <!-- Modern Hero Content -->
+  <div class="hero-content-modern">
+    <div class="hero-intro stagger-fade-in">
+      <div class="intro-badge glass-card">
+        <span class="badge-icon">🚀</span>
+        <span>Building the Future</span>
+      </div>
+
+      <h1 class="hero-title-modern">
+        <span class="title-greeting">Hello, I'm</span>
+        <span class="title-name gradient-text">Dhirendra Yadav</span>
+        <span class="title-role">Cybersecurity Enthusiast | ML & AI Specialist</span>
+      </h1>
+
+      <p class="hero-description-modern">
+        Passionate cybersecurity professional specializing in Machine Learning and 
+        Artificial Intelligence applications in security. Expert in threat detection, 
+        vulnerability assessment, and AI-powered security solutions.
+      </p>
+
+      <div class="hero-stats">
+        <div class="stat-item glass-card">
+          <div class="stat-number">50+</div>
+          <div class="stat-label">Security Projects</div>
+        </div>
+        <div class="stat-item glass-card">
+          <div class="stat-number">AI/ML</div>
+          <div class="stat-label">Specialist</div>
+        </div>
+        <div class="stat-item glass-card">
+          <div class="stat-number">24/7</div>
+          <div class="stat-label">Threat Hunter</div>
+        </div>
+      </div>
+
+      <div class="hero-actions">
+        <button class="btn-modern btn-primary-modern" data-glow onclick="scrollToSection('projects')">
+          <span>View My Work</span>
+          <div class="btn-glow"></div>
+        </button>
+        <button class="btn-modern btn-outline-modern" data-glow onclick="scrollToSection('contact')">
+          <span>Get In Touch</span>
+        </button>
+      </div>
+
+      <div class="social-links-modern">
+        <a href="https://github.com/Dhirendra07000" target="_blank" class="social-link-modern github" data-glow
+          aria-label="GitHub">
+          <svg viewBox="0 0 24 24" fill="currentColor">
+            <path
+              d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z" />
+          </svg>
+        </a>
+        <a href="https://www.linkedin.com/in/dhirendra-yadav-3040b82b4" target="_blank"
+          class="social-link-modern linkedin" data-glow aria-label="LinkedIn">
+          <svg viewBox="0 0 24 24" fill="currentColor">
+            <path
+              d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.32 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.79M6.88 8.56a1.68 1.68 0 0 0 1.68-1.68c0-.93-.75-1.69-1.68-1.69a1.69 1.69 0 0 0-1.69 1.69c0 .93.76 1.68 1.69 1.68m1.39 9.94v-8.37H5.5v8.37h2.77z" />
+          </svg>
+        </a>
+        <a href="https://www.instagram.com/its_dhiruu_____" target="_blank" class="social-link-modern instagram" data-glow
+          aria-label="Instagram">
+          <svg viewBox="0 0 24 24" fill="currentColor">
+            <path
+              d="M7.8,2H16.2C19.4,2 22,4.6 22,7.8V16.2A5.8,5.8 0 0,1 16.2,22H7.8C4.6,22 2,19.4 2,16.2V7.8A5.8,5.8 0 0,1 7.8,2M7.6,4A3.6,3.6 0 0,0 4,7.6V16.4C4,18.39 5.61,20 7.6,20H16.4A3.6,3.6 0 0,0 20,16.4V7.6C20,5.61 18.39,4 16.4,4H7.6M17.25,5.5A1.25,1.25 0 0,1 18.5,6.75A1.25,1.25 0 0,1 17.25,8A1.25,1.25 0 0,1 16,6.75A1.25,1.25 0 0,1 17.25,5.5M12,7A5,5 0 0,1 17,12A5,5 0 0,1 12,17A5,5 0 0,1 7,12A5,5 0 0,1 12,7M12,9A3,3 0 0,0 9,12A3,3 0 0,0 12,15A3,3 0 0,0 15,12A3,3 0 0,0 12,9Z" />
+          </svg>
+        </a>
+        <a href="mailto:Dhirendrayadav4999@gmail.com" class="social-link-modern email" data-glow aria-label="Email">
+          <svg viewBox="0 0 24 24" fill="currentColor">
+            <path
+              d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z" />
+          </svg>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modern Scroll Indicator -->
+  <div class="scroll-indicator-modern">
+    <div class="scroll-line"></div>
+    <div class="scroll-text">Scroll</div>
+  </div>
+</section>
+
+<!-- Modern Section Divider -->
+<div class="section-divider-animated"></div>
+
+<!-- Technology Stack Showcase -->
+<section class="tech-stack-modern section-bg">
+  <div class="container">
+    <div class="tech-stack-content">
+      <h2 class="section-title-modern gradient-text">Technology Stack</h2>
+      <p class="section-subtitle-modern">Tools and technologies I work with</p>
+
+      <div class="tech-grid">
+        <div class="tech-item glass-card reveal-on-scroll">
+          <div class="tech-icon">
+            <svg viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/>
+            </svg>
+          </div>
+          <h3>Cybersecurity</h3>
+          <p>Threat Analysis & Defense</p>
+        </div>
+
+        <div class="tech-item glass-card reveal-on-scroll">
+          <div class="tech-icon">
+            <svg viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+            </svg>
+          </div>
+          <h3>Machine Learning</h3>
+          <p>AI-Powered Security</p>
+        </div>
+
+        <div class="tech-item glass-card reveal-on-scroll">
+          <div class="tech-icon">
+            <svg viewBox="0 0 24 24" fill="currentColor">
+              <path d="M14.25.18l.9.2.73.26.59.3.45.32.34.34.25.34.16.33.1.3.04.26.02.2-.01.13V8.5l-.05.63-.13.55-.21.46-.26.38-.3.31-.33.25-.35.19-.35.14-.33.1-.3.07-.26.04-.21.02H8.77l-.69.05-.59.14-.5.22-.41.27-.33.32-.27.35-.2.36-.15.37-.1.35-.07.32-.04.27-.02.21v3.06H3.17l-.21-.03-.28-.07-.32-.12-.35-.18-.36-.26-.36-.36-.35-.46-.32-.59-.28-.73-.21-.88-.14-1.05-.05-1.23.06-1.22.16-1.04.24-.87.32-.71.36-.57.4-.44.42-.33.42-.24.4-.16.36-.1.32-.05.26-.02.21-.01h5.84l.69-.05.59-.14.5-.21.41-.28.33-.32.27-.35.2-.36.15-.36.1-.35.07-.32.04-.28.02-.21V6.07h2.09l.14.01zm-6.47 14.25l-.23.33-.08.41.08.41.23.34.33.22.41.09.41-.09.33-.22.23-.34.08-.41-.08-.41-.23-.33-.33-.22-.41-.09-.41.09-.33.22zM19.8 14.2c0-2.81-2.26-5.07-5.07-5.07a5.07 5.07 0 1 0 5.07 5.07z"/>
+            </svg>
+          </div>
+          <h3>Python</h3>
+          <p>Security Automation</p>
+        </div>
+
+        <div class="tech-item glass-card reveal-on-scroll">
+          <div class="tech-icon">
+            <svg viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm3.5 6L12 10.5 8.5 8 12 5.5 15.5 8zM12 13.5L8.5 16 12 18.5 15.5 16 12 13.5z"/>
+            </svg>
+          </div>
+          <h3>Penetration Testing</h3>
+          <p>Vulnerability Assessment</p>
+        </div>
+
+        <div class="tech-item glass-card reveal-on-scroll">
+          <div class="tech-icon">
+            <svg viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+            </svg>
+          </div>
+          <h3>Incident Response</h3>
+          <p>Threat Mitigation</p>
+        </div>
+
+        <div class="tech-item glass-card reveal-on-scroll">
+          <div class="tech-icon">
+            <svg viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/>
+            </svg>
+          </div>
+          <h3>Security Tools</h3>
+          <p>Wireshark, Nmap, Metasploit</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- About Preview Section -->
+<section class="about-preview-modern">
+  <div class="container">
+    <div class="about-content-modern">
+      <div class="about-text">
+        <h2 class="section-title-modern gradient-text">About Me</h2>
+        <p class="section-subtitle-modern">Passionate developer with a vision for the future</p>
+
+        <div class="about-description">
+          <p>I'm a fresh BSc IT graduate from University of Sunder with first-class honors. My journey in technology
+            began with curiosity and has evolved into a passion for creating innovative digital solutions.</p>
+          <p>I specialize in modern web technologies and have a keen interest in emerging trends like 3D web
+            experiences, AI integration, and responsive design.</p>
+        </div>
+
+        <div class="about-highlights">
+          <div class="highlight-item glass-card">
+            <div class="highlight-icon">🎓</div>
+            <div class="highlight-content">
+              <h4>Education Excellence</h4>
+              <p>First Class BSc IT Graduate</p>
+            </div>
+          </div>
+
+          <div class="highlight-item glass-card">
+            <div class="highlight-icon">💡</div>
+            <div class="highlight-content">
+              <h4>Innovation Focus</h4>
+              <p>Modern Web Technologies</p>
+            </div>
+          </div>
+
+          <div class="highlight-item glass-card">
+            <div class="highlight-icon">🚀</div>
+            <div class="highlight-content">
+              <h4>Future Ready</h4>
+              <p>Emerging Tech Enthusiast</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="about-cta">
+          <button class="btn-modern btn-outline-modern" onclick="scrollToSection('about')">
+            <span>Learn More About Me</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="about-visual">
+        <div class="visual-container">
+          <div class="floating-card glass-card">
+            <div class="card-header">
+              <div class="card-dots">
+                <span></span>
+                <span></span>
+                <span></span>
+              </div>
+              <div class="card-title">Profile</div>
+            </div>
+            <div class="card-content">
+              <div class="profile-item">
+                <span class="label">Name:</span>
+                <span class="value">Dhirendra Yadav</span>
+              </div>
+              <div class="profile-item">
+                <span class="label">Age:</span>
+                <span class="value">24 years</span>
+              </div>
+              <div class="profile-item">
+                <span class="label">Location:</span>
+                <span class="value">Bhaktapur, Nepal</span>
+              </div>
+              <div class="profile-item">
+                <span class="label">Status:</span>
+                <span class="value status-available">Available</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Featured Projects Section -->
+<section id="projects" class="projects-modern">
+  <div class="container">
+    <div class="projects-header">
+      <h2 class="section-title-modern gradient-text">Featured Projects</h2>
+      <p class="section-subtitle-modern">Showcasing my latest work and innovations</p>
+    </div>
+
+    <div class="projects-grid-modern">
+      <div class="project-card-modern glass-card reveal-on-scroll" data-glow data-magnetic data-tilt>
+        <div class="project-visual">
+          <div class="project-icon-modern">
+            <svg viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+            </svg>
+          </div>
+          <div class="project-glow"></div>
+        </div>
+        <div class="project-content">
+          <h3>Modern Portfolio</h3>
+          <p>Interactive portfolio with 3D elements, smooth animations, and responsive design.</p>
+          <div class="project-tech">
+            <span class="tech-tag">Flask</span>
+            <span class="tech-tag">Three.js</span>
+            <span class="tech-tag">GSAP</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="project-card-modern glass-card reveal-on-scroll" data-glow data-magnetic data-tilt>
+        <div class="project-visual">
+          <div class="project-icon-modern">
+            <svg viewBox="0 0 24 24" fill="currentColor">
+              <path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z" />
+            </svg>
+          </div>
+          <div class="project-glow"></div>
+        </div>
+        <div class="project-content">
+          <h3>Dashboard UI</h3>
+          <p>Modern dashboard interface with data visualization and real-time updates.</p>
+          <div class="project-tech">
+            <span class="tech-tag">React</span>
+            <span class="tech-tag">Charts.js</span>
+            <span class="tech-tag">CSS3</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="project-card-modern glass-card reveal-on-scroll" data-glow data-magnetic data-tilt>
+        <div class="project-visual">
+          <div class="project-icon-modern">
+            <svg viewBox="0 0 24 24" fill="currentColor">
+              <path
+                d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" />
+            </svg>
+          </div>
+          <div class="project-glow"></div>
+        </div>
+        <div class="project-content">
+          <h3>Web Application</h3>
+          <p>Full-stack web application with user authentication and database integration.</p>
+          <div class="project-tech">
+            <span class="tech-tag">Python</span>
+            <span class="tech-tag">SQLite</span>
+            <span class="tech-tag">API</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="projects-cta">
+      <button class="btn-modern btn-outline-modern" onclick="scrollToSection('portfolio')">
+        <span>View All Projects</span>
+      </button>
+    </div>
+  </div>
+</section>
+
+<!-- Skills Showcase -->
+<section class="skills-modern">
+  <div class="container">
+    <div class="skills-content">
+      <div class="skills-text">
+        <h2 class="section-title-modern gradient-text">Skills & Expertise</h2>
+        <p class="section-subtitle-modern">Technologies I'm passionate about</p>
+
+        <div class="skills-description">
+          <p>I focus on modern web technologies and continuously learn new tools to stay current with industry trends.
+            My expertise spans both frontend and backend development.</p>
+        </div>
+      </div>
+
+      <div class="skills-visual">
+        <div class="skills-orbit">
+          <div class="skill-planet python">
+            <span>Python</span>
+          </div>
+          <div class="skill-planet flask">
+            <span>Flask</span>
+          </div>
+          <div class="skill-planet javascript">
+            <span>JavaScript</span>
+          </div>
+          <div class="skill-planet css">
+            <span>CSS3</span>
+          </div>
+          <div class="skill-planet html">
+            <span>HTML5</span>
+          </div>
+          <div class="skill-planet git">
+            <span>Git</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Contact CTA Modern -->
+<section id="contact" class="contact-cta-modern">
+  <div class="container">
+    <div class="contact-content">
+      <div class="contact-text">
+        <h2 class="section-title-modern gradient-text">Let's Work Together</h2>
+        <p class="section-subtitle-modern">Ready to bring your ideas to life</p>
+
+        <div class="contact-description">
+          <p>I'm always excited to work on new projects and collaborate with fellow developers and designers. Let's
+            create something amazing together!</p>
+        </div>
+
+        <div class="contact-actions">
+          <a href="mailto:Dhirendrayadav4999@gmail.com" class="btn-modern btn-primary-modern">
+            <span>Send Email</span>
+            <div class="btn-glow"></div>
+          </a>
+          <button class="btn-modern btn-outline-modern" onclick="scrollToSection('contact')">
+            <span>Contact Form</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="contact-visual">
+        <div class="contact-card glass-card">
+          <div class="contact-header">
+            <div class="contact-avatar">
+              <div class="avatar-ring"></div>
+              <div class="avatar-content">DY</div>
+            </div>
+            <div class="contact-info">
+              <h4>Dhirendra Yadav</h4>
+              <p>BSc IT Graduate</p>
+            </div>
+          </div>
+
+          <div class="contact-details">
+            <div class="contact-item">
+              <div class="contact-icon">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                  <path
+                    d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z" />
+                </svg>
+              </div>
+              <span>Dhirendrayadav4999@gmail.com</span>
+            </div>
+
+            <div class="contact-item">
+              <div class="contact-icon">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                  <path
+                    d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z" />
+                </svg>
+              </div>
+              <span>+977 9845080167</span>
+            </div>
+
+            <div class="contact-item">
+              <div class="contact-icon">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                  <path
+                    d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" />
+                </svg>
+              </div>
+              <span>Bhaktapur, Nepal</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% endblock %}

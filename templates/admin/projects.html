@@ -1,0 +1,131 @@
+{% extends "admin/base.html" %}
+
+{% block title %}Manage Projects - Admin Panel{% endblock %}
+
+{% block content %}
+<div class="admin-card">
+    <div class="admin-card-header">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+            <h2>📁 Manage Projects</h2>
+            <a href="{{ url_for('admin_add_project') }}" class="btn btn-primary">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z" />
+                </svg>
+                Add New Project
+            </a>
+        </div>
+    </div>
+
+    <div class="admin-card-body">
+        {% if projects %}
+        <div class="table-container">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Project</th>
+                        <th>Type</th>
+                        <th>Status</th>
+                        <th>Featured</th>
+                        <th>Technologies</th>
+                        <th>Order</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for project in projects %}
+                    <tr>
+                        <td>
+                            <div>
+                                <strong>{{ project.title }}</strong>
+                                <div style="font-size: 0.875rem; color: #6b7280; margin-top: 0.25rem;">
+                                    {{ project.description[:80] }}{% if project.description|length > 80 %}...{% endif %}
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <span class="badge badge-info">{{ project.project_type }}</span>
+                        </td>
+                        <td>
+                            {% if project.status == 'completed' %}
+                            <span class="badge badge-success">Completed</span>
+                            {% elif project.status == 'in_progress' %}
+                            <span class="badge badge-warning">In Progress</span>
+                            {% else %}
+                            <span class="badge">{{ project.status }}</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if project.featured %}
+                            <span style="color: #f59e0b;">⭐ Featured</span>
+                            {% else %}
+                            <span style="color: #9ca3af;">-</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            <div class="tech-tags">
+                                {% for tech in project.technologies[:3] %}
+                                <span class="tech-tag">{{ tech }}</span>
+                                {% endfor %}
+                                {% if project.technologies|length > 3 %}
+                                <span class="tech-tag">+{{ project.technologies|length - 3 }}</span>
+                                {% endif %}
+                            </div>
+                        </td>
+                        <td>{{ project.display_order }}</td>
+                        <td>
+                            <div class="actions">
+                                <a href="{{ url_for('admin_edit_project', project_id=project.id) }}"
+                                    class="btn btn-secondary btn-sm">Edit</a>
+                                <button onclick="deleteProject({{ project.id }}, `{{ project.title|replace('`', '\\`') }}`)"
+                                    class="btn btn-danger btn-sm">Delete</button>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <div style="text-align: center; padding: 3rem; color: #6b7280;">
+            <svg width="64" height="64" viewBox="0 0 24 24" fill="currentColor"
+                style="margin-bottom: 1rem; opacity: 0.5;">
+                <path
+                    d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z" />
+            </svg>
+            <h3>No Projects Yet</h3>
+            <p>Get started by adding your first project!</p>
+            <a href="{{ url_for('admin_add_project') }}" class="btn btn-primary" style="margin-top: 1rem;">
+                Add Your First Project
+            </a>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    function deleteProject(projectId, projectTitle) {
+        if (confirm(`Are you sure you want to delete "${projectTitle}"? This action cannot be undone.`)) {
+            fetch(`/admin/projects/${projectId}/delete`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        location.reload();
+                    } else {
+                        alert('Error deleting project. Please try again.');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Error deleting project. Please try again.');
+                });
+        }
+    }
+</script>
+{% endblock %}

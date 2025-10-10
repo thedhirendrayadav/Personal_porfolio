@@ -1,0 +1,317 @@
+{% extends "base.html" %}
+
+{% block title %}Portfolio - Dhirendra Yadav{% endblock %}
+
+{% block extra_head %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/portfolio-minimal.css') }}">
+<script src="{{ url_for('static', filename='js/portfolio-minimal.js') }}" defer></script>
+{% endblock %}
+
+{% block content %}
+
+<!-- Minimal Portfolio Hero Section -->
+<section class="portfolio-hero-minimal">
+  <!-- 3D Interactive Background -->
+  <div class="portfolio-3d-bg">
+    <div class="floating-cube cube-1"></div>
+    <div class="floating-cube cube-2"></div>
+    <div class="floating-cube cube-3"></div>
+    <div class="connecting-lines">
+      <svg class="lines-svg" viewBox="0 0 100 100">
+        <path class="line-path" d="M10,50 Q50,10 90,50" stroke="url(#portfolioGradient)" stroke-width="0.5" fill="none"/>
+        <path class="line-path" d="M10,50 Q50,90 90,50" stroke="url(#portfolioGradient)" stroke-width="0.5" fill="none"/>
+        <defs>
+          <linearGradient id="portfolioGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" style="stop-color:#6366f1;stop-opacity:0"/>
+            <stop offset="50%" style="stop-color:#6366f1;stop-opacity:1"/>
+            <stop offset="100%" style="stop-color:#f59e0b;stop-opacity:0"/>
+          </linearGradient>
+        </defs>
+      </svg>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="hero-content-minimal">
+      <div class="intro-text">
+        <span class="intro-label">Portfolio</span>
+        <h1 class="hero-title-minimal">
+          <span class="name-text">Selected Works</span>
+          <span class="role-text">Projects & Case Studies</span>
+        </h1>
+        <p class="hero-description-minimal">
+          Showcasing thoughtful design and clean development
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Projects Section Enhanced -->
+<section class="projects-enhanced">
+  <div class="container">
+    <div class="projects-content-enhanced">
+      <!-- Left Side: Project Content -->
+      <div class="projects-left">
+        <div class="projects-header-enhanced">
+          <h2>Featured Projects</h2>
+          <p>Selected works showcasing design and development skills</p>
+        </div>
+        
+        <div class="projects-list-enhanced">
+          {% if projects %}
+            {% for project in projects %}
+            <div class="project-item-enhanced {% if loop.first %}active{% endif %}" data-project="project-{{ project.id }}">
+              <div class="project-number">{{ "%02d"|format(loop.index) }}</div>
+              <div class="project-details">
+                <h3>{{ project.title }}</h3>
+                <p>{{ project.description }}</p>
+                <div class="project-tech-enhanced">
+                  {% for tech in project.technologies %}
+                    <span class="tech-tag-enhanced">{{ tech }}</span>
+                  {% endfor %}
+                </div>
+                <div class="project-links-enhanced">
+                  {% if project.demo_url %}
+                    <a href="{{ project.demo_url }}" class="project-link-enhanced primary" target="_blank">View Live</a>
+                  {% endif %}
+                  {% if project.github_url %}
+                    <a href="{{ project.github_url }}" class="project-link-enhanced secondary" target="_blank">GitHub</a>
+                  {% endif %}
+                  {% if project.case_study_url %}
+                    <a href="{{ project.case_study_url }}" class="project-link-enhanced secondary" target="_blank">Case Study</a>
+                  {% endif %}
+                </div>
+              </div>
+            </div>
+            {% endfor %}
+          {% else %}
+            <!-- Fallback content when no projects exist -->
+            <div class="project-item-enhanced active" data-project="coming-soon">
+              <div class="project-number">01</div>
+              <div class="project-details">
+                <h3>Projects Coming Soon</h3>
+                <p>I'm currently working on some exciting projects that will be showcased here soon. Stay tuned!</p>
+                <div class="project-tech-enhanced">
+                  <span class="tech-tag-enhanced">React</span>
+                  <span class="tech-tag-enhanced">Python</span>
+                  <span class="tech-tag-enhanced">JavaScript</span>
+                </div>
+                <div class="project-links-enhanced">
+                  <a href="{{ url_for('contact') }}" class="project-link-enhanced primary">Get in Touch</a>
+                  <a href="https://github.com/Dhirendra07000" class="project-link-enhanced secondary" target="_blank">GitHub</a>
+                </div>
+              </div>
+            </div>
+          {% endif %}
+        </div>
+      </div>
+      
+      <!-- Right Side: 3D Interactive Element -->
+      <div class="projects-right">
+        <div class="portfolio-3d-showcase">
+          <div class="showcase-container">
+            <!-- 3D Project Visualization -->
+            <div class="project-3d-display">
+              <div class="display-screen" data-project-display="portfolio">
+                <div class="screen-content">
+                  <div class="project-preview">
+                    <div class="preview-header">
+                      <div class="preview-dots">
+                        <span class="dot red"></span>
+                        <span class="dot yellow"></span>
+                        <span class="dot green"></span>
+                      </div>
+                      <div class="preview-title">Portfolio</div>
+                    </div>
+                    <div class="preview-body">
+                      <div class="code-lines">
+                        <div class="code-line">
+                          <span class="line-number">1</span>
+                          <span class="code-text">&lt;div class="portfolio"&gt;</span>
+                        </div>
+                        <div class="code-line">
+                          <span class="line-number">2</span>
+                          <span class="code-text">  &lt;h1&gt;Modern Design&lt;/h1&gt;</span>
+                        </div>
+                        <div class="code-line">
+                          <span class="line-number">3</span>
+                          <span class="code-text">  &lt;p&gt;Clean & Responsive&lt;/p&gt;</span>
+                        </div>
+                        <div class="code-line">
+                          <span class="line-number">4</span>
+                          <span class="code-text">&lt;/div&gt;</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="display-screen" data-project-display="dashboard">
+                <div class="screen-content">
+                  <div class="project-preview">
+                    <div class="preview-header">
+                      <div class="preview-dots">
+                        <span class="dot red"></span>
+                        <span class="dot yellow"></span>
+                        <span class="dot green"></span>
+                      </div>
+                      <div class="preview-title">Dashboard</div>
+                    </div>
+                    <div class="preview-body">
+                      <div class="dashboard-preview">
+                        <div class="chart-bar" style="height: 60%"></div>
+                        <div class="chart-bar" style="height: 80%"></div>
+                        <div class="chart-bar" style="height: 45%"></div>
+                        <div class="chart-bar" style="height: 90%"></div>
+                        <div class="chart-bar" style="height: 70%"></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="display-screen" data-project-display="ecommerce">
+                <div class="screen-content">
+                  <div class="project-preview">
+                    <div class="preview-header">
+                      <div class="preview-dots">
+                        <span class="dot red"></span>
+                        <span class="dot yellow"></span>
+                        <span class="dot green"></span>
+                      </div>
+                      <div class="preview-title">E-Commerce</div>
+                    </div>
+                    <div class="preview-body">
+                      <div class="ecommerce-preview">
+                        <div class="product-grid">
+                          <div class="product-item"></div>
+                          <div class="product-item"></div>
+                          <div class="product-item"></div>
+                          <div class="product-item"></div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Floating Tech Icons -->
+            <div class="floating-tech-icons">
+              <div class="tech-icon icon-1" data-tech="react">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M12 10.11c1.03 0 1.87.84 1.87 1.89s-.84 1.89-1.87 1.89c-1.03 0-1.87-.84-1.87-1.89s.84-1.89 1.87-1.89M7.37 20c.63.38 2.01-.2 3.6-1.7-.52-.59-1.03-1.23-1.51-1.9a22.7 22.7 0 0 1-2.4-.36c-.51 2.14-.32 3.61.31 3.96m.71-5.74l-.29-.51c-.11.29-.22.58-.29.86.27.06.57.11.88.16l-.3-.51m6.54-.76l.81-1.5-.81-1.5c-.3-.53-.62-1-.91-1.47C13.17 9 12.6 9 12 9s-1.17 0-1.71.03c-.29.47-.61.94-.91 1.47L8.57 12l.81 1.5c.3.53.62 1 .91 1.47.54.03 1.11.03 1.71.03s1.17 0 1.71-.03c.29-.47.61-.94.91-1.47M12 6.78c-.19.22-.39.45-.59.72h1.18c-.2-.27-.4-.5-.59-.72m0 10.44c.19-.22.39-.45.59-.72h-1.18c.2.27.4.5.59.72M16.62 4c-.62-.38-2 .2-3.59 1.7.52.59 1.03 1.23 1.51 1.9.82.08 1.63.2 2.4.36.51-2.14.32-3.61-.32-3.96m-.7 5.74l.29.51c.11-.29.22-.58.29-.86-.27-.06-.57-.11-.88-.16l.3.51m1.45-7.05c1.47.84 1.63 3.05 1.01 5.63 2.54.75 4.37 1.99 4.37 3.68s-1.83 2.93-4.37 3.68c.62 2.58.46 4.79-1.01 5.63-1.46.84-3.45-.12-5.37-1.95-1.92 1.83-3.91 2.79-5.37 1.95-1.47-.84-1.63-3.05-1.01-5.63-2.54-.75-4.37-1.99-4.37-3.68s1.83-2.93 4.37-3.68c-.62-2.58-.46-4.79 1.01-5.63 1.46-.84 3.45.12 5.37 1.95 1.92-1.83 3.91-2.79 5.37-1.95z"/>
+                </svg>
+              </div>
+              
+              <div class="tech-icon icon-2" data-tech="python">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M19.14 7.5A2.86 2.86 0 0 1 22 10.36v3.78A2.86 2.86 0 0 1 19.14 17H12c0 .39.32.96.71.96h6.43A2.86 2.86 0 0 0 22 15.1V8.9A2.86 2.86 0 0 0 19.14 6H5.86A2.86 2.86 0 0 0 3 8.9v6.2A2.86 2.86 0 0 0 5.86 18H12c0-.39-.32-.96-.71-.96H4.86A2.86 2.86 0 0 1 2 14.18v-3.78A2.86 2.86 0 0 1 4.86 7.5h14.28z"/>
+                </svg>
+              </div>
+              
+              <div class="tech-icon icon-3" data-tech="javascript">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M3 3h18v18H3V3zm16.525 13.707c-.131-.821-.666-1.511-2.252-2.155-.552-.259-1.165-.438-1.349-.854-.068-.248-.078-.382-.034-.529.113-.484.687-.629 1.137-.495.293.09.563.315.732.676.775-.507.775-.507 1.316-.844-.203-.314-.304-.451-.439-.586-.473-.528-1.103-.798-2.126-.77l-.528.067c-.507.124-.991.395-1.283.754-.855.968-.608 2.655.427 3.354 1.023.765 2.521.933 2.712 1.653.18.878-.652 1.159-1.475 1.058-.607-.136-.945-.439-1.316-.971l-1.372.788c.157.359.337.517.607.832 1.305 1.316 4.568 1.249 5.153-.754.021-.067.18-.528.056-1.237l.034.049zm-6.737-5.434h-1.686c0 1.453-.007 2.898-.007 4.354 0 .924.047 1.772-.104 2.033-.247.517-.886.451-1.175.359-.297-.146-.448-.349-.623-.641-.047-.078-.082-.146-.095-.146l-1.368.844c.229.473.563.879.994 1.137.641.383 1.502.507 2.404.305.588-.17 1.095-.519 1.358-1.059.384-.697.302-1.553.299-2.509.008-1.541 0-3.083 0-4.635l.003-.042z"/>
+                </svg>
+              </div>
+              
+              <div class="tech-icon icon-4" data-tech="css">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M5 3l-.65 3.34h13.59L17.5 8.5H3.92l-.66 3.33h13.59l-.76 3.81-5.48 1.81-4.75-1.81.33-1.64H2.85l-.79 4 7.85 3 9.05-3 2.04-10.5L21.94 3H5z"/>
+                </svg>
+              </div>
+              
+              <div class="tech-icon icon-5" data-tech="node">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M12 1.85c-.27 0-.55.07-.78.2l-7.44 4.3c-.48.28-.78.8-.78 1.36v8.58c0 .56.3 1.08.78 1.36l1.95 1.12c.95.46 1.27.46 1.71.46.85 0 1.31-.52 1.31-1.36V9.47c0-.16-.14-.3-.3-.3H7.7c-.16 0-.3.14-.3.3v8.08c0 .78-.81 1.56-2.3.89L3.24 17.3c-.14-.08-.24-.22-.24-.39V8.33c0-.17.1-.31.24-.39l7.44-4.3c.15-.08.33-.08.48 0l7.44 4.3c.14.08.24.22.24.39v8.58c0 .17-.1.31-.24.39l-7.44 4.3c-.15.08-.33.08-.48 0l-1.95-1.12c-.1-.06-.24-.06-.32 0-.96.56-1.15.63-2.07.63-.74 0-1.41-.25-1.91-.68l-2.03-1.17c-.48-.28-.78-.8-.78-1.36V8.33c0-.56.3-1.08.78-1.36l7.44-4.3c.48-.28 1.08-.28 1.56 0l7.44 4.3c.48.28.78.8.78 1.36v8.58c0 .56-.3 1.08-.78 1.36l-7.44 4.3c-.23.13-.51.2-.78.2z"/>
+                </svg>
+              </div>
+            </div>
+            
+            <!-- Interactive Controls -->
+            <div class="showcase-controls">
+              <button class="control-button" data-action="prev">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/>
+                </svg>
+              </button>
+              <div class="project-indicators">
+                <span class="indicator active" data-project="portfolio"></span>
+                <span class="indicator" data-project="dashboard"></span>
+                <span class="indicator" data-project="ecommerce"></span>
+              </div>
+              <button class="control-button" data-action="next">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M8.59 16.59L10 18l6-6-6-6-1.41 1.41L13.17 12z"/>
+                </svg>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Categories Section -->
+<section class="categories-minimal">
+  <div class="container">
+    <div class="categories-header-minimal">
+      <h2>Specializations</h2>
+      <p>Areas of expertise and focus</p>
+    </div>
+    
+    <div class="categories-grid-minimal">
+      <div class="category-card-minimal" data-category="web">
+        <div class="category-icon-minimal">
+          <svg viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/>
+          </svg>
+        </div>
+        <h3>Web Development</h3>
+        <p>Full-stack applications with modern frameworks and clean architecture</p>
+        <a href="#" class="category-link-minimal">View Projects</a>
+      </div>
+      
+      <div class="category-card-minimal" data-category="design">
+        <div class="category-icon-minimal">
+          <svg viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 3c-4.97 0-9 4.03-9 9s4.03 9 9 9c.83 0 1.5-.67 1.5-1.5 0-.39-.15-.74-.39-1.01-.23-.26-.38-.61-.38-.99 0-.83.67-1.5 1.5-1.5H16c2.76 0 5-2.24 5-5 0-4.42-4.03-8-9-8zm-5.5 9c-.83 0-1.5-.67-1.5-1.5S5.67 9 6.5 9 8 9.67 8 10.5 7.33 12 6.5 12zm3-4C8.67 8 8 7.33 8 6.5S8.67 5 9.5 5s1.5.67 1.5 1.5S10.33 8 9.5 8zm5 0c-.83 0-1.5-.67-1.5-1.5S13.67 5 14.5 5s1.5.67 1.5 1.5S15.33 8 14.5 8zm3 4c-.83 0-1.5-.67-1.5-1.5S16.67 9 17.5 9s1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/>
+          </svg>
+        </div>
+        <h3>UI/UX Design</h3>
+        <p>User-centered design with focus on accessibility and usability</p>
+        <a href="#" class="category-link-minimal">Design Work</a>
+      </div>
+      
+      <div class="category-card-minimal" data-category="data">
+        <div class="category-icon-minimal">
+          <svg viewBox="0 0 24 24" fill="currentColor">
+            <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z"/>
+          </svg>
+        </div>
+        <h3>Data Visualization</h3>
+        <p>Interactive dashboards and meaningful data representations</p>
+        <a href="#" class="category-link-minimal">Dashboards</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA Section -->
+<section class="cta-minimal">
+  <div class="container">
+    <div class="cta-content-minimal">
+      <h2>Let's Create Something</h2>
+      <p>Ready to bring your ideas to life? Let's discuss your next project.</p>
+      <div class="cta-buttons-minimal">
+        <a href="{{ url_for('contact') }}" class="btn-minimal btn-primary-minimal">Start a Project</a>
+        <a href="{{ url_for('about') }}" class="btn-minimal btn-secondary-minimal">Learn More</a>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

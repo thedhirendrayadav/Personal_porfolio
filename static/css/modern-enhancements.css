@@ -1,0 +1,524 @@
+/**
+ * Modern Enhancements CSS
+ * Minimalist yet Futuristic Design System
+ * Includes: Glassmorphism, Neumorphism, 3D Effects, Animations
+ */
+
+/* ===================================
+   GLASSMORPHISM COMPONENTS
+   =================================== */
+
+.glass-card {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  box-shadow: 0 8px 32px rgba(15, 23, 42, 0.1);
+  transition: all 0.3s ease;
+}
+
+.glass-card:hover {
+  background: rgba(255, 255, 255, 0.15);
+  border-color: rgba(99, 102, 241, 0.3);
+  box-shadow: 0 12px 40px rgba(99, 102, 241, 0.2);
+  transform: translateY(-4px);
+}
+
+@media (prefers-color-scheme: dark) {
+  .glass-card {
+    background: rgba(30, 41, 59, 0.4);
+    border-color: rgba(99, 102, 241, 0.2);
+  }
+  
+  .glass-card:hover {
+    background: rgba(30, 41, 59, 0.6);
+  }
+}
+
+/* Frosted Glass Navigation */
+.frosted-nav {
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.18);
+  box-shadow: 0 4px 24px rgba(15, 23, 42, 0.08);
+}
+
+@media (prefers-color-scheme: dark) {
+  .frosted-nav {
+    background: rgba(15, 23, 42, 0.8);
+    border-bottom-color: rgba(99, 102, 241, 0.2);
+  }
+}
+
+/* ===================================
+   NEUMORPHISM COMPONENTS
+   =================================== */
+
+.neuro-card {
+  background: #F1F5F9;
+  box-shadow: 
+    12px 12px 24px rgba(15, 23, 42, 0.1),
+    -12px -12px 24px rgba(255, 255, 255, 0.8);
+  border-radius: 20px;
+  padding: 2rem;
+  transition: all 0.3s ease;
+}
+
+.neuro-card:hover {
+  box-shadow: 
+    6px 6px 12px rgba(15, 23, 42, 0.15),
+    -6px -6px 12px rgba(255, 255, 255, 0.9);
+}
+
+@media (prefers-color-scheme: dark) {
+  .neuro-card {
+    background: #1E293B;
+    box-shadow: 
+      12px 12px 24px rgba(0, 0, 0, 0.3),
+      -12px -12px 24px rgba(30, 41, 59, 0.5);
+  }
+  
+  .neuro-card:hover {
+    box-shadow: 
+      6px 6px 12px rgba(0, 0, 0, 0.4),
+      -6px -6px 12px rgba(30, 41, 59, 0.6);
+  }
+}
+
+/* Neumorphic Button */
+.neuro-btn {
+  background: #F1F5F9;
+  box-shadow: 
+    8px 8px 16px rgba(15, 23, 42, 0.1),
+    -8px -8px 16px rgba(255, 255, 255, 0.8);
+  border: none;
+  border-radius: 12px;
+  padding: 0.75rem 1.5rem;
+  font-weight: 600;
+  color: #0F172A;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.neuro-btn:active {
+  box-shadow: 
+    inset 4px 4px 8px rgba(15, 23, 42, 0.15),
+    inset -4px -4px 8px rgba(255, 255, 255, 0.7);
+}
+
+@media (prefers-color-scheme: dark) {
+  .neuro-btn {
+    background: #1E293B;
+    color: #F1F5F9;
+    box-shadow: 
+      8px 8px 16px rgba(0, 0, 0, 0.3),
+      -8px -8px 16px rgba(30, 41, 59, 0.5);
+  }
+  
+  .neuro-btn:active {
+    box-shadow: 
+      inset 4px 4px 8px rgba(0, 0, 0, 0.4),
+      inset -4px -4px 8px rgba(30, 41, 59, 0.4);
+  }
+}
+
+/* ===================================
+   3D CARD EFFECTS
+   =================================== */
+
+.card-3d {
+  position: relative;
+  transform-style: preserve-3d;
+  transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.card-3d::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(20, 184, 166, 0.1));
+  border-radius: inherit;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  z-index: -1;
+}
+
+.card-3d:hover::before {
+  opacity: 1;
+}
+
+.card-3d:hover {
+  transform: perspective(1000px) rotateX(var(--rotate-x, 0deg)) rotateY(var(--rotate-y, 0deg)) translateZ(20px);
+}
+
+/* ===================================
+   GRADIENT ANIMATIONS
+   =================================== */
+
+.gradient-animated {
+  background: linear-gradient(270deg, #6366F1, #14B8A6, #6366F1);
+  background-size: 400% 400%;
+  animation: gradientFlow 8s ease infinite;
+}
+
+@keyframes gradientFlow {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* Gradient Text */
+.gradient-text {
+  background: linear-gradient(135deg, #6366F1, #14B8A6);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: gradientFlow 8s ease infinite;
+  background-size: 200% 200%;
+}
+
+/* ===================================
+   HOVER GLOW EFFECTS
+   =================================== */
+
+.glow-on-hover {
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+.glow-on-hover::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(circle, rgba(99, 102, 241, 0.4), transparent 70%);
+  transform: translate(-50%, -50%) scale(0);
+  opacity: 0;
+  transition: all 0.5s ease;
+  border-radius: inherit;
+  z-index: -1;
+  filter: blur(20px);
+}
+
+.glow-on-hover:hover::after {
+  transform: translate(-50%, -50%) scale(1.5);
+  opacity: 1;
+}
+
+/* ===================================
+   FLOATING ELEMENTS
+   =================================== */
+
+.float-animation {
+  animation: float 6s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-20px);
+  }
+}
+
+.float-slow {
+  animation: float 8s ease-in-out infinite;
+}
+
+.float-fast {
+  animation: float 4s ease-in-out infinite;
+}
+
+/* ===================================
+   STAGGERED ANIMATIONS
+   =================================== */
+
+.stagger-fade-in > * {
+  opacity: 0;
+  transform: translateY(30px);
+  animation: fadeInUp 0.8s ease forwards;
+}
+
+.stagger-fade-in > *:nth-child(1) { animation-delay: 0.1s; }
+.stagger-fade-in > *:nth-child(2) { animation-delay: 0.2s; }
+.stagger-fade-in > *:nth-child(3) { animation-delay: 0.3s; }
+.stagger-fade-in > *:nth-child(4) { animation-delay: 0.4s; }
+.stagger-fade-in > *:nth-child(5) { animation-delay: 0.5s; }
+.stagger-fade-in > *:nth-child(6) { animation-delay: 0.6s; }
+.stagger-fade-in > *:nth-child(7) { animation-delay: 0.7s; }
+.stagger-fade-in > *:nth-child(8) { animation-delay: 0.8s; }
+
+@keyframes fadeInUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ===================================
+   REVEAL ON SCROLL
+   =================================== */
+
+.reveal-on-scroll {
+  opacity: 0;
+  transform: translateY(50px);
+  transition: all 0.8s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.reveal-on-scroll.revealed {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ===================================
+   PARTICLE BACKGROUND
+   =================================== */
+
+.particle-bg {
+  position: relative;
+  overflow: hidden;
+}
+
+.particle-bg::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: 
+    radial-gradient(circle at 20% 50%, rgba(99, 102, 241, 0.1) 0%, transparent 50%),
+    radial-gradient(circle at 80% 80%, rgba(20, 184, 166, 0.1) 0%, transparent 50%),
+    radial-gradient(circle at 40% 20%, rgba(99, 102, 241, 0.05) 0%, transparent 50%);
+  animation: particleMove 20s ease-in-out infinite;
+  z-index: -1;
+}
+
+@keyframes particleMove {
+  0%, 100% {
+    transform: translate(0, 0) scale(1);
+  }
+  33% {
+    transform: translate(30px, -30px) scale(1.1);
+  }
+  66% {
+    transform: translate(-20px, 20px) scale(0.9);
+  }
+}
+
+/* ===================================
+   GRID PATTERN BACKGROUND
+   =================================== */
+
+.grid-bg {
+  background-image: 
+    linear-gradient(rgba(99, 102, 241, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(99, 102, 241, 0.05) 1px, transparent 1px);
+  background-size: 50px 50px;
+  background-position: center center;
+}
+
+/* ===================================
+   BUTTON ENHANCEMENTS
+   =================================== */
+
+.btn-modern {
+  position: relative;
+  padding: 1rem 2rem;
+  background: linear-gradient(135deg, #6366F1, #14B8A6);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
+}
+
+.btn-modern::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  transition: left 0.5s ease;
+}
+
+.btn-modern:hover::before {
+  left: 100%;
+}
+
+.btn-modern:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(99, 102, 241, 0.4);
+}
+
+.btn-modern:active {
+  transform: translateY(0);
+}
+
+/* Outline Button */
+.btn-outline-modern {
+  background: transparent;
+  border: 2px solid #6366F1;
+  color: #6366F1;
+  padding: 0.875rem 1.875rem;
+  border-radius: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-outline-modern::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 100%;
+  background: linear-gradient(135deg, #6366F1, #14B8A6);
+  transition: width 0.3s ease;
+  z-index: -1;
+}
+
+.btn-outline-modern:hover::before {
+  width: 100%;
+}
+
+.btn-outline-modern:hover {
+  color: white;
+  border-color: transparent;
+}
+
+/* ===================================
+   BADGE STYLES
+   =================================== */
+
+.badge-modern {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.5rem 1rem;
+  background: rgba(99, 102, 241, 0.1);
+  border: 1px solid rgba(99, 102, 241, 0.2);
+  border-radius: 20px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #6366F1;
+  transition: all 0.3s ease;
+}
+
+.badge-modern:hover {
+  background: rgba(99, 102, 241, 0.2);
+  transform: translateY(-2px);
+}
+
+@media (prefers-color-scheme: dark) {
+  .badge-modern {
+    background: rgba(99, 102, 241, 0.2);
+    border-color: rgba(99, 102, 241, 0.3);
+    color: #A5B4FC;
+  }
+}
+
+/* ===================================
+   SECTION DIVIDERS
+   =================================== */
+
+.section-divider {
+  width: 100%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(99, 102, 241, 0.3), transparent);
+  margin: 4rem 0;
+}
+
+/* Animated Divider */
+.section-divider-animated {
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(90deg, #6366F1, #14B8A6, #6366F1);
+  background-size: 200% 100%;
+  animation: dividerFlow 3s ease infinite;
+  margin: 4rem 0;
+}
+
+@keyframes dividerFlow {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* ===================================
+   LOADING STATES
+   =================================== */
+
+.skeleton-loader {
+  background: linear-gradient(90deg, 
+    rgba(99, 102, 241, 0.05) 25%, 
+    rgba(99, 102, 241, 0.1) 50%, 
+    rgba(99, 102, 241, 0.05) 75%
+  );
+  background-size: 200% 100%;
+  animation: skeletonLoading 1.5s infinite;
+  border-radius: 8px;
+}
+
+@keyframes skeletonLoading {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* ===================================
+   RESPONSIVE ADJUSTMENTS
+   =================================== */
+
+@media (max-width: 768px) {
+  .glass-card,
+  .neuro-card {
+    padding: 1.5rem;
+  }
+  
+  .btn-modern,
+  .btn-outline-modern {
+    padding: 0.75rem 1.5rem;
+    font-size: 0.9375rem;
+  }
+  
+  .card-3d:hover {
+    transform: perspective(1000px) translateZ(10px);
+  }
+}
+
+/* ===================================
+   ACCESSIBILITY
+   =================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  .gradient-animated,
+  .float-animation,
+  .float-slow,
+  .float-fast,
+  .stagger-fade-in > *,
+  .particle-bg::before,
+  .section-divider-animated,
+  .skeleton-loader {
+    animation: none !important;
+  }
+  
+  .reveal-on-scroll {
+    opacity: 1;
+    transform: none;
+  }
+}

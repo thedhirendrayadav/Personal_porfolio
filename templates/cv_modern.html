@@ -1,0 +1,824 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dhirendra Yadav - Cybersecurity Professional CV</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #4a9bff;
+            --secondary-color: #00d4ff;
+            --accent-color: #ff6b6b;
+            --dark-bg: #0f172a;
+            --card-bg: #1e293b;
+            --text-primary: #f8fafc;
+            --text-secondary: #cbd5e1;
+            --text-muted: #64748b;
+            --border-color: #334155;
+            --success-color: #10b981;
+            --warning-color: #f59e0b;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, var(--dark-bg) 0%, #1e293b 100%);
+            color: var(--text-primary);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        .cv-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: var(--card-bg);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
+            border-radius: 20px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .cv-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color), var(--accent-color));
+        }
+
+        .cv-header {
+            background: linear-gradient(135deg, var(--dark-bg), var(--card-bg));
+            padding: 3rem 2rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cv-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M 10 0 L 0 0 0 10" fill="none" stroke="%234a9bff" stroke-width="0.5" opacity="0.1"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>');
+            opacity: 0.3;
+        }        .p
+rofile-section {
+            position: relative;
+            z-index: 2;
+        }
+
+        .profile-avatar {
+            width: 120px;
+            height: 120px;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            border-radius: 50%;
+            margin: 0 auto 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            font-weight: 800;
+            color: white;
+            box-shadow: 0 10px 30px rgba(74, 155, 255, 0.3);
+        }
+
+        .profile-name {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .profile-title {
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+            font-weight: 500;
+        }
+
+        .contact-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            border: 1px solid var(--border-color);
+            transition: all 0.3s ease;
+        }
+
+        .contact-item:hover {
+            background: rgba(74, 155, 255, 0.1);
+            border-color: var(--primary-color);
+        }
+
+        .contact-icon {
+            width: 20px;
+            height: 20px;
+            color: var(--primary-color);
+        }
+
+        .cv-body {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 0;
+        }
+
+        .cv-sidebar {
+            background: var(--dark-bg);
+            padding: 2rem;
+        }
+
+        .cv-main {
+            padding: 2rem;
+        }
+
+        .section {
+            margin-bottom: 2.5rem;
+        }
+
+        .section-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .section-icon {
+            width: 24px;
+            height: 24px;
+            color: var(--secondary-color);
+        }
+
+        .skill-category {
+            margin-bottom: 1.5rem;
+        }
+
+        .skill-category-title {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .skill-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .skill-tag {
+            background: rgba(74, 155, 255, 0.1);
+            color: var(--primary-color);
+            padding: 0.4rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            border: 1px solid rgba(74, 155, 255, 0.2);
+        }
+
+        .experience-item, .education-item, .project-item {
+            margin-bottom: 2rem;
+            padding: 1.5rem;
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 12px;
+            border-left: 4px solid var(--primary-color);
+            position: relative;
+        }
+
+        .item-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .item-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.25rem;
+        }
+
+        .item-company {
+            color: var(--primary-color);
+            font-weight: 500;
+        }
+
+        .item-date {
+            background: var(--primary-color);
+            color: white;
+            padding: 0.3rem 0.8rem;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        .item-description {
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+            line-height: 1.6;
+        }
+
+        .tech-stack {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .tech-tag {
+            background: rgba(0, 212, 255, 0.1);
+            color: var(--secondary-color);
+            padding: 0.3rem 0.6rem;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 500;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .achievements-list {
+            list-style: none;
+        }
+
+        .achievement-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            padding: 1rem;
+            background: rgba(16, 185, 129, 0.05);
+            border-radius: 10px;
+            border-left: 3px solid var(--success-color);
+        }
+
+        .achievement-icon {
+            width: 20px;
+            height: 20px;
+            color: var(--success-color);
+            flex-shrink: 0;
+            margin-top: 0.1rem;
+        }
+
+        .achievement-content h4 {
+            color: var(--text-primary);
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+
+        .achievement-content p {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .languages-grid {
+            display: grid;
+            gap: 1rem;
+        }
+
+        .language-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.75rem;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 8px;
+        }
+
+        .language-name {
+            font-weight: 500;
+            color: var(--text-primary);
+        }
+
+        .language-level {
+            background: var(--warning-color);
+            color: white;
+            padding: 0.2rem 0.6rem;
+            border-radius: 10px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        @media print {
+            body {
+                background: white;
+                color: #333;
+            }
+            
+            .cv-container {
+                box-shadow: none;
+                border-radius: 0;
+                background: white;
+            }
+            
+            .cv-header {
+                background: #f8f9fa;
+                color: #333;
+            }
+            
+            .cv-sidebar {
+                background: #f1f5f9;
+            }
+            
+            .profile-name {
+                color: #2c3e50;
+            }
+            
+            .section-title {
+                color: #3498db;
+            }
+            
+            .contact-item {
+                background: rgba(52, 152, 219, 0.1);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .cv-body {
+                grid-template-columns: 1fr;
+            }
+            
+            .cv-header {
+                padding: 2rem 1rem;
+            }
+            
+            .contact-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .item-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="cv-container">
+        <!-- Header Section -->
+        <div class="cv-header">
+            <div class="profile-section">
+                <div class="profile-avatar">DY</div>
+                <h1 class="profile-name">Dhirendra Yadav</h1>
+                <p class="profile-title">Cybersecurity Enthusiast | Machine Learning & AI Specialist</p>
+                
+                <div class="contact-grid">
+                    <div class="contact-item">
+                        <svg class="contact-icon" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z"/>
+                            <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z"/>
+                        </svg>
+                        <span>Dhirendrayadav4999@gmail.com</span>
+                    </div>
+                    <div class="contact-item">
+                        <svg class="contact-icon" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z"/>
+                        </svg>
+                        <span>+977 9845080167</span>
+                    </div>
+                    <div class="contact-item">
+                        <svg class="contact-icon" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd"/>
+                        </svg>
+                        <span>Nayathimi, Bhaktapur, Nepal</span>
+                    </div>
+                    <div class="contact-item">
+                        <svg class="contact-icon" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3z"/>
+                        </svg>
+                        <span>linkedin.com/in/dhirendra-yadav-3040b82b4</span>
+                    </div>
+                    <div class="contact-item">
+                        <svg class="contact-icon" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M12.316 3.051a1 1 0 01.633 1.265l-4 12a1 1 0 11-1.898-.632l4-12a1 1 0 011.265-.633zM5.707 6.293a1 1 0 010 1.414L3.414 10l2.293 2.293a1 1 0 11-1.414 1.414l-3-3a1 1 0 010-1.414l3-3a1 1 0 011.414 0zm8.586 0a1 1 0 011.414 0l3 3a1 1 0 010 1.414l-3 3a1 1 0 11-1.414-1.414L16.586 10l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd"/>
+                        </svg>
+                        <span>github.com/Dhirendra07000</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Body Section -->
+        <div class="cv-body">
+            <!-- Sidebar -->
+            <div class="cv-sidebar">
+                <!-- Professional Summary -->
+                <div class="section">
+                    <h2 class="section-title">
+                        <svg class="section-icon" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                        </svg>
+                        Professional Summary
+                    </h2>
+                    <p class="item-description">
+                        Passionate cybersecurity enthusiast with expertise in Machine Learning and Artificial Intelligence applications in security. Recent BSc IT graduate with first-class honors, specializing in threat detection, vulnerability assessment, and AI-powered security solutions.
+                    </p>
+                </div>
+
+                <!-- Core Skills -->
+                <div class="section">
+                    <h2 class="section-title">
+                        <svg class="section-icon" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
+                        </svg>
+                        Core Skills
+                    </h2>
+                    
+                    <div class="skill-category">
+                        <div class="skill-category-title">🛡️ Cybersecurity</div>
+                        <div class="skill-tags">
+                            <span class="skill-tag">Threat Analysis</span>
+                            <span class="skill-tag">Vulnerability Assessment</span>
+                            <span class="skill-tag">Incident Response</span>
+                            <span class="skill-tag">Penetration Testing</span>
+                            <span class="skill-tag">Security Auditing</span>
+                        </div>
+                    </div>
+
+                    <div class="skill-category">
+                        <div class="skill-category-title">🤖 Machine Learning</div>
+                        <div class="skill-tags">
+                            <span class="skill-tag">Anomaly Detection</span>
+                            <span class="skill-tag">Deep Learning</span>
+                            <span class="skill-tag">Neural Networks</span>
+                            <span class="skill-tag">Classification</span>
+                            <span class="skill-tag">Predictive Modeling</span>
+                        </div>
+                    </div>
+
+                    <div class="skill-category">
+                        <div class="skill-category-title">💻 Programming</div>
+                        <div class="skill-tags">
+                            <span class="skill-tag">Python</span>
+                            <span class="skill-tag">R</span>
+                            <span class="skill-tag">SQL</span>
+                            <span class="skill-tag">JavaScript</span>
+                            <span class="skill-tag">Bash</span>
+                            <span class="skill-tag">C++</span>
+                        </div>
+                    </div>
+
+                    <div class="skill-category">
+                        <div class="skill-category-title">🔧 Security Tools</div>
+                        <div class="skill-tags">
+                            <span class="skill-tag">Wireshark</span>
+                            <span class="skill-tag">Nmap</span>
+                            <span class="skill-tag">Metasploit</span>
+                            <span class="skill-tag">Burp Suite</span>
+                            <span class="skill-tag">OWASP ZAP</span>
+                            <span class="skill-tag">Kali Linux</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Languages -->
+                <div class="section">
+                    <h2 class="section-title">
+                        <svg class="section-icon" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M7 2a1 1 0 011 1v1h3a1 1 0 110 2H9.578a18.87 18.87 0 01-1.724 4.78c.29.354.596.696.914 1.026a1 1 0 11-1.44 1.389c-.188-.196-.373-.396-.554-.6a19.098 19.098 0 01-3.107 3.567 1 1 0 01-1.334-1.49 17.087 17.087 0 003.13-3.733 18.992 18.992 0 01-1.487-2.494 1 1 0 111.79-.89c.234.47.489.928.764 1.372.417-.934.752-1.913.997-2.927H3a1 1 0 110-2h3V3a1 1 0 011-1zm6 6a1 1 0 01.894.553l2.991 5.982a.869.869 0 01.02.037l.99 1.98a1 1 0 11-1.79.895L15.383 16h-4.764l-.724 1.447a1 1 0 11-1.788-.894l.99-1.98.019-.038 2.99-5.982A1 1 0 0113 8zm-1.382 6h2.764L13 11.236 11.618 14z" clip-rule="evenodd"/>
+                        </svg>
+                        Languages
+                    </h2>
+                    <div class="languages-grid">
+                        <div class="language-item">
+                            <span class="language-name">English</span>
+                            <span class="language-level">Fluent</span>
+                        </div>
+                        <div class="language-item">
+                            <span class="language-name">Nepali</span>
+                            <span class="language-level">Native</span>
+                        </div>
+                        <div class="language-item">
+                            <span class="language-name">Hindi</span>
+                            <span class="language-level">Conversational</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Main Content -->
+            <div class="cv-main">
+                <!-- Education -->
+                <div class="section">
+                    <h2 class="section-title">
+                        <svg class="section-icon" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M10.394 2.08a1 1 0 00-.788 0l-7 3a1 1 0 000 1.84L5.25 8.051a.999.999 0 01.356-.257l4-1.714a1 1 0 11.788 1.838L7.667 9.088l1.94.831a1 1 0 00.787 0l7-3a1 1 0 000-1.838l-7-3zM3.31 9.397L5 10.12v4.102a8.969 8.969 0 00-1.05-.174 1 1 0 01-.89-.89 11.115 11.115 0 01.25-3.762zM9.3 16.573A9.026 9.026 0 007 14.935v-3.957l1.818.78a3 3 0 002.364 0l5.508-2.361a11.026 11.026 0 01.25 3.762 1 1 0 01-.89.89 8.968 8.968 0 00-5.35 1.524zM6 18a1 1 0 001-1v-2.065a8.935 8.935 0 00-2-.712V17a1 1 0 001 1z"/>
+                        </svg>
+                        Education
+                    </h2>
+                    
+                    <div class="education-item">
+                        <div class="item-header">
+                            <div>
+                                <div class="item-title">BSc in Information Technology</div>
+                                <div class="item-company">University of Sunder</div>
+                            </div>
+                            <div class="item-date">2022-2025</div>
+                        </div>
+                        <p class="item-description">
+                            <strong>First Class Honors</strong> - Specialized in cybersecurity, machine learning, and software development with focus on security applications. Completed advanced coursework in AI/ML, network security, and ethical hacking.
+                        </p>
+                    </div>
+
+                    <div class="education-item">
+                        <div class="item-header">
+                            <div>
+                                <div class="item-title">Higher Secondary Education (HSEB)</div>
+                                <div class="item-company">KMC Kathmandu</div>
+                            </div>
+                            <div class="item-date">2019-2021</div>
+                        </div>
+                        <p class="item-description">
+                            <strong>GPA: 3.22</strong> - Focused on computer science and mathematics fundamentals.
+                        </p>
+                    </div>
+                </div>         
+       <!-- Key Projects -->
+                <div class="section">
+                    <h2 class="section-title">
+                        <svg class="section-icon" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M3 4a1 1 0 011-1h4a1 1 0 010 2H6.414l2.293 2.293a1 1 0 01-1.414 1.414L5 6.414V8a1 1 0 01-2 0V4zm9 1a1 1 0 010-2h4a1 1 0 011 1v4a1 1 0 01-2 0V4.414l-2.293 2.293a1 1 0 11-1.414-1.414L13.586 3H12zm-9 7a1 1 0 012 0v1.586l2.293-2.293a1 1 0 111.414 1.414L6.414 15H8a1 1 0 010 2H4a1 1 0 01-1-1v-4zm13-1a1 1 0 011 1v4a1 1 0 01-1 1h-4a1 1 0 010-2h1.586l-2.293-2.293a1 1 0 111.414-1.414L15.586 13H14a1 1 0 01-1-1z" clip-rule="evenodd"/>
+                        </svg>
+                        Key Projects
+                    </h2>
+                    
+                    <div class="project-item">
+                        <div class="item-header">
+                            <div>
+                                <div class="item-title">AI-Powered Threat Detection System</div>
+                                <div class="item-company">Personal Project</div>
+                            </div>
+                            <div class="item-date">2024</div>
+                        </div>
+                        <p class="item-description">
+                            Developed an intelligent threat detection system using machine learning algorithms to identify and classify security threats in real-time. Achieved 95% accuracy in threat classification using advanced neural networks and behavioral analysis.
+                        </p>
+                        <div class="tech-stack">
+                            <span class="tech-tag">Python</span>
+                            <span class="tech-tag">TensorFlow</span>
+                            <span class="tech-tag">Scikit-learn</span>
+                            <span class="tech-tag">REST APIs</span>
+                            <span class="tech-tag">Docker</span>
+                        </div>
+                    </div>
+
+                    <div class="project-item">
+                        <div class="item-header">
+                            <div>
+                                <div class="item-title">Vulnerability Assessment Automation</div>
+                                <div class="item-company">Security Research</div>
+                            </div>
+                            <div class="item-date">2024</div>
+                        </div>
+                        <p class="item-description">
+                            Created automated vulnerability scanning and reporting tools using Python and security frameworks. Integrated with popular security tools for comprehensive security assessments and automated report generation.
+                        </p>
+                        <div class="tech-stack">
+                            <span class="tech-tag">Python</span>
+                            <span class="tech-tag">Nmap</span>
+                            <span class="tech-tag">OpenVAS</span>
+                            <span class="tech-tag">Custom APIs</span>
+                            <span class="tech-tag">MySQL</span>
+                        </div>
+                    </div>
+
+                    <div class="project-item">
+                        <div class="item-header">
+                            <div>
+                                <div class="item-title">Security Analytics Dashboard</div>
+                                <div class="item-company">Academic Project</div>
+                            </div>
+                            <div class="item-date">2023</div>
+                        </div>
+                        <p class="item-description">
+                            Built a comprehensive security monitoring dashboard with real-time threat visualization and ML-based anomaly detection capabilities. Features include interactive charts, alert systems, and predictive analytics.
+                        </p>
+                        <div class="tech-stack">
+                            <span class="tech-tag">Flask</span>
+                            <span class="tech-tag">JavaScript</span>
+                            <span class="tech-tag">D3.js</span>
+                            <span class="tech-tag">Machine Learning</span>
+                            <span class="tech-tag">WebSocket</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Certifications & Achievements -->
+                <div class="section">
+                    <h2 class="section-title">
+                        <svg class="section-icon" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                        </svg>
+                        Certifications & Achievements
+                    </h2>
+                    
+                    <ul class="achievements-list">
+                        <li class="achievement-item">
+                            <svg class="achievement-icon" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                            </svg>
+                            <div class="achievement-content">
+                                <h4>First Class Honors - BSc IT Degree</h4>
+                                <p>Graduated with distinction in Information Technology (2025)</p>
+                            </div>
+                        </li>
+                        
+                        <li class="achievement-item">
+                            <svg class="achievement-icon" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                            </svg>
+                            <div class="achievement-content">
+                                <h4>Machine Learning Specialization</h4>
+                                <p>Advanced coursework in ML algorithms and applications (2024)</p>
+                            </div>
+                        </li>
+                        
+                        <li class="achievement-item">
+                            <svg class="achievement-icon" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                            </svg>
+                            <div class="achievement-content">
+                                <h4>ISMT Certificate of Appreciation</h4>
+                                <p>Outstanding performance recognition (2023)</p>
+                            </div>
+                        </li>
+                        
+                        <li class="achievement-item">
+                            <svg class="achievement-icon" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                            </svg>
+                            <div class="achievement-content">
+                                <h4>Cybersecurity Fundamentals</h4>
+                                <p>Self-study and practical application in security (2024)</p>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Research Interests -->
+                <div class="section">
+                    <h2 class="section-title">
+                        <svg class="section-icon" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M3 5a2 2 0 012-2h10a2 2 0 012 2v8a2 2 0 01-2 2h-2.22l.123.489.804.804A1 1 0 0113 18H7a1 1 0 01-.707-1.707l.804-.804L7.22 15H5a2 2 0 01-2-2V5zm5.771 7H5V5h10v7H8.771z" clip-rule="evenodd"/>
+                        </svg>
+                        Research Interests
+                    </h2>
+                    <div class="item-description">
+                        <strong>AI/ML Applications in Cybersecurity:</strong> Exploring advanced machine learning techniques for automated threat detection, behavioral analysis, and predictive security modeling.
+                        <br><br>
+                        <strong>Intelligent Defense Systems:</strong> Developing adaptive security systems that learn from attack patterns and evolve defense mechanisms in real-time.
+                        <br><br>
+                        <strong>Zero-day Vulnerability Detection:</strong> Research into AI-powered methods for identifying previously unknown security vulnerabilities and attack vectors.
+                        <br><br>
+                        <strong>Adversarial Machine Learning:</strong> Studying the security implications of ML systems and developing robust defenses against adversarial attacks.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- PDF Download JavaScript -->
+    {% if pdf_mode %}
+    <script>
+        // Auto-trigger print dialog when in PDF mode
+        window.addEventListener('load', function() {
+            // Add print-specific styles
+            document.body.classList.add('pdf-mode');
+            
+            // Show download instructions
+            const instructions = document.createElement('div');
+            instructions.innerHTML = `
+                <div style="position: fixed; top: 20px; right: 20px; background: #4a9bff; color: white; padding: 15px 20px; border-radius: 10px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); z-index: 10000; font-family: Inter, sans-serif; max-width: 300px;">
+                    <h4 style="margin: 0 0 10px 0; font-size: 16px;">📄 Download as PDF</h4>
+                    <p style="margin: 0 0 10px 0; font-size: 14px; line-height: 1.4;">Press <strong>Ctrl+P</strong> (or Cmd+P on Mac) and select "Save as PDF" as the destination.</p>
+                    <button onclick="window.print()" style="background: white; color: #4a9bff; border: none; padding: 8px 16px; border-radius: 5px; cursor: pointer; font-weight: 600; margin-right: 10px;">Print/Save PDF</button>
+                    <button onclick="this.parentElement.remove()" style="background: transparent; color: white; border: 1px solid white; padding: 8px 16px; border-radius: 5px; cursor: pointer;">Close</button>
+                </div>
+            `;
+            document.body.appendChild(instructions);
+            
+            // Auto-trigger print dialog after a short delay
+            setTimeout(() => {
+                window.print();
+            }, 1000);
+        });
+    </script>
+    {% endif %}
+
+    <script>
+        // Print optimization
+        window.addEventListener('beforeprint', function() {
+            document.body.classList.add('printing');
+        });
+
+        window.addEventListener('afterprint', function() {
+            document.body.classList.remove('printing');
+        });
+    </script>
+
+    <style>
+        /* Print-specific styles */
+        @media print {
+            body {
+                background: white !important;
+                color: #1a1a1a !important;
+                font-size: 12px !important;
+                line-height: 1.4 !important;
+            }
+            
+            .cv-container {
+                background: white !important;
+                box-shadow: none !important;
+                border-radius: 0 !important;
+                margin: 0 !important;
+                max-width: none !important;
+            }
+            
+            .cv-container::before {
+                display: none !important;
+            }
+            
+            .header-bg {
+                background: linear-gradient(135deg, #2563eb, #1d4ed8) !important;
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+            }
+            
+            .section-card {
+                background: #f8fafc !important;
+                border: 1px solid #e2e8f0 !important;
+                box-shadow: none !important;
+                page-break-inside: avoid !important;
+                margin-bottom: 15px !important;
+            }
+            
+            .skill-tag, .cert-badge, .tech-tag {
+                background: #e2e8f0 !important;
+                color: #1a1a1a !important;
+                border: 1px solid #cbd5e1 !important;
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+            }
+            
+            h1, h2, h3 {
+                color: #1a1a1a !important;
+            }
+            
+            .text-primary {
+                color: #1a1a1a !important;
+            }
+            
+            .text-secondary {
+                color: #4a5568 !important;
+            }
+            
+            .text-muted {
+                color: #718096 !important;
+            }
+            
+            /* Hide any fixed elements that might interfere */
+            [style*="position: fixed"] {
+                display: none !important;
+            }
+        }
+        
+        /* PDF mode specific styles */
+        .pdf-mode {
+            padding: 20px;
+        }
+        
+        .printing {
+            /* Additional styles when printing */
+            opacity: 1;
+        }
+    </style>
+</body>
+</html>

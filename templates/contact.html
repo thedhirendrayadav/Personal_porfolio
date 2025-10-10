@@ -1,0 +1,647 @@
+{% extends "base.html" %}
+
+{% block title %}Contact - Dhirendra Yadav{% endblock %}
+
+{% block extra_head %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/contact-enhanced.css') }}">
+<script src="{{ url_for('static', filename='js/contact-enhanced.js') }}" defer></script>
+{% endblock %}
+
+{% block content %}
+
+<!-- Enhanced Contact Hero Section -->
+<section class="contact-hero-enhanced">
+  <!-- Enhanced 3D Interactive Background -->
+  <div class="contact-3d-background">
+    <div class="floating-orb orb-1" data-parallax="0.1"></div>
+    <div class="floating-orb orb-2" data-parallax="0.15"></div>
+    <div class="floating-orb orb-3" data-parallax="0.08"></div>
+    <div class="floating-orb orb-4" data-parallax="0.12"></div>
+    <div class="floating-orb orb-5" data-parallax="0.06"></div>
+    <div class="message-particles">
+      <div class="particle p-1"></div>
+      <div class="particle p-2"></div>
+      <div class="particle p-3"></div>
+      <div class="particle p-4"></div>
+      <div class="particle p-5"></div>
+      <div class="particle p-6"></div>
+      <div class="particle p-7"></div>
+    </div>
+    <div class="connection-lines">
+      <div class="line line-1"></div>
+      <div class="line line-2"></div>
+      <div class="line line-3"></div>
+      <div class="line line-4"></div>
+    </div>
+    <div class="tech-grid-overlay"></div>
+  </div>
+
+  <div class="container">
+    <div class="hero-content-enhanced">
+      <div class="hero-layout-contact">
+        <div class="hero-text-section">
+          <div class="intro-badge">
+            <span class="badge-icon">💬</span>
+            <span>Let's Talk</span>
+          </div>
+          <h1 class="hero-title-enhanced">
+            <span class="title-greeting">Ready to</span>
+            <span class="title-main">Connect & Create</span>
+            <span class="title-subtitle">Something Amazing Together</span>
+          </h1>
+          <p class="hero-description-enhanced">
+            Have a project in mind? Let's discuss how we can bring your ideas to life with clean code and thoughtful design.
+          </p>
+          <div class="hero-stats">
+            <div class="stat-item">
+              <span class="stat-number">24h</span>
+              <span class="stat-label">Response Time</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-number">50+</span>
+              <span class="stat-label">Projects</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-number">100%</span>
+              <span class="stat-label">Dedication</span>
+            </div>
+          </div>
+        </div>
+        
+        <div class="hero-visual-section">
+          <div class="shuttle-container">
+            <div class="shuttle-frame">
+              <img src="{{ url_for('static', filename='images/shuttle.png') }}" 
+                   alt="Space Shuttle - Innovation and Technology" 
+                   class="shuttle-image"
+                   loading="eager">
+              <div class="shuttle-glow"></div>
+              <div class="shuttle-trail"></div>
+            </div>
+            <div class="orbital-rings">
+              <div class="orbital-ring ring-1"></div>
+              <div class="orbital-ring ring-2"></div>
+              <div class="orbital-ring ring-3"></div>
+            </div>
+            <div class="tech-particles">
+              <div class="tech-particle particle-1"></div>
+              <div class="tech-particle particle-2"></div>
+              <div class="tech-particle particle-3"></div>
+              <div class="tech-particle particle-4"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Enhanced Contact Main Section -->
+<section class="contact-main-enhanced">
+  <div class="container">
+    <div class="contact-layout-enhanced">
+      <!-- Left Side: Contact Form -->
+      <div class="contact-left">
+        <div class="form-container-enhanced" data-tilt data-glow>
+          <div class="form-header">
+            <h2>Send a Message</h2>
+            <p>Let's start a conversation about your next project</p>
+          </div>
+          
+          <form id="contactFormEnhanced" class="contact-form-enhanced">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+            <div class="form-row">
+              <div class="form-group-enhanced">
+                <label for="name">Full Name</label>
+                <div class="input-wrapper">
+                  <input type="text" id="name" name="name" class="input-enhanced" placeholder="Enter your full name" required>
+                  <div class="input-focus-line"></div>
+                </div>
+              </div>
+              
+              <div class="form-group-enhanced">
+                <label for="email">Email Address</label>
+                <div class="input-wrapper">
+                  <input type="email" id="email" name="email" class="input-enhanced" placeholder="your@email.com" required>
+                  <div class="input-focus-line"></div>
+                </div>
+              </div>
+            </div>
+            
+            <div class="form-group-enhanced">
+              <label for="subject">Subject</label>
+              <div class="input-wrapper">
+                <input type="text" id="subject" name="subject" class="input-enhanced" placeholder="What's this about?" required>
+                <div class="input-focus-line"></div>
+              </div>
+            </div>
+            
+            <div class="form-group-enhanced">
+              <label for="message">Message</label>
+              <div class="input-wrapper">
+                <textarea id="message" name="message" class="input-enhanced" rows="6" placeholder="Tell me about your project or inquiry..." required></textarea>
+                <div class="input-focus-line"></div>
+              </div>
+            </div>
+            
+            <button type="submit" class="submit-btn-enhanced" data-magnetic data-ripple>
+              <span class="btn-text">Send Message</span>
+              <span class="btn-icon">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>
+                </svg>
+              </span>
+              <div class="btn-ripple"></div>
+            </button>
+          </form>
+          
+          <!-- Form Status -->
+          <div class="form-status" id="formStatus"></div>
+        </div>
+      </div>
+      
+      <!-- Right Side: Contact Info & 3D Showcase -->
+      <div class="contact-right">
+        <!-- 3D Contact Showcase -->
+        <div class="contact-3d-showcase">
+          <div class="showcase-container-contact">
+            <div class="contact-display-screen" data-tilt data-glow>
+              <div class="screen-header">
+                <div class="screen-dots">
+                  <span class="dot red"></span>
+                  <span class="dot yellow"></span>
+                  <span class="dot green"></span>
+                </div>
+                <div class="screen-title">Contact Info</div>
+              </div>
+              <div class="screen-content">
+                <div class="contact-visualization">
+                  <div class="contact-avatar">
+                    <div class="avatar-ring"></div>
+                    <div class="avatar-core">
+                      <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+                      </svg>
+                    </div>
+                  </div>
+                  <div class="contact-info-display">
+                    <div class="info-item active" data-info="email">
+                      <div class="info-icon">
+                        <svg viewBox="0 0 24 24" fill="currentColor">
+                          <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/>
+                        </svg>
+                      </div>
+                      <div class="info-text">Dhirendrayadav4999@gmail.com</div>
+                    </div>
+                    <div class="info-item" data-info="phone">
+                      <div class="info-icon">
+                        <svg viewBox="0 0 24 24" fill="currentColor">
+                          <path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/>
+                        </svg>
+                      </div>
+                      <div class="info-text">+977 9845080167</div>
+                    </div>
+                    <div class="info-item" data-info="location">
+                      <div class="info-icon">
+                        <svg viewBox="0 0 24 24" fill="currentColor">
+                          <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
+                        </svg>
+                      </div>
+                      <div class="info-text">Bhaktapur, Nepal</div>
+                    </div>
+                    <div class="info-item" data-info="time">
+                      <div class="info-icon">
+                        <svg viewBox="0 0 24 24" fill="currentColor">
+                          <path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8z"/>
+                          <path d="M12.5 7H11v6l5.25 3.15.75-1.23-4.5-2.67z"/>
+                        </svg>
+                      </div>
+                      <div class="info-text">24h Response</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Floating Contact Icons -->
+            <div class="floating-contact-icons">
+              <div class="contact-icon-float icon-1" data-contact="email">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/>
+                </svg>
+              </div>
+              
+              <div class="contact-icon-float icon-2" data-contact="phone">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/>
+                </svg>
+              </div>
+              
+              <div class="contact-icon-float icon-3" data-contact="location">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
+                </svg>
+              </div>
+              
+              <div class="contact-icon-float icon-4" data-contact="social">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M16 4c0-1.11.89-2 2-2s2 .89 2 2-.89 2-2 2-2-.89-2-2zm4 18v-6h2.5l-2.54-7.63A2.996 2.996 0 0 0 17.06 6c-.8 0-1.54.37-2.01.97l-2.05 2.58c-.26.33-.26.8 0 1.13l2.05 2.58c.47.6 1.21.97 2.01.97.35 0 .69-.06 1-.17V22h2z"/>
+                </svg>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Social Links Enhanced -->
+        <div class="social-section-enhanced">
+          <h3>Connect With Me</h3>
+          <div class="social-links-enhanced">
+            <a href="https://github.com/Dhirendra07000" target="_blank" class="social-link-enhanced github" data-platform="GitHub" data-magnetic data-ripple>
+              <div class="social-icon">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+                </svg>
+              </div>
+              <span class="social-label">GitHub</span>
+            </a>
+            
+            <a href="https://www.linkedin.com/in/dhirendra-yadav-3040b82b4" target="_blank" class="social-link-enhanced linkedin" data-platform="LinkedIn" data-magnetic data-ripple>
+              <div class="social-icon">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.32 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.79M6.88 8.56a1.68 1.68 0 0 0 1.68-1.68c0-.93-.75-1.69-1.68-1.69a1.69 1.69 0 0 0-1.69 1.69c0 .93.76 1.68 1.69 1.68m1.39 9.94v-8.37H5.5v8.37h2.77z"/>
+                </svg>
+              </div>
+              <span class="social-label">LinkedIn</span>
+            </a>
+            
+            <a href="https://www.instagram.com/its_dhiruu_____" target="_blank" class="social-link-enhanced instagram" data-platform="Instagram" data-magnetic data-ripple>
+              <div class="social-icon">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M7.8 2h8.4C19.4 2 22 4.6 22 7.8v8.4a5.8 5.8 0 0 1-5.8 5.8H7.8C4.6 22 2 19.4 2 16.2V7.8A5.8 5.8 0 0 1 7.8 2m-.2 2A3.6 3.6 0 0 0 4 7.6v8.8C4 18.39 5.61 20 7.6 20h8.8a3.6 3.6 0 0 0 3.6-3.6V7.6C20 5.61 18.39 4 16.4 4H7.6m9.65 1.5a1.25 1.25 0 0 1 1.25 1.25A1.25 1.25 0 0 1 17.25 8 1.25 1.25 0 0 1 16 6.75a1.25 1.25 0 0 1 1.25-1.25M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3z"/>
+                </svg>
+              </div>
+              <span class="social-label">Instagram</span>
+            </a>
+            
+            <a href="mailto:Dhirendrayadav4999@gmail.com" class="social-link-enhanced email" data-platform="Email" data-magnetic data-ripple>
+              <div class="social-icon">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/>
+                </svg>
+              </div>
+              <span class="social-label">Email</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Enhanced Resume Section -->
+<section class="resume-section-enhanced">
+  <div class="container">
+    <div class="resume-header-enhanced">
+      <h2>Professional Resume</h2>
+      <p>My journey, skills, and achievements in web development</p>
+      <div class="resume-actions-enhanced">
+        <a href="{{ url_for('download_cv') }}" class="btn-enhanced btn-primary-enhanced" data-magnetic data-ripple>
+          <span class="btn-text">Download CV (PDF)</span>
+          <span class="btn-icon">
+            <svg viewBox="0 0 24 24" fill="currentColor">
+              <path d="M14,2H6A2,2 0 0,0 4,4V20A2,2 0 0,0 6,22H18A2,2 0 0,0 20,20V8L14,2M18,20H6V4H13V9H18V20Z"/>
+            </svg>
+          </span>
+        </a>
+        <a href="{{ url_for('cv_preview') }}" class="btn-enhanced btn-secondary-enhanced" data-magnetic data-ripple target="_blank">
+          <span class="btn-text">Preview CV</span>
+          <span class="btn-icon">
+            <svg viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12,9A3,3 0 0,0 9,12A3,3 0 0,0 12,15A3,3 0 0,0 15,12A3,3 0 0,0 12,9M12,17A5,5 0 0,1 7,12A5,5 0 0,1 12,7A5,5 0 0,1 17,12A5,5 0 0,1 12,17M12,4.5C7,4.5 2.73,7.61 1,12C2.73,16.39 7,19.5 12,19.5C17,19.5 21.27,16.39 23,12C21.27,7.61 17,4.5 12,4.5Z"/>
+            </svg>
+          </span>
+        </a>
+        <a href="{{ url_for('about') }}" class="btn-enhanced btn-secondary-enhanced" data-magnetic data-ripple>
+          <span class="btn-text">View Full Profile</span>
+        </a>
+      </div>
+    </div>
+    
+    <div class="resume-content-enhanced">
+      <!-- Education Enhanced -->
+      <div class="resume-card-enhanced">
+        <div class="card-header-enhanced">
+          <div class="card-icon-enhanced">
+            <svg viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12,3L1,9L12,15L21,10.09V17H23V9M5,13.18V17.18L12,21L19,17.18V13.18L12,17L5,13.18Z"/>
+            </svg>
+          </div>
+          <h3>Education</h3>
+        </div>
+        
+        <div class="timeline-enhanced">
+          <div class="timeline-item-enhanced">
+            <div class="timeline-marker"></div>
+            <div class="timeline-content">
+              <div class="item-header-enhanced">
+                <div class="item-info">
+                  <div class="item-title-enhanced">BSc in Information Technology</div>
+                  <div class="item-company-enhanced">University of Sunder</div>
+                </div>
+                <div class="item-date-enhanced">2022 - 2025</div>
+              </div>
+              <p class="item-description-enhanced">
+                Graduated with First Class. Specialized in web development, database management, and UI/UX design.
+              </p>
+              <div class="item-tags">
+                <span class="tag">Web Development</span>
+                <span class="tag">Database Design</span>
+                <span class="tag">UI/UX</span>
+              </div>
+            </div>
+          </div>
+          
+          <div class="timeline-item-enhanced">
+            <div class="timeline-marker"></div>
+            <div class="timeline-content">
+              <div class="item-header-enhanced">
+                <div class="item-info">
+                  <div class="item-title-enhanced">Higher Secondary Education (HSEB)</div>
+                  <div class="item-company-enhanced">KMC Kathmandu</div>
+                </div>
+                <div class="item-date-enhanced">2019 - 2021</div>
+              </div>
+              <p class="item-description-enhanced">
+                Achieved 3.22 GPA. Focused on computer science and mathematics.
+              </p>
+              <div class="item-tags">
+                <span class="tag">Computer Science</span>
+                <span class="tag">Mathematics</span>
+              </div>
+            </div>
+          </div>
+          
+          <div class="timeline-item-enhanced">
+            <div class="timeline-marker"></div>
+            <div class="timeline-content">
+              <div class="item-header-enhanced">
+                <div class="item-info">
+                  <div class="item-title-enhanced">Secondary Education (SEE)</div>
+                  <div class="item-company-enhanced">GS Niketan Hetauda</div>
+                </div>
+                <div class="item-date-enhanced">2019</div>
+              </div>
+              <p class="item-description-enhanced">
+                Scored 3.65 GPA. Developed strong foundation in academics.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Skills Enhanced -->
+      <div class="resume-card-enhanced">
+        <div class="card-header-enhanced">
+          <div class="card-icon-enhanced">
+            <svg viewBox="0 0 24 24" fill="currentColor">
+              <path d="M8,3A2,2 0 0,0 6,5V9A2,2 0 0,1 4,11H3V13H4A2,2 0 0,1 6,15V19A2,2 0 0,0 8,21H10V19H8V14A2,2 0 0,0 6,12A2,2 0 0,0 8,10V5H10V3M16,3A2,2 0 0,1 18,5V9A2,2 0 0,0 20,11H21V13H20A2,2 0 0,0 18,15V19A2,2 0 0,1 16,21H14V19H16V14A2,2 0 0,1 18,12A2,2 0 0,1 16,10V5H14V3H16Z"/>
+            </svg>
+          </div>
+          <h3>Technical Skills</h3>
+        </div>
+        
+        <div class="skills-grid-enhanced">
+          <div class="skills-column">
+            <div class="skill-item-enhanced">
+              <div class="skill-header-enhanced">
+                <span class="skill-name">Python</span>
+                <span class="skill-percentage">85%</span>
+              </div>
+              <div class="skill-bar-enhanced">
+                <div class="skill-progress-enhanced" data-width="85"></div>
+              </div>
+            </div>
+            
+            <div class="skill-item-enhanced">
+              <div class="skill-header-enhanced">
+                <span class="skill-name">Flask</span>
+                <span class="skill-percentage">80%</span>
+              </div>
+              <div class="skill-bar-enhanced">
+                <div class="skill-progress-enhanced" data-width="80"></div>
+              </div>
+            </div>
+            
+            <div class="skill-item-enhanced">
+              <div class="skill-header-enhanced">
+                <span class="skill-name">MySQL</span>
+                <span class="skill-percentage">75%</span>
+              </div>
+              <div class="skill-bar-enhanced">
+                <div class="skill-progress-enhanced" data-width="75"></div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="skills-column">
+            <div class="skill-item-enhanced">
+              <div class="skill-header-enhanced">
+                <span class="skill-name">HTML/CSS</span>
+                <span class="skill-percentage">90%</span>
+              </div>
+              <div class="skill-bar-enhanced">
+                <div class="skill-progress-enhanced" data-width="90"></div>
+              </div>
+            </div>
+            
+            <div class="skill-item-enhanced">
+              <div class="skill-header-enhanced">
+                <span class="skill-name">JavaScript</span>
+                <span class="skill-percentage">75%</span>
+              </div>
+              <div class="skill-bar-enhanced">
+                <div class="skill-progress-enhanced" data-width="75"></div>
+              </div>
+            </div>
+            
+            <div class="skill-item-enhanced">
+              <div class="skill-header-enhanced">
+                <span class="skill-name">React</span>
+                <span class="skill-percentage">70%</span>
+              </div>
+              <div class="skill-bar-enhanced">
+                <div class="skill-progress-enhanced" data-width="70"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Projects Enhanced -->
+      <div class="resume-card-enhanced">
+        <div class="card-header-enhanced">
+          <div class="card-icon-enhanced">
+            <svg viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12,2A3,3 0 0,1 15,5V11A3,3 0 0,1 12,14A3,3 0 0,1 9,11V5A3,3 0 0,1 12,2M19,11C19,14.53 16.39,17.44 13,17.93V21H11V17.93C7.61,17.44 5,14.53 5,11H7A5,5 0 0,0 12,16A5,5 0 0,0 17,11H19Z"/>
+            </svg>
+          </div>
+          <h3>Projects & Experience</h3>
+        </div>
+        
+        <div class="projects-grid-enhanced">
+          <div class="project-item-enhanced">
+            <div class="project-header">
+              <div class="project-info">
+                <div class="project-title">Personal Portfolio Website</div>
+                <div class="project-type">Personal Project</div>
+              </div>
+              <div class="project-date">2024</div>
+            </div>
+            <p class="project-description">
+              Developed a modern, responsive portfolio website using Flask, featuring 3D animations, interactive elements, and a clean minimal design. Implemented dark mode support and optimized for performance.
+            </p>
+            <div class="project-tech">
+              <span class="tech-tag">Flask</span>
+              <span class="tech-tag">JavaScript</span>
+              <span class="tech-tag">CSS3</span>
+              <span class="tech-tag">3D Animations</span>
+            </div>
+          </div>
+          
+          <div class="project-item-enhanced">
+            <div class="project-header">
+              <div class="project-info">
+                <div class="project-title">Web Development Projects</div>
+                <div class="project-type">Academic & Freelance</div>
+              </div>
+              <div class="project-date">2022 - 2024</div>
+            </div>
+            <p class="project-description">
+              Created multiple web applications and websites using modern technologies. Focused on responsive design, user experience, and clean code practices.
+            </p>
+            <div class="project-tech">
+              <span class="tech-tag">Python</span>
+              <span class="tech-tag">React</span>
+              <span class="tech-tag">MySQL</span>
+              <span class="tech-tag">UI/UX</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+// Enhanced CV download functionality
+document.addEventListener('DOMContentLoaded', function() {
+    const downloadBtn = document.querySelector('a[href*="download-cv"]');
+    const previewBtn = document.querySelector('a[href*="cv-preview"]');
+    
+    if (downloadBtn) {
+        downloadBtn.addEventListener('click', function(e) {
+            // Add loading state
+            const originalText = this.querySelector('.btn-text').textContent;
+            this.querySelector('.btn-text').textContent = 'Preparing Download...';
+            this.style.pointerEvents = 'none';
+            
+            // Reset after a delay
+            setTimeout(() => {
+                this.querySelector('.btn-text').textContent = originalText;
+                this.style.pointerEvents = 'auto';
+                
+                // Show success message
+                showNotification('CV download started! Use Ctrl+P to save as PDF when the page opens.', 'success');
+            }, 1000);
+        });
+    }
+    
+    if (previewBtn) {
+        previewBtn.addEventListener('click', function(e) {
+            showNotification('Opening CV preview in new tab...', 'info');
+        });
+    }
+});
+
+// Notification system
+function showNotification(message, type = 'info') {
+    const notification = document.createElement('div');
+    notification.className = `notification notification-${type}`;
+    notification.innerHTML = `
+        <div class="notification-content">
+            <span class="notification-icon">
+                ${type === 'success' ? '✅' : type === 'error' ? '❌' : 'ℹ️'}
+            </span>
+            <span class="notification-message">${message}</span>
+            <button class="notification-close" onclick="this.parentElement.parentElement.remove()">×</button>
+        </div>
+    `;
+    
+    // Add styles
+    notification.style.cssText = `
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        background: ${type === 'success' ? '#10b981' : type === 'error' ? '#ef4444' : '#3b82f6'};
+        color: white;
+        padding: 15px 20px;
+        border-radius: 10px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        z-index: 10000;
+        font-family: Inter, sans-serif;
+        max-width: 400px;
+        animation: slideIn 0.3s ease-out;
+    `;
+    
+    document.body.appendChild(notification);
+    
+    // Auto-remove after 5 seconds
+    setTimeout(() => {
+        if (notification.parentElement) {
+            notification.style.animation = 'slideOut 0.3s ease-in';
+            setTimeout(() => notification.remove(), 300);
+        }
+    }, 5000);
+}
+
+// Add CSS animations
+const style = document.createElement('style');
+style.textContent = `
+    @keyframes slideIn {
+        from { transform: translateX(100%); opacity: 0; }
+        to { transform: translateX(0); opacity: 1; }
+    }
+    
+    @keyframes slideOut {
+        from { transform: translateX(0); opacity: 1; }
+        to { transform: translateX(100%); opacity: 0; }
+    }
+    
+    .notification-content {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+    
+    .notification-close {
+        background: none;
+        border: none;
+        color: white;
+        font-size: 18px;
+        cursor: pointer;
+        padding: 0;
+        margin-left: auto;
+    }
+    
+    .notification-close:hover {
+        opacity: 0.7;
+    }
+`;
+document.head.appendChild(style);
+</script>
+{% endblock %}
+
+

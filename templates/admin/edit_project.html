@@ -1,0 +1,220 @@
+{% extends "admin/base.html" %}
+
+{% block title %}Edit Project - Admin Panel{% endblock %}
+
+{% block content %}
+<div class="admin-card">
+    <div class="admin-card-header">
+        <h2>✏️ Edit Project: {{ project.title }}</h2>
+    </div>
+
+    <div class="admin-card-body">
+        <form id="editProjectForm" method="POST">
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;">
+                <!-- Left Column -->
+                <div>
+                    <div class="form-group">
+                        <label class="form-label" for="title">Project Title *</label>
+                        <input type="text" id="title" name="title" class="form-input" 
+                               value="{{ project.title }}" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="description">Short Description *</label>
+                        <textarea id="description" name="description" class="form-textarea" required>{{ project.description }}</textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="long_description">Detailed Description</label>
+                        <textarea id="long_description" name="long_description" class="form-textarea" 
+                                  style="min-height: 120px;">{{ project.long_description or '' }}</textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="technologies">Technologies Used</label>
+                        <div id="tech-container">
+                            <input type="text" id="tech-input" class="form-input" 
+                                   placeholder="Type technology and press Enter">
+                            <div id="tech-tags" style="margin-top: 0.5rem; display: flex; flex-wrap: wrap; gap: 0.5rem;"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Column -->
+                <div>
+                    <div class="form-group">
+                        <label class="form-label" for="project_type">Project Type</label>
+                        <select id="project_type" name="project_type" class="form-select">
+                            <option value="web" {% if project.project_type == 'web' %}selected{% endif %}>Web Application</option>
+                            <option value="mobile" {% if project.project_type == 'mobile' %}selected{% endif %}>Mobile App</option>
+                            <option value="desktop" {% if project.project_type == 'desktop' %}selected{% endif %}>Desktop Application</option>
+                            <option value="data" {% if project.project_type == 'data' %}selected{% endif %}>Data Science</option>
+                            <option value="design" {% if project.project_type == 'design' %}selected{% endif %}>Design</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="status">Project Status</label>
+                        <select id="status" name="status" class="form-select">
+                            <option value="completed" {% if project.status == 'completed' %}selected{% endif %}>Completed</option>
+                            <option value="in_progress" {% if project.status == 'in_progress' %}selected{% endif %}>In Progress</option>
+                            <option value="planned" {% if project.status == 'planned' %}selected{% endif %}>Planned</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-checkbox">
+                            <input type="checkbox" id="featured" name="featured" {% if project.featured %}checked{% endif %}>
+                            <span>Featured Project (show on homepage)</span>
+                        </label>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="display_order">Display Order</label>
+                        <input type="number" id="display_order" name="display_order" class="form-input" 
+                               value="{{ project.display_order }}" min="0">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="image_url">Project Image URL</label>
+                        <input type="url" id="image_url" name="image_url" class="form-input" 
+                               value="{{ project.image_url or '' }}">
+                    </div>
+                </div>
+            </div>
+
+            <!-- URLs Section -->
+            <div style="margin-top: 2rem; padding-top: 2rem; border-top: 1px solid #e2e8f0;">
+                <h3 style="margin-bottom: 1rem; color: #374151;">Project Links</h3>
+                
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                    <div class="form-group">
+                        <label class="form-label" for="demo_url">Live Demo URL</label>
+                        <input type="url" id="demo_url" name="demo_url" class="form-input" 
+                               value="{{ project.demo_url or '' }}">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="github_url">GitHub Repository</label>
+                        <input type="url" id="github_url" name="github_url" class="form-input" 
+                               value="{{ project.github_url or '' }}">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="case_study_url">Case Study URL</label>
+                    <input type="url" id="case_study_url" name="case_study_url" class="form-input" 
+                           value="{{ project.case_study_url or '' }}">
+                </div>
+            </div>
+
+            <!-- Form Actions -->
+            <div style="display: flex; gap: 1rem; justify-content: flex-end; margin-top: 2rem; padding-top: 2rem; border-top: 1px solid #e2e8f0;">
+                <a href="{{ url_for('admin_projects') }}" class="btn btn-secondary">Cancel</a>
+                <button type="submit" class="btn btn-primary">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
+                    </svg>
+                    Update Project
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    // Technology tags management
+    const techInput = document.getElementById('tech-input');
+    const techTags = document.getElementById('tech-tags');
+    let technologies = {{ project.technologies | tojson if project.technologies else '[]' | safe }};
+
+    // Initialize existing technologies
+    technologies.forEach(tech => addTechTag(tech));
+
+    techInput.addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            const tech = this.value.trim();
+            if (tech && !technologies.includes(tech)) {
+                technologies.push(tech);
+                addTechTag(tech);
+                this.value = '';
+            }
+        }
+    });
+
+    function addTechTag(tech) {
+        const tag = document.createElement('span');
+        tag.className = 'tech-tag';
+        tag.style.cssText = `
+            background: #6366f1;
+            color: white;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+        `;
+        
+        tag.innerHTML = `
+            ${tech}
+            <button type="button" onclick="removeTechTag(\`${tech}\`, this.parentElement)" 
+                    style="background: none; border: none; color: white; cursor: pointer; padding: 0; margin-left: 0.25rem;">
+                ×
+            </button>
+        `;
+        
+        techTags.appendChild(tag);
+    }
+
+    function removeTechTag(tech, element) {
+        const index = technologies.indexOf(tech);
+        if (index > -1) {
+            technologies.splice(index, 1);
+        }
+        element.remove();
+    }
+
+    // Form submission
+    document.getElementById('editProjectForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        const formData = new FormData(this);
+        
+        // Add technologies
+        technologies.forEach(tech => {
+            formData.append('technologies', tech);
+        });
+        
+        // Show loading state
+        const submitBtn = this.querySelector('button[type="submit"]');
+        const originalText = submitBtn.innerHTML;
+        submitBtn.innerHTML = 'Updating Project...';
+        submitBtn.disabled = true;
+        
+        fetch(this.action, {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                window.location.href = "{{ url_for('admin_projects') }}";
+            } else {
+                alert('Error updating project. Please try again.');
+                submitBtn.innerHTML = originalText;
+                submitBtn.disabled = false;
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Error updating project. Please try again.');
+            submitBtn.innerHTML = originalText;
+            submitBtn.disabled = false;
+        });
+    });
+</script>
+{% endblock %}

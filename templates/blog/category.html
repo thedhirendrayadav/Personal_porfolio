@@ -1,0 +1,235 @@
+{% extends "base.html" %}
+
+{% block title %}{{ category_name }} - Blog - {{ app_name }}{% endblock %}
+
+{% block extra_head %}
+<style>
+/* Category Page Styles */
+.category-hero {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 4rem 0;
+  text-align: center;
+}
+
+.category-title {
+  font-size: 3rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+}
+
+.category-description {
+  font-size: 1.25rem;
+  opacity: 0.9;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.posts-grid {
+  display: grid;
+  gap: 2rem;
+  margin-top: 3rem;
+}
+
+.blog-post-card {
+  background: white;
+  border-radius: 15px;
+  overflow: hidden;
+  box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+  transition: all 0.3s ease;
+  border: 1px solid #e2e8f0;
+}
+
+.blog-post-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.12);
+}
+
+.post-image {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+}
+
+.post-placeholder {
+  width: 100%;
+  height: 200px;
+  background: linear-gradient(45deg, #667eea, #764ba2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 3rem;
+  color: white;
+}
+
+.post-content {
+  padding: 2rem;
+}
+
+.post-meta {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+  font-size: 0.875rem;
+  color: #64748b;
+}
+
+.post-category {
+  background: linear-gradient(45deg, #667eea, #764ba2);
+  color: white;
+  padding: 0.25rem 0.75rem;
+  border-radius: 50px;
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+.post-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  line-height: 1.3;
+}
+
+.post-title a {
+  color: #1e293b;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.post-title a:hover {
+  color: #667eea;
+}
+
+.post-excerpt {
+  color: #64748b;
+  margin-bottom: 1.5rem;
+  line-height: 1.6;
+}
+
+.read-more-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: linear-gradient(45deg, #667eea, #764ba2);
+  color: white;
+  padding: 0.75rem 1.5rem;
+  border-radius: 50px;
+  text-decoration: none;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.read-more-btn:hover {
+  transform: translateX(5px);
+  box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+}
+
+.no-posts {
+  text-align: center;
+  padding: 4rem 2rem;
+  color: #64748b;
+}
+
+.no-posts h3 {
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+  color: #1e293b;
+}
+
+.back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #667eea;
+  text-decoration: none;
+  font-weight: 500;
+  margin-bottom: 2rem;
+  transition: all 0.3s ease;
+}
+
+.back-link:hover {
+  transform: translateX(-5px);
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Category Hero -->
+<section class="category-hero">
+  <div class="container">
+    <h1 class="category-title">{{ category_name }}</h1>
+    <p class="category-description">
+      Explore articles in the {{ category_name.lower() }} category
+    </p>
+  </div>
+</section>
+
+<!-- Category Posts -->
+<section class="blog-section">
+  <div class="container">
+    <a href="{{ url_for('blog') }}" class="back-link">
+      <span>←</span>
+      <span>Back to All Posts</span>
+    </a>
+    
+    {% if posts %}
+    <div class="posts-grid">
+      {% for post in posts %}
+      <article class="blog-post-card">
+        {% if post.featured_image %}
+        <img src="{{ post.featured_image }}" alt="{{ post.title }}" class="post-image">
+        {% else %}
+        <div class="post-placeholder">📝</div>
+        {% endif %}
+        
+        <div class="post-content">
+          <div class="post-meta">
+            <span class="post-category">{{ post.category }}</span>
+            <span class="post-date">{{ post.created_at.strftime('%B %d, %Y') }}</span>
+            <span class="post-reading-time">{{ post.reading_time }} min read</span>
+          </div>
+          
+          <h2 class="post-title">
+            <a href="{{ url_for('blog_post', slug=post.slug) }}">{{ post.title }}</a>
+          </h2>
+          
+          <p class="post-excerpt">{{ post.excerpt }}</p>
+          
+          <a href="{{ url_for('blog_post', slug=post.slug) }}" class="read-more-btn">
+            <span>Read Article</span>
+            <span>→</span>
+          </a>
+        </div>
+      </article>
+      {% endfor %}
+    </div>
+    {% else %}
+    <div class="no-posts">
+      <div style="font-size: 4rem; margin-bottom: 1rem;">📝</div>
+      <h3>No Articles in {{ category_name }}</h3>
+      <p>There are no articles in this category yet. Check back soon!</p>
+    </div>
+    {% endif %}
+  </div>
+</section>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+// Add hover effects to cards
+document.addEventListener('DOMContentLoaded', function() {
+  const cards = document.querySelectorAll('.blog-post-card');
+  
+  cards.forEach(card => {
+    card.addEventListener('mouseenter', () => {
+      card.style.transform = 'translateY(-5px) scale(1.02)';
+    });
+    
+    card.addEventListener('mouseleave', () => {
+      card.style.transform = 'translateY(0) scale(1)';
+    });
+  });
+});
+</script>
+{% endblock %}

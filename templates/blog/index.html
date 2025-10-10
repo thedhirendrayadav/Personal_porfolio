@@ -1,0 +1,1864 @@
+{% extends "base.html" %}
+
+{% block title %}Blog - {{ app_name }}{% endblock %}
+
+{% block extra_head %}
+<style>
+  /* Enhanced Modern Blog Styles - Matching Site Theme */
+  .blog-hero-enhanced {
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #334155 100%);
+    overflow: hidden;
+  }
+
+  /* 3D Grid Background */
+  .cyber-grid-3d {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image:
+      linear-gradient(rgba(6, 182, 212, 0.1) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(6, 182, 212, 0.1) 1px, transparent 1px);
+    background-size: 50px 50px;
+    animation: gridMove 20s linear infinite;
+    z-index: 1;
+  }
+
+  @keyframes gridMove {
+    0% {
+      transform: translate(0, 0);
+    }
+
+    100% {
+      transform: translate(50px, 50px);
+    }
+  }
+
+  .blog-3d-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 1;
+  }
+
+  /* 3D Floating Cubes */
+  .floating-cube {
+    position: absolute;
+    transform-style: preserve-3d;
+    animation: cubeFloat 12s ease-in-out infinite;
+  }
+
+  .cube-3d {
+    position: relative;
+    transform-style: preserve-3d;
+    animation: cubeRotate 20s linear infinite;
+  }
+
+  .cube-face {
+    position: absolute;
+    width: 60px;
+    height: 60px;
+    background: linear-gradient(45deg, rgba(6, 182, 212, 0.3), rgba(14, 165, 233, 0.3));
+    border: 1px solid rgba(6, 182, 212, 0.5);
+    backdrop-filter: blur(10px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    color: #06b6d4;
+  }
+
+  .cube-face.front {
+    transform: rotateY(0deg) translateZ(30px);
+  }
+
+  .cube-face.back {
+    transform: rotateY(180deg) translateZ(30px);
+  }
+
+  .cube-face.right {
+    transform: rotateY(90deg) translateZ(30px);
+  }
+
+  .cube-face.left {
+    transform: rotateY(-90deg) translateZ(30px);
+  }
+
+  .cube-face.top {
+    transform: rotateX(90deg) translateZ(30px);
+  }
+
+  .cube-face.bottom {
+    transform: rotateX(-90deg) translateZ(30px);
+  }
+
+  .cube-1 {
+    top: 20%;
+    left: 10%;
+    animation-delay: 0s;
+  }
+
+  .cube-2 {
+    top: 60%;
+    right: 15%;
+    animation-delay: 4s;
+  }
+
+  .cube-3 {
+    bottom: 30%;
+    left: 20%;
+    animation-delay: 8s;
+  }
+
+  @keyframes cubeFloat {
+
+    0%,
+    100% {
+      transform: translateY(0px) translateX(0px);
+    }
+
+    25% {
+      transform: translateY(-30px) translateX(20px);
+    }
+
+    50% {
+      transform: translateY(-10px) translateX(-15px);
+    }
+
+    75% {
+      transform: translateY(-25px) translateX(10px);
+    }
+  }
+
+  @keyframes cubeRotate {
+    0% {
+      transform: rotateX(0deg) rotateY(0deg) rotateZ(0deg);
+    }
+
+    100% {
+      transform: rotateX(360deg) rotateY(360deg) rotateZ(360deg);
+    }
+  }
+
+  /* Additional floating elements */
+  .floating-particles {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+  }
+
+  /* Enhanced Particles */
+  .particle {
+    position: absolute;
+    width: 3px;
+    height: 3px;
+    background: #06b6d4;
+    border-radius: 50%;
+    animation: particleFloat 15s linear infinite;
+    box-shadow: 0 0 10px #06b6d4;
+  }
+
+  .data-stream {
+    position: absolute;
+    width: 2px;
+    height: 100px;
+    background: linear-gradient(to bottom, transparent, #06b6d4, transparent);
+    animation: dataFlow 8s linear infinite;
+  }
+
+  .stream-1 {
+    left: 25%;
+    animation-delay: 0s;
+  }
+
+  .stream-2 {
+    left: 50%;
+    animation-delay: 2s;
+  }
+
+  .stream-3 {
+    left: 75%;
+    animation-delay: 4s;
+  }
+
+  @keyframes dataFlow {
+    0% {
+      transform: translateY(-100px);
+      opacity: 0;
+    }
+
+    10% {
+      opacity: 1;
+    }
+
+    90% {
+      opacity: 1;
+    }
+
+    100% {
+      transform: translateY(100vh);
+      opacity: 0;
+    }
+  }
+
+  .particle:nth-child(1) {
+    left: 10%;
+    animation-delay: 0s;
+  }
+
+  .particle:nth-child(2) {
+    left: 20%;
+    animation-delay: 2s;
+  }
+
+  .particle:nth-child(3) {
+    left: 30%;
+    animation-delay: 4s;
+  }
+
+  .particle:nth-child(4) {
+    left: 40%;
+    animation-delay: 6s;
+  }
+
+  .particle:nth-child(5) {
+    left: 50%;
+    animation-delay: 8s;
+  }
+
+  .particle:nth-child(6) {
+    left: 60%;
+    animation-delay: 10s;
+  }
+
+  .particle:nth-child(7) {
+    left: 70%;
+    animation-delay: 12s;
+  }
+
+  .particle:nth-child(8) {
+    left: 80%;
+    animation-delay: 14s;
+  }
+
+  @keyframes float {
+
+    0%,
+    100% {
+      transform: translateY(0px) rotate(0deg) scale(1);
+      opacity: 0.7;
+    }
+
+    33% {
+      transform: translateY(-30px) rotate(120deg) scale(1.1);
+      opacity: 1;
+    }
+
+    66% {
+      transform: translateY(-15px) rotate(240deg) scale(0.9);
+      opacity: 0.8;
+    }
+  }
+
+  @keyframes particleFloat {
+    0% {
+      transform: translateY(100vh) rotate(0deg);
+      opacity: 0;
+    }
+
+    10% {
+      opacity: 1;
+    }
+
+    90% {
+      opacity: 1;
+    }
+
+    100% {
+      transform: translateY(-100px) rotate(360deg);
+      opacity: 0;
+    }
+  }
+
+  .blog-hero-content {
+    position: relative;
+    z-index: 3;
+    text-align: center;
+    color: white;
+    animation: heroContentFadeIn 1.5s ease-out;
+  }
+
+  .intro-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    background: rgba(6, 182, 212, 0.2);
+    backdrop-filter: blur(20px);
+    padding: 0.75rem 1.5rem;
+    border-radius: 50px;
+    border: 1px solid rgba(6, 182, 212, 0.4);
+    margin-bottom: 2.5rem;
+    font-size: 0.95rem;
+    font-weight: 600;
+    box-shadow: 0 8px 32px rgba(6, 182, 212, 0.3);
+    transition: all 0.3s ease;
+    animation: badgeGlow 3s ease-in-out infinite;
+  }
+
+  .intro-badge:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+  }
+
+  .badge-icon {
+    font-size: 1.2rem;
+    animation: iconSpin 4s linear infinite;
+  }
+
+  .hero-title-enhanced {
+    font-size: clamp(3rem, 6vw, 5rem);
+    font-weight: 800;
+    margin-bottom: 2rem;
+    line-height: 1.1;
+    text-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  }
+
+  .title-greeting {
+    display: block;
+    font-size: 0.4em;
+    font-weight: 400;
+    opacity: 0.9;
+    margin-bottom: 0.5rem;
+    animation: slideInLeft 1s ease-out 0.5s both;
+  }
+
+  .title-main {
+    display: block;
+    background: linear-gradient(45deg, #06b6d4, #0ea5e9, #38bdf8);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: slideInUp 1s ease-out 0.7s both;
+    position: relative;
+    text-shadow: 0 0 30px rgba(6, 182, 212, 0.5);
+  }
+
+  .title-main::after {
+    content: '';
+    position: absolute;
+    bottom: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100px;
+    height: 4px;
+    background: linear-gradient(45deg, #06b6d4, #0ea5e9);
+    border-radius: 2px;
+    animation: underlineExpand 1s ease-out 1.2s both;
+    box-shadow: 0 0 20px rgba(6, 182, 212, 0.6);
+  }
+
+  .title-subtitle {
+    display: block;
+    font-size: 0.35em;
+    font-weight: 300;
+    opacity: 0.8;
+    margin-top: 1rem;
+    animation: slideInRight 1s ease-out 0.9s both;
+  }
+
+  .hero-description {
+    font-size: 1.3rem;
+    margin-bottom: 3rem;
+    opacity: 0.95;
+    max-width: 700px;
+    margin-left: auto;
+    margin-right: auto;
+    line-height: 1.6;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    animation: fadeInUp 1s ease-out 1.1s both;
+  }
+
+  .blog-stats {
+    display: flex;
+    justify-content: center;
+    gap: 2.5rem;
+    margin-top: 4rem;
+    animation: statsSlideIn 1s ease-out 1.3s both;
+  }
+
+  .stat-item {
+    background: rgba(15, 23, 42, 0.8);
+    backdrop-filter: blur(25px);
+    padding: 2rem 1.5rem;
+    border-radius: 25px;
+    border: 1px solid rgba(6, 182, 212, 0.3);
+    text-align: center;
+    min-width: 140px;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 8px 32px rgba(6, 182, 212, 0.2);
+  }
+
+  .stat-item::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.5s ease;
+  }
+
+  .stat-item:hover {
+    transform: translateY(-8px) scale(1.05);
+    background: rgba(6, 182, 212, 0.2);
+    box-shadow: 0 15px 45px rgba(6, 182, 212, 0.4);
+    border-color: rgba(6, 182, 212, 0.6);
+  }
+
+  .stat-item:hover::before {
+    left: 100%;
+  }
+
+  .stat-number {
+    display: block;
+    font-size: 2.5rem;
+    font-weight: 800;
+    margin-bottom: 0.75rem;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    animation: numberPulse 2s ease-in-out infinite;
+  }
+
+  .stat-label {
+    font-size: 0.95rem;
+    opacity: 0.9;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  /* Enhanced Animations */
+  @keyframes heroContentFadeIn {
+    0% {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes badgeGlow {
+
+    0%,
+    100% {
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    }
+
+    50% {
+      box-shadow: 0 8px 32px rgba(255, 255, 255, 0.2);
+    }
+  }
+
+  @keyframes iconSpin {
+    0% {
+      transform: rotate(0deg);
+    }
+
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+
+  @keyframes slideInLeft {
+    0% {
+      opacity: 0;
+      transform: translateX(-50px);
+    }
+
+    100% {
+      opacity: 0.9;
+      transform: translateX(0);
+    }
+  }
+
+  @keyframes slideInUp {
+    0% {
+      opacity: 0;
+      transform: translateY(50px);
+    }
+
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes slideInRight {
+    0% {
+      opacity: 0;
+      transform: translateX(50px);
+    }
+
+    100% {
+      opacity: 0.8;
+      transform: translateX(0);
+    }
+  }
+
+  @keyframes fadeInUp {
+    0% {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+
+    100% {
+      opacity: 0.95;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes underlineExpand {
+    0% {
+      width: 0;
+    }
+
+    100% {
+      width: 100px;
+    }
+  }
+
+  @keyframes statsSlideIn {
+    0% {
+      opacity: 0;
+      transform: translateY(40px);
+    }
+
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes numberPulse {
+
+    0%,
+    100% {
+      transform: scale(1);
+    }
+
+    50% {
+      transform: scale(1.05);
+    }
+  }
+
+  /* Enhanced Blog Content Sections */
+  .blog-section {
+    padding: 6rem 0;
+    position: relative;
+    background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+  }
+
+  .blog-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(6, 182, 212, 0.5), transparent);
+    box-shadow: 0 0 20px rgba(6, 182, 212, 0.3);
+  }
+
+  /* 3D Interactive Elements */
+  .interactive-3d-element {
+    position: absolute;
+    width: 40px;
+    height: 40px;
+    background: linear-gradient(45deg, rgba(6, 182, 212, 0.3), rgba(14, 165, 233, 0.3));
+    border: 1px solid rgba(6, 182, 212, 0.5);
+    border-radius: 8px;
+    transform-style: preserve-3d;
+    animation: elementFloat 8s ease-in-out infinite;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+
+  .interactive-3d-element:hover {
+    transform: scale(1.2) rotateX(45deg) rotateY(45deg);
+    box-shadow: 0 10px 30px rgba(6, 182, 212, 0.4);
+  }
+
+  .element-1 {
+    top: 10%;
+    right: 10%;
+    animation-delay: 0s;
+  }
+
+  .element-2 {
+    top: 30%;
+    left: 5%;
+    animation-delay: 2s;
+  }
+
+  .element-3 {
+    bottom: 20%;
+    right: 8%;
+    animation-delay: 4s;
+  }
+
+  @keyframes elementFloat {
+
+    0%,
+    100% {
+      transform: translateY(0px) rotateZ(0deg);
+    }
+
+    50% {
+      transform: translateY(-20px) rotateZ(180deg);
+    }
+  }
+
+  .section-header {
+    text-align: center;
+    margin-bottom: 5rem;
+    animation: sectionHeaderFadeIn 1s ease-out;
+  }
+
+  .section-title {
+    font-size: 3rem;
+    font-weight: 800;
+    margin-bottom: 1.5rem;
+    background: linear-gradient(135deg, #06b6d4, #0ea5e9, #38bdf8);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    position: relative;
+    display: inline-block;
+  }
+
+  .section-title::after {
+    content: '';
+    position: absolute;
+    bottom: -8px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60px;
+    height: 3px;
+    background: linear-gradient(45deg, #06b6d4, #0ea5e9);
+    border-radius: 2px;
+    box-shadow: 0 0 15px rgba(6, 182, 212, 0.6);
+  }
+
+  .section-subtitle {
+    font-size: 1.25rem;
+    color: #64748b;
+    font-weight: 400;
+    max-width: 600px;
+    margin: 0 auto;
+    line-height: 1.6;
+  }
+
+  @keyframes sectionHeaderFadeIn {
+    0% {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /* Enhanced Featured Posts */
+  .featured-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+    gap: 2.5rem;
+    margin-bottom: 5rem;
+  }
+
+  .featured-post {
+    background: rgba(15, 23, 42, 0.9);
+    border-radius: 25px;
+    overflow: hidden;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    border: 1px solid rgba(6, 182, 212, 0.3);
+    position: relative;
+    animation: cardSlideIn 0.6s ease-out;
+    backdrop-filter: blur(10px);
+  }
+
+  .featured-post::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, #06b6d4, #0ea5e9, #38bdf8);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    box-shadow: 0 0 20px rgba(6, 182, 212, 0.6);
+  }
+
+  .featured-post:hover {
+    transform: translateY(-15px) scale(1.02) rotateX(5deg);
+    box-shadow: 0 25px 50px rgba(6, 182, 212, 0.3);
+    border-color: rgba(6, 182, 212, 0.6);
+  }
+
+  .featured-post:hover::before {
+    opacity: 1;
+  }
+
+  @keyframes cardSlideIn {
+    0% {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .post-image {
+    width: 100%;
+    height: 240px;
+    object-fit: cover;
+    transition: transform 0.4s ease;
+  }
+
+  .featured-post:hover .post-image {
+    transform: scale(1.05);
+  }
+
+  .post-placeholder {
+    width: 100%;
+    height: 240px;
+    background: linear-gradient(135deg, #0f172a, #1e293b, #334155);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 4rem;
+    color: #06b6d4;
+    position: relative;
+    overflow: hidden;
+    border-bottom: 2px solid rgba(6, 182, 212, 0.3);
+  }
+
+  .post-placeholder::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+    animation: shimmer 3s ease-in-out infinite;
+  }
+
+  .post-content {
+    padding: 2.5rem;
+    position: relative;
+  }
+
+  @keyframes shimmer {
+    0% {
+      transform: translateX(-100%) translateY(-100%) rotate(45deg);
+    }
+
+    100% {
+      transform: translateX(100%) translateY(100%) rotate(45deg);
+    }
+  }
+
+  .post-meta {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+    margin-bottom: 1.5rem;
+    font-size: 0.9rem;
+    color: #64748b;
+    font-weight: 500;
+  }
+
+  .post-category {
+    background: linear-gradient(135deg, #06b6d4, #0ea5e9);
+    color: white;
+    padding: 0.4rem 1rem;
+    border-radius: 50px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    box-shadow: 0 4px 15px rgba(6, 182, 212, 0.4);
+  }
+
+  .post-title {
+    font-size: 1.75rem;
+    font-weight: 800;
+    margin-bottom: 1.25rem;
+    line-height: 1.25;
+  }
+
+  .post-title a {
+    color: #f8fafc;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    position: relative;
+  }
+
+  .post-title a::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background: linear-gradient(45deg, #06b6d4, #0ea5e9);
+    transition: width 0.3s ease;
+    box-shadow: 0 0 10px rgba(6, 182, 212, 0.6);
+  }
+
+  .post-title a:hover {
+    color: #06b6d4;
+    text-shadow: 0 0 10px rgba(6, 182, 212, 0.5);
+  }
+
+  .post-title a:hover::after {
+    width: 100%;
+  }
+
+  .post-excerpt {
+    color: #cbd5e1;
+    margin-bottom: 2rem;
+    line-height: 1.7;
+    font-size: 1.05rem;
+  }
+
+  .post-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-bottom: 2rem;
+  }
+
+  .tag {
+    background: linear-gradient(135deg, #f1f5f9, #e2e8f0);
+    color: #475569;
+    padding: 0.4rem 1rem;
+    border-radius: 50px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    border: 1px solid #e2e8f0;
+  }
+
+  .tag:hover {
+    background: linear-gradient(135deg, #06b6d4, #0ea5e9);
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(6, 182, 212, 0.4);
+  }
+
+  .read-more-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    background: linear-gradient(135deg, #06b6d4, #0ea5e9);
+    color: white;
+    padding: 1rem 2rem;
+    border-radius: 50px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.95rem;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    box-shadow: 0 8px 25px rgba(6, 182, 212, 0.4);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .read-more-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.5s ease;
+  }
+
+  .read-more-btn:hover {
+    transform: translateY(-3px) scale(1.05);
+    box-shadow: 0 12px 35px rgba(6, 182, 212, 0.6);
+  }
+
+  .read-more-btn:hover::before {
+    left: 100%;
+  }
+
+  /* Blog Layout */
+  .blog-layout {
+    display: grid;
+    grid-template-columns: 1fr 300px;
+    gap: 4rem;
+    align-items: start;
+  }
+
+  .posts-grid {
+    display: grid;
+    gap: 2rem;
+  }
+
+  .blog-post-card {
+    background: rgba(15, 23, 42, 0.9);
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+    transition: all 0.3s ease;
+    border: 1px solid rgba(6, 182, 212, 0.3);
+    backdrop-filter: blur(10px);
+  }
+
+  .blog-post-card:hover {
+    transform: translateY(-5px) rotateX(2deg);
+    box-shadow: 0 10px 30px rgba(6, 182, 212, 0.3);
+    border-color: rgba(6, 182, 212, 0.6);
+  }
+
+  /* Enhanced Sidebar */
+  .blog-sidebar {
+    position: sticky;
+    top: 2rem;
+  }
+
+  .sidebar-widget {
+    background: rgba(15, 23, 42, 0.9);
+    border-radius: 20px;
+    padding: 2.5rem;
+    margin-bottom: 2.5rem;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(6, 182, 212, 0.3);
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+    backdrop-filter: blur(10px);
+  }
+
+  .sidebar-widget::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, #06b6d4, #0ea5e9, #38bdf8);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    box-shadow: 0 0 20px rgba(6, 182, 212, 0.6);
+  }
+
+  .sidebar-widget:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 40px rgba(6, 182, 212, 0.2);
+    border-color: rgba(6, 182, 212, 0.6);
+  }
+
+  .sidebar-widget:hover::before {
+    opacity: 1;
+  }
+
+  .widget-title {
+    font-size: 1.4rem;
+    font-weight: 800;
+    margin-bottom: 2rem;
+    color: #f8fafc;
+    position: relative;
+    display: inline-block;
+  }
+
+  .widget-title::after {
+    content: '';
+    position: absolute;
+    bottom: -5px;
+    left: 0;
+    width: 30px;
+    height: 2px;
+    background: linear-gradient(45deg, #06b6d4, #0ea5e9);
+    border-radius: 1px;
+    box-shadow: 0 0 10px rgba(6, 182, 212, 0.6);
+  }
+
+  .search-form {
+    display: flex;
+    gap: 0.5rem;
+  }
+
+  .search-input {
+    flex: 1;
+    padding: 0.75rem;
+    border: 2px solid #e2e8f0;
+    border-radius: 10px;
+    font-size: 0.875rem;
+    transition: border-color 0.3s ease;
+  }
+
+  .search-input:focus {
+    outline: none;
+    border-color: #06b6d4;
+    box-shadow: 0 0 15px rgba(6, 182, 212, 0.3);
+  }
+
+  .search-btn {
+    background: linear-gradient(45deg, #06b6d4, #0ea5e9);
+    color: white;
+    border: none;
+    padding: 0.75rem 1rem;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(6, 182, 212, 0.3);
+  }
+
+  .search-btn:hover {
+    transform: scale(1.05);
+  }
+
+  .category-list {
+    list-style: none;
+  }
+
+  .category-item {
+    margin-bottom: 0.75rem;
+  }
+
+  .category-link {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    color: #64748b;
+    text-decoration: none;
+    padding: 0.5rem;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+  }
+
+  .category-link:hover {
+    background: rgba(6, 182, 212, 0.1);
+    color: #06b6d4;
+  }
+
+  .category-color {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: #667eea;
+  }
+
+  .recent-posts {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .recent-post {
+    padding-bottom: 1rem;
+    border-bottom: 1px solid #e2e8f0;
+  }
+
+  .recent-post:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+  }
+
+  .recent-post-title {
+    font-size: 0.875rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+  }
+
+  .recent-post-title a {
+    color: #f8fafc;
+    text-decoration: none;
+    transition: color 0.3s ease;
+  }
+
+  .recent-post-title a:hover {
+    color: #06b6d4;
+    text-shadow: 0 0 10px rgba(6, 182, 212, 0.5);
+  }
+
+  .recent-post-meta {
+    font-size: 0.75rem;
+    color: #94a3b8;
+  }
+
+  /* No Posts State */
+  .no-posts {
+    text-align: center;
+    padding: 4rem 2rem;
+    color: #64748b;
+  }
+
+  .no-posts h3 {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+    color: #1e293b;
+  }
+
+  /* Filter Buttons */
+  .posts-filter {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 2rem;
+    justify-content: center;
+  }
+
+  .filter-btn {
+    background: white;
+    border: 2px solid #e2e8f0;
+    color: #64748b;
+    padding: 0.5rem 1rem;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 0.875rem;
+    font-weight: 500;
+  }
+
+  .filter-btn:hover,
+  .filter-btn.active {
+    background: linear-gradient(45deg, #06b6d4, #0ea5e9);
+    color: white;
+    border-color: transparent;
+    box-shadow: 0 4px 15px rgba(6, 182, 212, 0.4);
+  }
+
+  /* Enhanced Responsive Design */
+  @media (max-width: 1024px) {
+    .blog-layout {
+      grid-template-columns: 1fr;
+      gap: 3rem;
+    }
+
+    .featured-grid {
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 2rem;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .blog-hero-enhanced {
+      min-height: 80vh;
+      padding: 2rem 0;
+    }
+
+    .hero-title-enhanced {
+      font-size: clamp(2.5rem, 8vw, 4rem);
+    }
+
+    .hero-description {
+      font-size: 1.1rem;
+      padding: 0 1rem;
+    }
+
+    .blog-stats {
+      flex-direction: column;
+      align-items: center;
+      gap: 1.5rem;
+    }
+
+    .stat-item {
+      min-width: 200px;
+    }
+
+    .featured-grid {
+      grid-template-columns: 1fr;
+      gap: 2rem;
+    }
+
+    .posts-filter {
+      justify-content: center;
+      gap: 0.75rem;
+    }
+
+    .filter-btn {
+      padding: 0.75rem 1.25rem;
+      font-size: 0.9rem;
+    }
+
+    .section-title {
+      font-size: 2.5rem;
+    }
+
+    .post-content {
+      padding: 2rem;
+    }
+
+    .sidebar-widget {
+      padding: 2rem;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .blog-hero-enhanced {
+      min-height: 70vh;
+    }
+
+    .intro-badge {
+      padding: 0.5rem 1rem;
+      font-size: 0.85rem;
+    }
+
+    .hero-title-enhanced {
+      font-size: clamp(2rem, 10vw, 3rem);
+      margin-bottom: 1.5rem;
+    }
+
+    .hero-description {
+      font-size: 1rem;
+      margin-bottom: 2rem;
+    }
+
+    .blog-stats {
+      gap: 1rem;
+    }
+
+    .stat-item {
+      min-width: 150px;
+      padding: 1.5rem 1rem;
+    }
+
+    .stat-number {
+      font-size: 2rem;
+    }
+
+    .section-title {
+      font-size: 2rem;
+    }
+
+    .post-title {
+      font-size: 1.5rem;
+    }
+
+    .post-content {
+      padding: 1.5rem;
+    }
+
+    .posts-filter {
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .filter-btn {
+      padding: 0.5rem 1rem;
+      font-size: 0.85rem;
+    }
+
+    .floating-orb {
+      display: none;
+      /* Hide on very small screens for performance */
+    }
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+
+<!-- Enhanced Blog Hero Section -->
+<section class="blog-hero-enhanced">
+  <!-- Enhanced 3D Background Elements -->
+  <div class="blog-3d-background">
+    <!-- 3D Grid Background -->
+    <div class="cyber-grid-3d"></div>
+
+    <!-- 3D Floating Cubes -->
+    <div class="floating-cube cube-1">
+      <div class="cube-3d">
+        <div class="cube-face front">📝</div>
+        <div class="cube-face back">💻</div>
+        <div class="cube-face right">🚀</div>
+        <div class="cube-face left">⚡</div>
+        <div class="cube-face top">🔥</div>
+        <div class="cube-face bottom">✨</div>
+      </div>
+    </div>
+
+    <div class="floating-cube cube-2">
+      <div class="cube-3d">
+        <div class="cube-face front">🎯</div>
+        <div class="cube-face back">🌟</div>
+        <div class="cube-face right">💡</div>
+        <div class="cube-face left">🔧</div>
+        <div class="cube-face top">📊</div>
+        <div class="cube-face bottom">🎨</div>
+      </div>
+    </div>
+
+    <div class="floating-cube cube-3">
+      <div class="cube-3d">
+        <div class="cube-face front">🔮</div>
+        <div class="cube-face back">🌐</div>
+        <div class="cube-face right">⚙️</div>
+        <div class="cube-face left">🎪</div>
+        <div class="cube-face top">🎭</div>
+        <div class="cube-face bottom">🎲</div>
+      </div>
+    </div>
+
+    <!-- Data Streams -->
+    <div class="data-stream stream-1"></div>
+    <div class="data-stream stream-2"></div>
+    <div class="data-stream stream-3"></div>
+
+    <!-- Floating Particles -->
+    <div class="floating-particles">
+      <div class="particle"></div>
+      <div class="particle"></div>
+      <div class="particle"></div>
+      <div class="particle"></div>
+      <div class="particle"></div>
+      <div class="particle"></div>
+      <div class="particle"></div>
+      <div class="particle"></div>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="blog-hero-content">
+      <div class="intro-badge">
+        <span class="badge-icon">📝</span>
+        <span>Blog & Insights</span>
+      </div>
+
+      <h1 class="hero-title-enhanced">
+        <span class="title-greeting">Welcome to my</span>
+        <span class="title-main">Blog</span>
+        <span class="title-subtitle">Thoughts, tutorials, and insights</span>
+      </h1>
+
+      <p class="hero-description">
+        Sharing knowledge about web development, technology trends, and personal experiences
+        in the world of software engineering and innovation.
+      </p>
+
+      <div class="blog-stats">
+        <div class="stat-item">
+          <span class="stat-number">{{ posts|length }}+</span>
+          <span class="stat-label">Articles</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">{{ categories|length }}</span>
+          <span class="stat-label">Categories</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">Tech</span>
+          <span class="stat-label">Focus</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Featured Posts Section -->
+{% if featured_posts %}
+<section class="blog-section">
+  <div class="container">
+    <div class="section-header">
+      <h2 class="section-title">Featured Articles</h2>
+      <p class="section-subtitle">Highlighted posts and latest insights</p>
+    </div>
+
+    <div class="featured-grid">
+      {% for post in featured_posts %}
+      <article class="featured-post">
+        {% if post.featured_image %}
+        <img src="{{ post.featured_image }}" alt="{{ post.title }}" class="post-image">
+        {% else %}
+        <div class="post-placeholder">
+          📝
+        </div>
+        {% endif %}
+
+        <div class="post-content">
+          <div class="post-meta">
+            <span class="post-category">{{ post.category }}</span>
+            <span class="post-date">{{ post.created_at.strftime('%B %d, %Y') }}</span>
+            <span class="post-reading-time">{{ post.reading_time }} min read</span>
+          </div>
+
+          <h3 class="post-title">
+            <a href="{{ url_for('blog_post', slug=post.slug) }}">{{ post.title }}</a>
+          </h3>
+
+          <p class="post-excerpt">{{ post.excerpt }}</p>
+
+          {% if post.tags %}
+          <div class="post-tags">
+            {% for tag in post.tags[:3] %}
+            <span class="tag">{{ tag }}</span>
+            {% endfor %}
+          </div>
+          {% endif %}
+
+          <a href="{{ url_for('blog_post', slug=post.slug) }}" class="read-more-btn">
+            <span>Read More</span>
+            <span>→</span>
+          </a>
+        </div>
+      </article>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endif %}
+
+<!-- Main Blog Content -->
+<section class="blog-section">
+  <!-- 3D Interactive Elements -->
+  <div class="interactive-3d-element element-1"></div>
+  <div class="interactive-3d-element element-2"></div>
+  <div class="interactive-3d-element element-3"></div>
+
+  <div class="container">
+    <div class="blog-layout">
+      <!-- Blog Posts -->
+      <div class="blog-posts">
+        <div class="posts-header">
+          <h2 class="section-title">Latest Articles</h2>
+          {% if categories %}
+          <div class="posts-filter">
+            <button class="filter-btn active" data-category="all">All</button>
+            {% for category in categories %}
+            <button class="filter-btn" data-category="{{ category.slug }}">{{ category.name }}</button>
+            {% endfor %}
+          </div>
+          {% endif %}
+        </div>
+
+        <div class="posts-grid">
+          {% for post in posts %}
+          <article class="blog-post-card" data-category="{{ post.category }}">
+            {% if post.featured_image %}
+            <img src="{{ post.featured_image }}" alt="{{ post.title }}" class="post-image">
+            {% else %}
+            <div class="post-placeholder">📝</div>
+            {% endif %}
+
+            <div class="post-content">
+              <div class="post-meta">
+                <span class="post-category">{{ post.category }}</span>
+                <span class="post-date">{{ post.created_at.strftime('%B %d, %Y') }}</span>
+                <span class="post-reading-time">{{ post.reading_time }} min read</span>
+                {% if post.views %}
+                <span class="post-views">{{ post.views }} views</span>
+                {% endif %}
+              </div>
+
+              <h3 class="post-title">
+                <a href="{{ url_for('blog_post', slug=post.slug) }}">{{ post.title }}</a>
+              </h3>
+
+              <p class="post-excerpt">{{ post.excerpt }}</p>
+
+              {% if post.tags %}
+              <div class="post-tags">
+                {% for tag in post.tags[:3] %}
+                <span class="tag">{{ tag }}</span>
+                {% endfor %}
+              </div>
+              {% endif %}
+
+              <a href="{{ url_for('blog_post', slug=post.slug) }}" class="read-more-btn">
+                <span>Read Article</span>
+                <span>→</span>
+              </a>
+            </div>
+          </article>
+          {% endfor %}
+        </div>
+
+        {% if not posts %}
+        <div class="no-posts">
+          <div style="font-size: 4rem; margin-bottom: 1rem;">📝</div>
+          <h3>No Articles Yet</h3>
+          <p>Check back soon for the latest insights and tutorials!</p>
+        </div>
+        {% endif %}
+      </div>
+
+      <!-- Sidebar -->
+      <aside class="blog-sidebar">
+        <!-- Search Widget -->
+        <div class="sidebar-widget">
+          <h3 class="widget-title">Search Articles</h3>
+          <form action="{{ url_for('blog_search') }}" method="GET" class="search-form">
+            <input type="text" name="q" placeholder="Search topics..." class="search-input">
+            <button type="submit" class="search-btn">🔍</button>
+          </form>
+        </div>
+
+        <!-- Categories Widget -->
+        {% if categories %}
+        <div class="sidebar-widget">
+          <h3 class="widget-title">Categories</h3>
+          <ul class="category-list">
+            {% for category in categories %}
+            <li class="category-item">
+              <a href="{{ url_for('blog_category', category_slug=category.slug) }}" class="category-link">
+                <div class="category-color" style="background-color: {{ category.color or '#667eea' }}"></div>
+                <span>{{ category.name }}</span>
+              </a>
+            </li>
+            {% endfor %}
+          </ul>
+        </div>
+        {% endif %}
+
+        <!-- Recent Posts Widget -->
+        {% if recent_posts %}
+        <div class="sidebar-widget">
+          <h3 class="widget-title">Recent Articles</h3>
+          <div class="recent-posts">
+            {% for post in recent_posts %}
+            <article class="recent-post">
+              <h4 class="recent-post-title">
+                <a href="{{ url_for('blog_post', slug=post.slug) }}">{{ post.title }}</a>
+              </h4>
+              <div class="recent-post-meta">
+                <span>{{ post.created_at.strftime('%b %d, %Y') }}</span>
+                <span>{{ post.category }}</span>
+              </div>
+            </article>
+            {% endfor %}
+          </div>
+        </div>
+        {% endif %}
+
+        <!-- About Widget -->
+        <div class="sidebar-widget">
+          <h3 class="widget-title">About This Blog</h3>
+          <p>Welcome to my personal blog where I share insights about web development, technology trends, and my journey
+            as a software engineer.</p>
+        </div>
+      </aside>
+    </div>
+  </div>
+</section>
+
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+  // Enhanced Blog functionality with advanced 3D animations
+  document.addEventListener('DOMContentLoaded', function () {
+    console.log('🚀 Initializing Enhanced 3D Blog...');
+
+    // Initialize all features
+    initBlogFiltering();
+    initCardEffects();
+    initScrollAnimations();
+    init3DParallaxEffects();
+    initAdvancedInteractions();
+    init3DInteractiveElements();
+
+    console.log('✨ Enhanced 3D Blog initialized!');
+  });
+
+  function init3DInteractiveElements() {
+    const elements = document.querySelectorAll('.interactive-3d-element');
+
+    elements.forEach(element => {
+      element.addEventListener('click', () => {
+        element.style.animation = 'none';
+        element.style.transform = 'scale(1.5) rotateX(360deg) rotateY(360deg)';
+
+        setTimeout(() => {
+          element.style.animation = 'elementFloat 8s ease-in-out infinite';
+          element.style.transform = '';
+        }, 1000);
+      });
+    });
+  }
+
+  function init3DParallaxEffects() {
+    const cubes = document.querySelectorAll('.floating-cube');
+    const dataStreams = document.querySelectorAll('.data-stream');
+
+    window.addEventListener('scroll', () => {
+      const scrolled = window.pageYOffset;
+      const rate = scrolled * -0.3;
+
+      cubes.forEach((cube, index) => {
+        const speed = (index + 1) * 0.2;
+        cube.style.transform = `translateY(${rate * speed}px) rotateX(${scrolled * 0.05}deg) rotateY(${scrolled * 0.1}deg)`;
+      });
+    });
+
+    // Enhanced mouse parallax effect
+    document.addEventListener('mousemove', (e) => {
+      const mouseX = (e.clientX / window.innerWidth - 0.5) * 2;
+      const mouseY = (e.clientY / window.innerHeight - 0.5) * 2;
+
+      cubes.forEach((cube, index) => {
+        const speed = (index + 1) * 15;
+        const x = mouseX * speed;
+        const y = mouseY * speed;
+
+        cube.style.transform += ` translate(${x}px, ${y}px) rotateX(${mouseY * 10}deg) rotateY(${mouseX * 10}deg)`;
+      });
+
+      // Interactive elements follow mouse
+      const interactiveElements = document.querySelectorAll('.interactive-3d-element');
+      interactiveElements.forEach((element, index) => {
+        const speed = (index + 1) * 5;
+        const x = mouseX * speed;
+        const y = mouseY * speed;
+
+        element.style.transform += ` translate(${x}px, ${y}px)`;
+      });
+    });
+  }
+  console.log('🚀 Initializing Enhanced Blog...');
+
+  // Initialize all features
+  initBlogFiltering();
+  initCardEffects();
+  initScrollAnimations();
+  initParallaxEffects();
+  initAdvancedInteractions();
+
+  console.log('✨ Enhanced Blog initialized!');
+  });
+
+  function initBlogFiltering() {
+    const filterBtns = document.querySelectorAll('.filter-btn');
+    const postCards = document.querySelectorAll('.blog-post-card');
+
+    filterBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const category = btn.dataset.category;
+
+        // Update active button with animation
+        filterBtns.forEach(b => {
+          b.classList.remove('active');
+          b.style.transform = 'scale(1)';
+        });
+        btn.classList.add('active');
+        btn.style.transform = 'scale(1.05)';
+
+        // Filter posts with staggered animation
+        postCards.forEach((card, index) => {
+          if (category === 'all' || card.dataset.category === category) {
+            card.style.display = 'block';
+            card.style.opacity = '0';
+            card.style.transform = 'translateY(30px) scale(0.9)';
+
+            setTimeout(() => {
+              card.style.opacity = '1';
+              card.style.transform = 'translateY(0) scale(1)';
+            }, index * 100);
+          } else {
+            card.style.opacity = '0';
+            card.style.transform = 'translateY(-30px) scale(0.9)';
+
+            setTimeout(() => {
+              card.style.display = 'none';
+            }, 300);
+          }
+        });
+      });
+    });
+  }
+
+  function initCardEffects() {
+    const cards = document.querySelectorAll('.featured-post, .blog-post-card');
+
+    cards.forEach((card, index) => {
+      // Staggered entrance animation
+      card.style.opacity = '0';
+      card.style.transform = 'translateY(50px)';
+
+      setTimeout(() => {
+        card.style.transition = 'all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
+        card.style.opacity = '1';
+        card.style.transform = 'translateY(0)';
+      }, index * 150);
+
+      // Enhanced hover effects
+      card.addEventListener('mouseenter', () => {
+        card.style.transform = 'translateY(-15px) scale(1.02) rotateX(5deg)';
+        card.style.boxShadow = '0 25px 50px rgba(0,0,0,0.15)';
+      });
+
+      card.addEventListener('mouseleave', () => {
+        card.style.transform = 'translateY(0) scale(1) rotateX(0deg)';
+        card.style.boxShadow = '0 15px 35px rgba(0,0,0,0.08)';
+      });
+    });
+  }
+
+  function initScrollAnimations() {
+    const observerOptions = {
+      threshold: 0.1,
+      rootMargin: '0px 0px -50px 0px'
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.style.opacity = '1';
+          entry.target.style.transform = 'translateY(0)';
+        }
+      });
+    }, observerOptions);
+
+    // Observe elements for scroll animations
+    document.querySelectorAll('.section-header, .sidebar-widget').forEach(el => {
+      el.style.opacity = '0';
+      el.style.transform = 'translateY(30px)';
+      el.style.transition = 'all 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
+      observer.observe(el);
+    });
+  }
+
+  function initParallaxEffects() {
+    const orbs = document.querySelectorAll('.floating-orb');
+    const particles = document.querySelectorAll('.particle');
+
+    window.addEventListener('scroll', () => {
+      const scrolled = window.pageYOffset;
+      const rate = scrolled * -0.5;
+
+      orbs.forEach((orb, index) => {
+        const speed = (index + 1) * 0.3;
+        orb.style.transform = `translateY(${rate * speed}px) rotate(${scrolled * 0.1}deg)`;
+      });
+    });
+
+    // Mouse parallax effect
+    document.addEventListener('mousemove', (e) => {
+      const mouseX = e.clientX / window.innerWidth;
+      const mouseY = e.clientY / window.innerHeight;
+
+      orbs.forEach((orb, index) => {
+        const speed = (index + 1) * 20;
+        const x = (mouseX - 0.5) * speed;
+        const y = (mouseY - 0.5) * speed;
+
+        orb.style.transform += ` translate(${x}px, ${y}px)`;
+      });
+    });
+  }
+
+  function initAdvancedInteractions() {
+    // Add ripple effect to buttons
+    document.querySelectorAll('.read-more-btn, .filter-btn').forEach(btn => {
+      btn.addEventListener('click', function (e) {
+        const ripple = document.createElement('span');
+        const rect = this.getBoundingClientRect();
+        const size = Math.max(rect.width, rect.height);
+        const x = e.clientX - rect.left - size / 2;
+        const y = e.clientY - rect.top - size / 2;
+
+        ripple.style.cssText = `
+        position: absolute;
+        width: ${size}px;
+        height: ${size}px;
+        left: ${x}px;
+        top: ${y}px;
+        background: rgba(255,255,255,0.3);
+        border-radius: 50%;
+        transform: scale(0);
+        animation: ripple 0.6s linear;
+        pointer-events: none;
+      `;
+
+        this.style.position = 'relative';
+        this.style.overflow = 'hidden';
+        this.appendChild(ripple);
+
+        setTimeout(() => ripple.remove(), 600);
+      });
+    });
+
+    // Add CSS for ripple animation
+    const style = document.createElement('style');
+    style.textContent = `
+    @keyframes ripple {
+      to {
+        transform: scale(4);
+        opacity: 0;
+      }
+    }
+  `;
+    document.head.appendChild(style);
+  }
+
+  // Smooth scroll for internal links
+  document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function (e) {
+      e.preventDefault();
+      const target = document.querySelector(this.getAttribute('href'));
+      if (target) {
+        target.scrollIntoView({
+          behavior: 'smooth',
+          block: 'start'
+        });
+      }
+    });
+  });
+
+  // Enhanced image loading with fade-in effect
+  document.querySelectorAll('.post-image').forEach(img => {
+    img.addEventListener('load', function () {
+      this.style.opacity = '1';
+      this.style.transform = 'scale(1)';
+    });
+
+    img.style.opacity = '0';
+    img.style.transform = 'scale(1.1)';
+    img.style.transition = 'all 0.6s ease';
+  });
+
+  // Add scroll progress indicator
+  const progressBar = document.createElement('div');
+  progressBar.style.cssText = `
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 0%;
+  height: 3px;
+  background: linear-gradient(90deg, #667eea, #764ba2, #f093fb);
+  z-index: 9999;
+  transition: width 0.3s ease;
+`;
+  document.body.appendChild(progressBar);
+
+  window.addEventListener('scroll', () => {
+    const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+    const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+    const scrolled = (winScroll / height) * 100;
+    progressBar.style.width = scrolled + '%';
+  });
+</script>
+{% endblock %}

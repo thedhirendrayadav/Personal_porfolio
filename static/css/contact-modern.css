@@ -1,0 +1,698 @@
+/* ===================================
+   MODERN CONTACT PAGE DESIGN
+   Minimalistic, Professional, Eye-pleasing
+   =================================== */
+
+/* ===================================
+   CONTACT HERO SECTION
+   =================================== */
+
+.contact-hero-modern {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(135deg, #0F172A 0%, #1E293B 30%, #0F172A 70%, #1E293B 100%);
+  padding: 8rem 0;
+}
+
+.contact-shuttle-elements {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.contact-hero-content {
+  position: relative;
+  z-index: 10;
+  max-width: 900px;
+  text-align: center;
+  padding: 3rem;
+  margin: 0 auto;
+}
+
+.intro-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem 2rem;
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(25px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 50px;
+  color: white;
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: 3rem;
+  animation: float 4s ease-in-out infinite;
+  box-shadow: 0 8px 32px rgba(99, 102, 241, 0.2);
+}
+
+.badge-icon {
+  font-size: 1.5rem;
+  filter: drop-shadow(0 0 10px rgba(99, 102, 241, 0.5));
+}
+
+.hero-title-modern {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  margin: 3rem 0 4rem;
+}
+
+.title-greeting {
+  font-size: 1.5rem;
+  color: rgba(255, 255, 255, 0.8);
+  font-weight: 300;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  margin-bottom: 0.5rem;
+}
+
+.title-name {
+  font-size: clamp(3.5rem, 10vw, 6rem);
+  font-weight: 900;
+  background: linear-gradient(135deg, #6366F1 0%, #14B8A6 50%, #6366F1 100%);
+  background-size: 300% 300%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: gradientFlow 6s ease infinite;
+  text-shadow: 0 0 40px rgba(99, 102, 241, 0.3);
+  line-height: 1.1;
+  margin: 1rem 0;
+}
+
+.title-role {
+  font-size: 1.8rem;
+  color: rgba(255, 255, 255, 0.9);
+  font-weight: 400;
+  letter-spacing: 0.08em;
+}
+
+.hero-description-modern {
+  font-size: 1.4rem;
+  line-height: 1.8;
+  color: rgba(255, 255, 255, 0.8);
+  max-width: 700px;
+  margin: 3rem auto 0;
+  font-weight: 300;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+}
+
+@keyframes gradientFlow {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+/* ===================================
+   CONTACT MAIN SECTION
+   =================================== */
+
+.contact-main-modern {
+  padding: 10rem 0;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.02) 0%, rgba(255, 255, 255, 0.05) 100%);
+  backdrop-filter: blur(25px);
+  position: relative;
+}
+
+.contact-main-modern::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(99, 102, 241, 0.5), transparent);
+}
+
+.contact-grid-modern {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: 6rem;
+  max-width: 1400px;
+  margin: 0 auto;
+  align-items: start;
+}
+
+/* ===================================
+   CONTACT FORM MODERN
+   =================================== */
+
+.contact-form-modern {
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(25px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 30px;
+  padding: 4rem;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+}
+
+.contact-form-modern::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, rgba(99, 102, 241, 0.8), transparent);
+  border-radius: 30px 30px 0 0;
+}
+
+.contact-form-modern h2 {
+  font-size: 2.5rem;
+  font-weight: 800;
+  color: white;
+  margin-bottom: 2rem;
+  background: linear-gradient(135deg, #6366F1, #14B8A6);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.form-group-modern {
+  margin-bottom: 2rem;
+  position: relative;
+}
+
+.form-group-modern label {
+  display: block;
+  margin-bottom: 0.75rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 1.1rem;
+  letter-spacing: 0.05em;
+}
+
+.input-modern {
+  width: 100%;
+  padding: 1.25rem 1.5rem;
+  font-family: inherit;
+  font-size: 1rem;
+  color: white;
+  background: rgba(255, 255, 255, 0.05);
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  border-radius: 15px;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+}
+
+.input-modern:focus {
+  outline: none;
+  border-color: rgba(99, 102, 241, 0.6);
+  background: rgba(255, 255, 255, 0.08);
+  box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
+  transform: translateY(-2px);
+}
+
+.input-modern::placeholder {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+textarea.input-modern {
+  resize: vertical;
+  min-height: 150px;
+  font-family: inherit;
+}
+
+.submit-btn-modern {
+  width: 100%;
+  padding: 1.5rem 2rem;
+  background: linear-gradient(135deg, #6366F1, #14B8A6);
+  color: white;
+  border: none;
+  border-radius: 15px;
+  font-size: 1.1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.4s ease;
+  position: relative;
+  overflow: hidden;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-top: 1rem;
+}
+
+.submit-btn-modern::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  transition: left 0.5s ease;
+}
+
+.submit-btn-modern:hover::before {
+  left: 100%;
+}
+
+.submit-btn-modern:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 15px 35px rgba(99, 102, 241, 0.4);
+}
+
+/* ===================================
+   CONTACT INFO MODERN
+   =================================== */
+
+.contact-info-modern {
+  padding: 2rem;
+}
+
+.contact-info-modern h2 {
+  font-size: 2.5rem;
+  font-weight: 800;
+  color: white;
+  margin-bottom: 3rem;
+  background: linear-gradient(135deg, #6366F1, #14B8A6);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.contact-item-modern {
+  display: flex;
+  align-items: flex-start;
+  gap: 1.5rem;
+  margin-bottom: 3rem;
+  padding: 2rem;
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 20px;
+  transition: all 0.4s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.contact-item-modern::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(99, 102, 241, 0.1), transparent);
+  transition: left 0.6s ease;
+}
+
+.contact-item-modern:hover::before {
+  left: 100%;
+}
+
+.contact-item-modern:hover {
+  transform: translateY(-5px) translateX(5px);
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(99, 102, 241, 0.3);
+  box-shadow: 0 15px 35px rgba(99, 102, 241, 0.2);
+}
+
+.contact-icon-modern {
+  width: 60px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #6366F1, #14B8A6);
+  border-radius: 50%;
+  flex-shrink: 0;
+  box-shadow: 0 8px 25px rgba(99, 102, 241, 0.4);
+  position: relative;
+  z-index: 2;
+}
+
+.contact-icon-modern svg,
+.contact-icon-modern i {
+  width: 24px;
+  height: 24px;
+  color: white;
+  font-size: 24px;
+}
+
+.contact-details-modern h3 {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: white;
+  margin-bottom: 0.5rem;
+  position: relative;
+  z-index: 2;
+}
+
+.contact-details-modern p,
+.contact-details-modern a {
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 1.1rem;
+  margin: 0;
+  text-decoration: none;
+  transition: color 0.3s ease;
+  position: relative;
+  z-index: 2;
+}
+
+.contact-details-modern a:hover {
+  color: #14B8A6;
+}
+
+/* ===================================
+   SOCIAL LINKS MODERN
+   =================================== */
+
+.social-section-modern {
+  margin-top: 4rem;
+  padding: 2.5rem;
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 20px;
+  text-align: center;
+}
+
+.social-section-modern h3 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: white;
+  margin-bottom: 2rem;
+}
+
+.social-links-modern {
+  display: flex;
+  gap: 1.5rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.social-link-modern {
+  width: 60px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 50%;
+  color: rgba(255, 255, 255, 0.7);
+  text-decoration: none;
+  transition: all 0.4s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.social-link-modern svg,
+.social-link-modern i {
+  width: 24px;
+  height: 24px;
+  font-size: 24px;
+  z-index: 2;
+  position: relative;
+}
+
+.social-link-modern::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  transition: all 0.4s ease;
+  z-index: 1;
+}
+
+.social-link-modern.github::before {
+  background: linear-gradient(135deg, #333, #666);
+}
+
+.social-link-modern.linkedin::before {
+  background: linear-gradient(135deg, #0077B5, #00A0DC);
+}
+
+.social-link-modern.instagram::before {
+  background: linear-gradient(135deg, #E4405F, #FCAF45);
+}
+
+.social-link-modern.email::before {
+  background: linear-gradient(135deg, #6366F1, #14B8A6);
+}
+
+.social-link-modern:hover::before {
+  width: 100%;
+  height: 100%;
+  transform: translate(-50%, -50%);
+}
+
+.social-link-modern:hover {
+  color: white;
+  transform: translateY(-8px) scale(1.15);
+  box-shadow: 0 15px 35px rgba(99, 102, 241, 0.4);
+}
+
+/* ===================================
+   RESUME SECTION MODERN
+   =================================== */
+
+.resume-section-modern {
+  padding: 12rem 0;
+  background: linear-gradient(135deg, rgba(15, 23, 42, 0.95) 0%, rgba(30, 41, 59, 0.95) 50%, rgba(15, 23, 42, 0.95) 100%);
+  position: relative;
+  overflow: hidden;
+}
+
+.resume-section-modern::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(circle at 30% 20%, rgba(99, 102, 241, 0.1) 0%, transparent 50%),
+              radial-gradient(circle at 70% 80%, rgba(20, 184, 166, 0.1) 0%, transparent 50%);
+  pointer-events: none;
+}
+
+.resume-header-modern {
+  text-align: center;
+  margin-bottom: 6rem;
+  position: relative;
+  z-index: 2;
+}
+
+.resume-header-modern h2 {
+  font-size: clamp(2.5rem, 6vw, 4.5rem);
+  font-weight: 800;
+  margin-bottom: 2rem;
+  background: linear-gradient(135deg, #6366F1, #14B8A6, #6366F1);
+  background-size: 200% 200%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: gradientFlow 4s ease infinite;
+}
+
+.resume-header-modern p {
+  font-size: 1.3rem;
+  color: rgba(255, 255, 255, 0.8);
+  margin-bottom: 3rem;
+}
+
+.resume-actions-modern {
+  display: flex;
+  gap: 2rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.resume-content-modern {
+  max-width: 1200px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 2;
+}
+
+.resume-card-modern {
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(25px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 25px;
+  padding: 3rem;
+  margin-bottom: 3rem;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+  transition: all 0.5s ease;
+}
+
+.resume-card-modern::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, rgba(99, 102, 241, 0.8), transparent);
+  border-radius: 25px 25px 0 0;
+}
+
+.resume-card-modern:hover {
+  transform: translateY(-8px);
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(99, 102, 241, 0.4);
+  box-shadow: 0 25px 50px rgba(99, 102, 241, 0.3);
+}
+
+.resume-card-modern h3 {
+  font-size: 2rem;
+  font-weight: 700;
+  color: white;
+  margin-bottom: 2rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.resume-card-modern h3 i {
+  color: #14B8A6;
+  font-size: 1.5rem;
+}
+
+/* ===================================
+   RESPONSIVE DESIGN
+   =================================== */
+
+@media (max-width: 1024px) {
+  .contact-grid-modern {
+    grid-template-columns: 1fr;
+    gap: 4rem;
+  }
+  
+  .contact-form-modern,
+  .contact-info-modern {
+    padding: 3rem 2rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .contact-hero-modern,
+  .contact-main-modern,
+  .resume-section-modern {
+    padding: 6rem 0;
+  }
+  
+  .contact-hero-content {
+    padding: 2rem;
+  }
+  
+  .contact-form-modern {
+    padding: 2rem;
+  }
+  
+  .contact-item-modern {
+    flex-direction: column;
+    text-align: center;
+    padding: 1.5rem;
+  }
+  
+  .social-links-modern {
+    gap: 1rem;
+  }
+  
+  .social-link-modern {
+    width: 50px;
+    height: 50px;
+  }
+  
+  .resume-actions-modern {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .resume-card-modern {
+    padding: 2rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .contact-hero-content {
+    padding: 1rem;
+  }
+  
+  .intro-badge {
+    padding: 0.75rem 1.5rem;
+    font-size: 0.9rem;
+  }
+  
+  .title-greeting {
+    font-size: 1.2rem;
+  }
+  
+  .title-role {
+    font-size: 1.5rem;
+  }
+  
+  .hero-description-modern {
+    font-size: 1.2rem;
+    margin: 2rem auto 0;
+  }
+  
+  .contact-form-modern {
+    padding: 1.5rem;
+  }
+  
+  .contact-form-modern h2,
+  .contact-info-modern h2 {
+    font-size: 2rem;
+  }
+  
+  .input-modern {
+    padding: 1rem;
+  }
+  
+  .submit-btn-modern {
+    padding: 1.25rem 1.5rem;
+    font-size: 1rem;
+  }
+}
+
+/* ===================================
+   ACCESSIBILITY & PERFORMANCE
+   =================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  .intro-badge,
+  .contact-icon-modern,
+  .social-link-modern:hover {
+    animation: none !important;
+    transform: none !important;
+  }
+  
+  .title-name {
+    animation: none !important;
+    background: #6366F1;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+}
+
+/* Print styles */
+@media print {
+  .contact-shuttle-elements,
+  .space-background,
+  .scroll-indicator-modern {
+    display: none !important;
+  }
+}

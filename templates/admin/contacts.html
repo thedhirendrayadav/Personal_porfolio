@@ -1,0 +1,235 @@
+{% extends "admin/base.html" %}
+
+{% block title %}Contact Messages - Admin{% endblock %}
+
+{% block content %}
+<div class="admin-header">
+    <h1>Contact Messages</h1>
+    <div class="admin-stats">
+        <div class="stat-card">
+            <h3>{{ messages|length }}</h3>
+            <p>Total Messages</p>
+        </div>
+        <div class="stat-card">
+            <h3>{{ unread_count }}</h3>
+            <p>Unread Messages</p>
+        </div>
+    </div>
+</div>
+
+<div class="admin-content">
+    {% if messages %}
+    <div class="messages-list">
+        {% for message in messages %}
+        <div class="message-card {% if message.status == 'unread' %}unread{% endif %}">
+            <div class="message-header">
+                <div class="message-info">
+                    <h3>{{ message.subject }}</h3>
+                    <p class="message-meta">
+                        From: <strong>{{ message.name }}</strong>
+                        ({{ message.email }}) -
+                        {{ message.created_at.strftime('%B %d, %Y at %I:%M %p') if message.created_at else 'Unknown
+                        date' }}
+                    </p>
+                </div>
+                <div class="message-actions">
+                    {% if message.status == 'unread' %}
+                    <button class="btn btn-sm btn-primary" onclick="markAsRead('{{ message.id }}')"></button>
+                    Mark as Read
+                    </button>
+                    {% else %}
+                    <span class="status-badge read">Read</span>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="message-content">
+                <p>{{ message.message }}</p>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="empty-state">
+        <h3>No contact messages yet</h3>
+        <p>Contact messages will appear here when visitors use the contact form.</p>
+    </div>
+    {% endif %}
+</div>
+
+<style>
+    .admin-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 2rem;
+    }
+
+    .admin-stats {
+        display: flex;
+        gap: 1rem;
+    }
+
+    .stat-card {
+        background: white;
+        padding: 1rem;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        text-align: center;
+        min-width: 120px;
+    }
+
+    .stat-card h3 {
+        margin: 0;
+        font-size: 2rem;
+        color: #6366f1;
+    }
+
+    .stat-card p {
+        margin: 0.5rem 0 0 0;
+        color: #6b7280;
+        font-size: 0.875rem;
+    }
+
+    .messages-list {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .message-card {
+        background: white;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+        border-left: 4px solid #e5e7eb;
+    }
+
+    .message-card.unread {
+        border-left-color: #6366f1;
+        background: #f8faff;
+    }
+
+    .message-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        padding: 1.5rem 1.5rem 1rem 1.5rem;
+        border-bottom: 1px solid #e5e7eb;
+    }
+
+    .message-info h3 {
+        margin: 0 0 0.5rem 0;
+        color: #111827;
+    }
+
+    .message-meta {
+        margin: 0;
+        color: #6b7280;
+        font-size: 0.875rem;
+    }
+
+    .message-actions {
+        display: flex;
+        gap: 0.5rem;
+    }
+
+    .status-badge {
+        padding: 0.25rem 0.75rem;
+        border-radius: 9999px;
+        font-size: 0.75rem;
+        font-weight: 500;
+    }
+
+    .status-badge.read {
+        background: #d1fae5;
+        color: #065f46;
+    }
+
+    .message-content {
+        padding: 1rem 1.5rem 1.5rem 1.5rem;
+    }
+
+    .message-content p {
+        margin: 0;
+        line-height: 1.6;
+        color: #374151;
+    }
+
+    .empty-state {
+        text-align: center;
+        padding: 3rem;
+        color: #6b7280;
+    }
+
+    .empty-state h3 {
+        margin: 0 0 0.5rem 0;
+        color: #374151;
+    }
+
+    .btn {
+        padding: 0.5rem 1rem;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 0.875rem;
+        font-weight: 500;
+        text-decoration: none;
+        display: inline-block;
+        transition: all 0.2s;
+    }
+
+    .btn-primary {
+        background: #6366f1;
+        color: white;
+    }
+
+    .btn-primary:hover {
+        background: #5856eb;
+    }
+
+    .btn-sm {
+        padding: 0.375rem 0.75rem;
+        font-size: 0.8125rem;
+    }
+
+    @media (max-width: 768px) {
+        .admin-header {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 1rem;
+        }
+
+        .message-header {
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .message-actions {
+            align-self: flex-start;
+        }
+    }
+</style>
+
+<script>
+    function markAsRead(messageId) {
+        fetch(`/admin/contacts/${messageId}/read`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    location.reload();
+                } else {
+                    alert('Error marking message as read');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Error marking message as read');
+            });
+    }
+</script>
+{% endblock %}

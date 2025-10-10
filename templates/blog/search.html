@@ -1,0 +1,631 @@
+{% extends "base.html" %}
+
+{% block title %}Search Results{% if query %} for "{{ query }}"{% endif %} - Blog - {{ app_name }}{% endblock %}
+
+{% block extra_head %}
+<style>
+/* Search Results Styles */
+.search-hero {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 4rem 0;
+  text-align: center;
+}
+
+.search-title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+}
+
+.search-subtitle {
+  font-size: 1.25rem;
+  opacity: 0.9;
+}
+
+.search-form-hero {
+  max-width: 600px;
+  margin: 2rem auto 0;
+  display: flex;
+  gap: 1rem;
+}
+
+.search-input-hero {
+  flex: 1;
+  padding: 1rem;
+  border: none;
+  border-radius: 50px;
+  font-size: 1rem;
+  outline: none;
+}
+
+.search-btn-hero {
+  background: rgba(255,255,255,0.2);
+  color: white;
+  border: none;
+  padding: 1rem 2rem;
+  border-radius: 50px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.search-btn-hero:hover {
+  background: rgba(255,255,255,0.3);
+}
+
+.search-results-section {
+  padding: 4rem 0;
+}
+
+.results-header {
+  margin-bottom: 3rem;
+  text-align: center;
+}
+
+.results-count {
+  font-size: 1.125rem;
+  color: #64748b;
+  margin-bottom: 1rem;
+}
+
+.results-query {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #1e293b;
+  margin-bottom: 0.5rem;
+}
+
+.results-grid {
+  display: grid;
+  gap: 2rem;
+}
+
+.result-card {
+  background: white;
+  border-radius: 15px;
+  padding: 2rem;
+  box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+  border: 1px solid #e2e8f0;
+  transition: all 0.3s ease;
+}
+
+.result-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.12);
+}
+
+.result-meta {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+  font-size: 0.875rem;
+  color: #64748b;
+}
+
+.result-category {
+  background: linear-gradient(45deg, #667eea, #764ba2);
+  color: white;
+  padding: 0.25rem 0.75rem;
+  border-radius: 50px;
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+.result-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  line-height: 1.3;
+}
+
+.result-title a {
+  color: #1e293b;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.result-title a:hover {
+  color: #667eea;
+}
+
+.result-excerpt {
+  color: #64748b;
+  line-height: 1.6;
+  margin-bottom: 1.5rem;
+}
+
+.result-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.result-tag {
+  background: #f1f5f9;
+  color: #475569;
+  padding: 0.25rem 0.75rem;
+  border-radius: 50px;
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+.no-results {
+  text-align: center;
+  padding: 4rem 2rem;
+  color: #64748b;
+}
+
+.no-results h3 {
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+  color: #1e293b;
+}
+
+.back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #667eea;
+  text-decoration: none;
+  font-weight: 500;
+  margin-bottom: 2rem;
+  transition: all 0.3s ease;
+}
+
+.back-link:hover {
+  transform: translateX(-5px);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .search-form-hero {
+    flex-direction: column;
+  }
+  
+  .search-input-hero,
+  .search-btn-hero {
+    width: 100%;
+  }
+}
+</style>
+{% endblock %}
+
+{% block content %}
+
+<!-- Search Hero -->
+<section class="search-hero">
+  <div class="container">
+    <h1 class="search-title">Search Blog</h1>
+    <p class="search-subtitle">Find articles, tutorials, and insights</p>
+    
+    <form action="{{ url_for('blog_search') }}" method="GET" class="search-form-hero">
+      <input type="text" name="q" value="{{ query or '' }}" 
+             placeholder="Search for articles..." class="search-input-hero">
+      <button type="submit" class="search-btn-hero">Search</button>
+    </form>
+  </div>
+</section>
+
+<!-- Search Results -->
+<section class="search-results-section">
+  <div class="container">
+    <a href="{{ url_for('blog') }}" class="back-link">
+      <span>←</span>
+      <span>Back to Blog</span>
+    </a>
+    
+    {% if query %}
+    <div class="results-header">
+      <div class="results-count">
+        {% if posts %}
+        Found {{ posts|length }} result{{ 's' if posts|length != 1 else '' }}
+        {% else %}
+        No results found
+        {% endif %}
+      </div>
+      <h2 class="results-query">{{ query }}</h2>
+    </div>
+    
+    {% if posts %}
+    <div class="results-grid">
+      {% for post in posts %}
+      <article class="result-card">
+        <div class="result-meta">
+          <span class="result-category">{{ post.category }}</span>
+          <span>{{ post.created_at.strftime('%B %d, %Y') }}</span>
+          <span>{{ post.reading_time }} min read</span>
+        </div>
+        
+        <h3 class="result-title">
+          <a href="{{ url_for('blog_post', slug=post.slug) }}">{{ post.title }}</a>
+        </h3>
+        
+        <p class="result-excerpt">{{ post.excerpt }}</p>
+        
+        {% if post.tags %}
+        <div class="result-tags">
+          {% for tag in post.tags[:3] %}
+          <span class="result-tag">{{ tag }}</span>
+          {% endfor %}
+        </div>
+        {% endif %}
+      </article>
+      {% endfor %}
+    </div>
+    {% else %}
+    <div class="no-results">
+      <div style="font-size: 4rem; margin-bottom: 1rem;">🔍</div>
+      <h3>No Results Found</h3>
+      <p>Sorry, we couldn't find any articles matching "{{ query }}". Try different keywords or browse our categories.</p>
+    </div>
+    {% endif %}
+    
+    {% else %}
+    <div class="no-results">
+      <div style="font-size: 4rem; margin-bottom: 1rem;">📝</div>
+      <h3>Start Your Search</h3>
+      <p>Enter keywords above to search through our blog articles and find the content you're looking for.</p>
+    </div>
+    {% endif %}
+  </div>
+</section>
+
+            <div class="search-title-section">
+                <h1 class="search-title">
+                    {% if query %}
+                    Search Results for "<span class="search-query">{{ query }}</span>"
+                    {% else %}
+                    Blog Search
+                    {% endif %}
+                </h1>
+
+                {% if posts %}
+                <p class="search-subtitle">
+                    Found {{ posts|length }} result{{ 's' if posts|length != 1 else '' }}
+                    {% if query %}for "{{ query }}"{% endif %}
+                </p>
+                {% else %}
+                <p class="search-subtitle">
+                    {% if query %}
+                    No results found for "{{ query }}"
+                    {% else %}
+                    Enter a search term to find blog posts
+                    {% endif %}
+                </p>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Search Form -->
+        <div class="search-form-container">
+            <form class="blog-search-form" method="GET" action="{{ url_for('blog.search') }}" role="search">
+                <div class="search-input-group">
+                    <label for="search-input" class="sr-only">Search blog posts</label>
+                    <input type="search" id="search-input" name="q" class="search-input"
+                        placeholder="Search articles, topics, or keywords..." value="{{ query or '' }}"
+                        autocomplete="off" aria-describedby="search-help">
+                    <button type="submit" class="search-btn" aria-label="Search">
+                        <i class="fas fa-search" aria-hidden="true"></i>
+                    </button>
+                </div>
+                <div id="search-help" class="search-help">
+                    Search for cybersecurity topics, AI/ML concepts, tutorials, and more
+                </div>
+            </form>
+        </div>
+
+        <!-- Search Results -->
+        {% if query %}
+        <div class="search-results">
+            {% if posts %}
+            <div class="results-grid">
+                {% for post in posts %}
+                <article class="search-result-card card" data-aos="fade-up" data-aos-delay="{{ loop.index0 * 100 }}">
+                    <div class="result-content">
+                        <div class="result-meta">
+                            <time class="result-date" datetime="{{ post.created_at.isoformat() }}">
+                                {{ post.created_at.strftime('%B %d, %Y') }}
+                            </time>
+                            {% if post.category %}
+                            <span class="result-category">{{ post.category }}</span>
+                            {% endif %}
+                        </div>
+
+                        <h2 class="result-title">
+                            <a href="{{ url_for('blog.post', slug=post.slug) }}" class="result-link">
+                                {{ post.title }}
+                            </a>
+                        </h2>
+
+                        <div class="result-excerpt">
+                            {% if post.excerpt %}
+                            {{ post.excerpt|truncate(200) }}
+                            {% else %}
+                            {{ post.content|striptags|truncate(200) }}
+                            {% endif %}
+                        </div>
+
+                        {% if post.tags %}
+                        <div class="result-tags">
+                            {% for tag in post.tags[:3] %}
+                            <span class="result-tag">{{ tag }}</span>
+                            {% endfor %}
+                            {% if post.tags|length > 3 %}
+                            <span class="result-tag-more">+{{ post.tags|length - 3 }} more</span>
+                            {% endif %}
+                        </div>
+                        {% endif %}
+
+                        <div class="result-actions">
+                            <a href="{{ url_for('blog.post', slug=post.slug) }}" class="read-more-btn">
+                                Read Article
+                                <i class="fas fa-arrow-right" aria-hidden="true"></i>
+                            </a>
+                        </div>
+                    </div>
+                </article>
+                {% endfor %}
+            </div>
+
+            <!-- Pagination -->
+            {% if pagination and pagination.pages > 1 %}
+            <nav class="search-pagination" aria-label="Search results pagination">
+                <ul class="pagination">
+                    {% if pagination.has_prev %}
+                    <li class="page-item">
+                        <a class="page-link" href="{{ url_for('blog.search', q=query, page=pagination.prev_num) }}"
+                            aria-label="Previous page">
+                            <i class="fas fa-chevron-left" aria-hidden="true"></i>
+                            Previous
+                        </a>
+                    </li>
+                    {% endif %}
+
+                    {% for page_num in pagination.iter_pages() %}
+                    {% if page_num %}
+                    {% if page_num != pagination.page %}
+                    <li class="page-item">
+                        <a class="page-link" href="{{ url_for('blog.search', q=query, page=page_num) }}">{{ page_num
+                            }}</a>
+                    </li>
+                    {% else %}
+                    <li class="page-item active">
+                        <span class="page-link" aria-current="page">{{ page_num }}</span>
+                    </li>
+                    {% endif %}
+                    {% else %}
+                    <li class="page-item disabled">
+                        <span class="page-link">…</span>
+                    </li>
+                    {% endif %}
+                    {% endfor %}
+
+                    {% if pagination.has_next %}
+                    <li class="page-item">
+                        <a class="page-link" href="{{ url_for('blog.search', q=query, page=pagination.next_num) }}"
+                            aria-label="Next page">
+                            Next
+                            <i class="fas fa-chevron-right" aria-hidden="true"></i>
+                        </a>
+                    </li>
+                    {% endif %}
+                </ul>
+            </nav>
+            {% endif %}
+
+            {% else %}
+            <!-- No Results -->
+            <div class="no-results">
+                <div class="no-results-icon">
+                    <i class="fas fa-search" aria-hidden="true"></i>
+                </div>
+                <h2 class="no-results-title">No Results Found</h2>
+                <p class="no-results-text">
+                    We couldn't find any articles matching "<strong>{{ query }}</strong>".
+                    Try different keywords or browse our latest posts below.
+                </p>
+
+                <div class="search-suggestions">
+                    <h3>Search Suggestions:</h3>
+                    <ul>
+                        <li>Try broader keywords (e.g., "security" instead of "penetration testing")</li>
+                        <li>Check your spelling</li>
+                        <li>Use different terms or synonyms</li>
+                        <li>Browse by categories or tags</li>
+                    </ul>
+                </div>
+
+                <div class="no-results-actions">
+                    <a href="{{ url_for('blog.index') }}" class="btn btn-primary">
+                        Browse All Posts
+                    </a>
+                    <a href="{{ url_for('contact') }}" class="btn btn-secondary">
+                        Suggest a Topic
+                    </a>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+        {% endif %}
+
+        <!-- Popular Topics (shown when no search or no results) -->
+        {% if not query or not posts %}
+        <div class="popular-topics-section">
+            <h2 class="popular-topics-title">Popular Topics</h2>
+            <div class="popular-topics-grid">
+                <a href="{{ url_for('blog.search', q='cybersecurity') }}" class="topic-card">
+                    <div class="topic-icon">
+                        <i class="fas fa-shield-alt" aria-hidden="true"></i>
+                    </div>
+                    <h3>Cybersecurity</h3>
+                    <p>Security best practices and threat analysis</p>
+                </a>
+
+                <a href="{{ url_for('blog.search', q='machine learning') }}" class="topic-card">
+                    <div class="topic-icon">
+                        <i class="fas fa-brain" aria-hidden="true"></i>
+                    </div>
+                    <h3>Machine Learning</h3>
+                    <p>AI applications in security and automation</p>
+                </a>
+
+                <a href="{{ url_for('blog.search', q='python') }}" class="topic-card">
+                    <div class="topic-icon">
+                        <i class="fab fa-python" aria-hidden="true"></i>
+                    </div>
+                    <h3>Python</h3>
+                    <p>Programming tutorials and security tools</p>
+                </a>
+
+                <a href="{{ url_for('blog.search', q='penetration testing') }}" class="topic-card">
+                    <div class="topic-icon">
+                        <i class="fas fa-bug" aria-hidden="true"></i>
+                    </div>
+                    <h3>Penetration Testing</h3>
+                    <p>Ethical hacking and vulnerability assessment</p>
+                </a>
+
+                <a href="{{ url_for('blog.search', q='automation') }}" class="topic-card">
+                    <div class="topic-icon">
+                        <i class="fas fa-cogs" aria-hidden="true"></i>
+                    </div>
+                    <h3>Automation</h3>
+                    <p>Security automation and scripting</p>
+                </a>
+
+                <a href="{{ url_for('blog.search', q='tutorials') }}" class="topic-card">
+                    <div class="topic-icon">
+                        <i class="fas fa-graduation-cap" aria-hidden="true"></i>
+                    </div>
+                    <h3>Tutorials</h3>
+                    <p>Step-by-step guides and how-tos</p>
+                </a>
+            </div>
+        </div>
+        {% endif %}
+
+        <!-- Recent Posts (fallback content) -->
+        {% if not query %}
+        <div class="recent-posts-section">
+            <h2 class="recent-posts-title">Recent Posts</h2>
+            <div class="recent-posts-grid">
+                <!-- This would be populated with recent blog posts -->
+                <div class="recent-post-placeholder">
+                    <p>Recent blog posts will appear here once you start publishing content.</p>
+                    <a href="{{ url_for('admin.add_blog_post') }}" class="btn btn-primary">
+                        Write Your First Post
+                    </a>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</section>
+
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Focus search input on page load
+        const searchInput = document.getElementById('search-input');
+        if (searchInput && !searchInput.value) {
+            searchInput.focus();
+        }
+
+        // Highlight search terms in results
+        const query = '{{ query|e }}';
+        if (query) {
+            highlightSearchTerms(query);
+        }
+
+        // Search form enhancements
+        const searchForm = document.querySelector('.blog-search-form');
+        if (searchForm) {
+            searchForm.addEventListener('submit', function (e) {
+                const input = this.querySelector('input[name="q"]');
+                if (!input.value.trim()) {
+                    e.preventDefault();
+                    input.focus();
+                    return false;
+                }
+            });
+        }
+    });
+
+    function highlightSearchTerms(query) {
+        const terms = query.toLowerCase().split(' ').filter(term => term.length > 2);
+        const resultCards = document.querySelectorAll('.search-result-card');
+
+        resultCards.forEach(card => {
+            const title = card.querySelector('.result-title a');
+            const excerpt = card.querySelector('.result-excerpt');
+
+            if (title) highlightInElement(title, terms);
+            if (excerpt) highlightInElement(excerpt, terms);
+        });
+    }
+
+    function highlightInElement(element, terms) {
+        let html = element.innerHTML;
+
+        terms.forEach(term => {
+            const regex = new RegExp(`(${escapeRegExp(term)})`, 'gi');
+            html = html.replace(regex, '<mark class="search-highlight">$1</mark>');
+        });
+
+        element.innerHTML = html;
+    }
+
+    function escapeRegExp(string) {
+        return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    }
+</script>
+{% endblock %}{
+% endblock %}
+
+{% block extra_scripts %}
+<script>
+// Search functionality
+document.addEventListener('DOMContentLoaded', function() {
+  // Focus on search input
+  const searchInput = document.querySelector('.search-input-hero');
+  if (searchInput && !searchInput.value) {
+    searchInput.focus();
+  }
+  
+  // Add hover effects to result cards
+  const resultCards = document.querySelectorAll('.result-card');
+  resultCards.forEach(card => {
+    card.addEventListener('mouseenter', () => {
+      card.style.transform = 'translateY(-5px) scale(1.02)';
+    });
+    
+    card.addEventListener('mouseleave', () => {
+      card.style.transform = 'translateY(0) scale(1)';
+    });
+  });
+  
+  // Highlight search terms in results
+  const query = '{{ query }}';
+  if (query) {
+    const searchTerms = query.toLowerCase().split(' ');
+    const resultTitles = document.querySelectorAll('.result-title a');
+    const resultExcerpts = document.querySelectorAll('.result-excerpt');
+    
+    [...resultTitles, ...resultExcerpts].forEach(element => {
+      let html = element.innerHTML;
+      searchTerms.forEach(term => {
+        if (term.length > 2) {
+          const regex = new RegExp(`(${term})`, 'gi');
+          html = html.replace(regex, '<mark style="background: #fef3c7; padding: 0.125rem 0.25rem; border-radius: 3px;">$1</mark>');
+        }
+      });
+      element.innerHTML = html;
+    });
+  }
+});
+</script>
+{% endblock %}

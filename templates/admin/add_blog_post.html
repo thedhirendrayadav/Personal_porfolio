@@ -1,0 +1,237 @@
+{% extends "admin/base.html" %}
+
+{% block title %}Add New Blog Post - {{ app_name }}{% endblock %}
+
+{% block content %}
+<div class="admin-header">
+    <h1>Add New Blog Post</h1>
+    <div class="admin-actions">
+        <a href="{{ url_for('admin_blog') }}" class="btn btn-outline">
+            <i class="fas fa-arrow-left"></i> Back to Blog
+        </a>
+    </div>
+</div>
+
+<div class="admin-content">
+    <form id="blogPostForm" class="admin-form">
+        <div class="form-grid">
+            <div class="form-group">
+                <label for="title">Title *</label>
+                <input type="text" id="title" name="title" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="slug">Slug *</label>
+                <input type="text" id="slug" name="slug" required>
+                <small>URL-friendly version of the title</small>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="excerpt">Excerpt</label>
+            <textarea id="excerpt" name="excerpt" rows="3" placeholder="Brief description of the post..."></textarea>
+        </div>
+
+        <div class="form-group">
+            <label for="content">Content *</label>
+            <textarea id="content" name="content" rows="15" required placeholder="Write your blog post content here..."></textarea>
+        </div>
+
+        <div class="form-grid">
+            <div class="form-group">
+                <label for="featured_image">Featured Image URL</label>
+                <input type="url" id="featured_image" name="featured_image" placeholder="https://example.com/image.jpg">
+            </div>
+            
+            <div class="form-group">
+                <label for="category">Category *</label>
+                <select id="category" name="category" required>
+                    <option value="">Select Category</option>
+                    {% for category in categories %}
+                    <option value="{{ category.slug }}">{{ category.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="tags">Tags</label>
+            <input type="text" id="tags" name="tags" placeholder="Enter tags separated by commas">
+            <small>e.g., python, web development, tutorial</small>
+        </div>
+
+        <div class="form-grid">
+            <div class="form-group">
+                <label for="status">Status</label>
+                <select id="status" name="status">
+                    <option value="draft">Draft</option>
+                    <option value="published">Published</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label for="reading_time">Reading Time (minutes)</label>
+                <input type="number" id="reading_time" name="reading_time" min="1" value="5">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="checkbox-label">
+                <input type="checkbox" id="featured" name="featured">
+                <span class="checkmark"></span>
+                Featured Post
+            </label>
+        </div>
+
+        <div class="form-actions">
+            <button type="submit" class="btn btn-primary">
+                <i class="fas fa-save"></i> Create Post
+            </button>
+            <button type="button" class="btn btn-outline" onclick="window.history.back()">
+                Cancel
+            </button>
+        </div>
+    </form>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const titleInput = document.getElementById('title');
+    const slugInput = document.getElementById('slug');
+    
+    // Auto-generate slug from title
+    titleInput.addEventListener('input', function() {
+        const title = this.value;
+        const slug = title
+            .toLowerCase()
+            .replace(/[^a-z0-9\s-]/g, '')
+            .replace(/\s+/g, '-')
+            .replace(/-+/g, '-')
+            .trim('-');
+        slugInput.value = slug;
+    });
+    
+    // Handle form submission
+    document.getElementById('blogPostForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        const formData = new FormData();
+        formData.append('title', document.getElementById('title').value);
+        formData.append('slug', document.getElementById('slug').value);
+        formData.append('excerpt', document.getElementById('excerpt').value);
+        formData.append('content', document.getElementById('content').value);
+        formData.append('featured_image', document.getElementById('featured_image').value);
+        formData.append('category', document.getElementById('category').value);
+        formData.append('status', document.getElementById('status').value);
+        formData.append('reading_time', document.getElementById('reading_time').value);
+        
+        // Handle tags
+        const tagsInput = document.getElementById('tags').value;
+        if (tagsInput) {
+            const tags = tagsInput.split(',').map(tag => tag.trim()).filter(tag => tag);
+            tags.forEach(tag => formData.append('tags', tag));
+        }
+        
+        // Handle featured checkbox
+        if (document.getElementById('featured').checked) {
+            formData.append('featured', 'on');
+        }
+        
+        fetch('/admin/blog/add', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                alert('Blog post created successfully!');
+                window.location.href = '/admin/blog';
+            } else {
+                alert('Error creating blog post: ' + (data.message || 'Unknown error'));
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Error creating blog post');
+        });
+    });
+});
+</script>
+
+<style>
+.form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+    color: #1e293b;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    background: #ffffff;
+    color: #1e293b;
+    font-size: 1rem;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+    outline: none;
+    border-color: #6366f1;
+    box-shadow: 0 0 0 3px rgba(74, 155, 255, 0.1);
+}
+
+.form-group small {
+    display: block;
+    margin-top: 0.25rem;
+    color: #6b7280;
+    font-size: 0.875rem;
+}
+
+.checkbox-label {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    font-weight: 600;
+    color: #1e293b;
+}
+
+.checkbox-label input[type="checkbox"] {
+    width: auto;
+    margin-right: 0.5rem;
+}
+
+.form-actions {
+    display: flex;
+    gap: 1rem;
+    margin-top: 2rem;
+    padding-top: 2rem;
+    border-top: 1px solid #d1d5db;
+}
+
+@media (max-width: 768px) {
+    .form-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .form-actions {
+        flex-direction: column;
+    }
+}
+</style>
+{% endblock %}

@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- SVG Definitions for gradients and patterns -->
+  <svg width="0" height="0" style="position: absolute;">
+    <defs>
+      <linearGradient id="icon-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stop-color="#4a9bff" />
+        <stop offset="100%" stop-color="#00d4ff" />
+      </linearGradient>
+      
+      <!-- Circuit board pattern -->
+      <pattern id="circuit-pattern" x="0" y="0" width="100" height="100" patternUnits="userSpaceOnUse">
+        <path d="M0,50 L100,50 M50,0 L50,100" stroke="rgba(74, 155, 255, 0.1)" stroke-width="1"/>
+        <circle cx="50" cy="50" r="3" fill="rgba(0, 212, 255, 0.15)"/>
+        <circle cx="0" cy="50" r="3" fill="rgba(0, 212, 255, 0.15)"/>
+        <circle cx="100" cy="50" r="3" fill="rgba(0, 212, 255, 0.15)"/>
+        <circle cx="50" cy="0" r="3" fill="rgba(0, 212, 255, 0.15)"/>
+        <circle cx="50" cy="100" r="3" fill="rgba(0, 212, 255, 0.15)"/>
+      </pattern>
+      
+      <!-- Dot grid pattern -->
+      <pattern id="dot-grid" x="0" y="0" width="20" height="20" patternUnits="userSpaceOnUse">
+        <circle cx="10" cy="10" r="1" fill="rgba(255, 255, 255, 0.1)"/>
+      </pattern>
+      
+      <!-- Tech lines pattern -->
+      <pattern id="tech-lines" x="0" y="0" width="100" height="100" patternUnits="userSpaceOnUse">
+        <path d="M0,20 L100,20 M0,40 L100,40 M0,60 L100,60 M0,80 L100,80" stroke="rgba(74, 155, 255, 0.07)" stroke-width="1"/>
+        <path d="M20,0 L20,100 M40,0 L40,100 M60,0 L60,100 M80,0 L80,100" stroke="rgba(0, 212, 255, 0.05)" stroke-width="1"/>
+      </pattern>
+      
+      {% block extra_patterns %}{% endblock %}
+    </defs>
+  </svg>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes" />
+  <meta name="format-detection" content="telephone=no" />
+  <meta name="theme-color" content="#6366f1" />
+  
+  <!-- SEO Meta Tags -->
+  <title>{% block title %}Dhirendra Yadav - Cybersecurity Expert & AI/ML Specialist{% endblock %}</title>
+  <meta name="description" content="{% block description %}Dhirendra Yadav - BSc IT Graduate specializing in Cybersecurity, Machine Learning, and AI. Expert in threat detection, vulnerability assessment, and AI-powered security solutions.{% endblock %}" />
+  <meta name="keywords" content="{% block keywords %}cybersecurity, machine learning, AI, threat detection, vulnerability assessment, penetration testing, security automation, python, web development{% endblock %}" />
+  <meta name="author" content="Dhirendra Yadav" />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="{{ request.url }}" />
+  
+  <!-- Open Graph Meta Tags -->
+  <meta property="og:title" content="{% block og_title %}{{ self.title() }}{% endblock %}" />
+  <meta property="og:description" content="{% block og_description %}{{ self.description() }}{% endblock %}" />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="{{ request.url }}" />
+  <meta property="og:image" content="{{ url_for('static', filename='images/og-image.jpg', _external=True) }}" />
+  <meta property="og:site_name" content="Dhirendra Yadav Portfolio" />
+  <meta property="og:locale" content="en_US" />
+  
+  <!-- Twitter Card Meta Tags -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="{% block twitter_title %}{{ self.title() }}{% endblock %}" />
+  <meta name="twitter:description" content="{% block twitter_description %}{{ self.description() }}{% endblock %}" />
+  <meta name="twitter:image" content="{{ url_for('static', filename='images/twitter-card.jpg', _external=True) }}" />
+  <meta name="twitter:creator" content="@dhirendra_yadav" />
+  
+  <!-- Favicon and Icons -->
+  <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='favicon.ico') }}" />
+  <link rel="apple-touch-icon" sizes="180x180" href="{{ url_for('static', filename='images/apple-touch-icon.png') }}" />
+  <link rel="icon" type="image/png" sizes="32x32" href="{{ url_for('static', filename='images/favicon-32x32.png') }}" />
+  <link rel="icon" type="image/png" sizes="16x16" href="{{ url_for('static', filename='images/favicon-16x16.png') }}" />
+  <!-- Manifest file not needed for basic functionality -->
+  <!-- Styles -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/responsive-optimized.css') }}" />
+  <!-- Mobile optimizations included in responsive-optimized.css -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/minimal-modern.css') }}" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/modern-enhancements.css') }}" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/3d-enhancements.css') }}" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/homepage-modern.css') }}" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/about-modern.css') }}" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/skills-modern.css') }}" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/contact-modern.css') }}" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/theme-toggle.css') }}" />
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <!-- Clash Display Font (Geometric Heading Font) -->
+  <link href="https://api.fontshare.com/v2/css?f[]=clash-display@200,300,400,500,600,700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- JavaScript Libraries -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  
+  <!-- Global Mouse Interactions (Load First) -->
+  <script src="{{ url_for('static', filename='js/global-mouse-interactions.js') }}"></script>
+  
+  <!-- Custom Scripts -->
+  <!-- Responsive optimizations handled by CSS -->
+  <script src="{{ url_for('static', filename='js/animations.js') }}" defer></script>
+  <script src="{{ url_for('static', filename='js/3d-icons.js') }}" defer></script>
+  <script src="{{ url_for('static', filename='js/3d-background.js') }}" defer></script>
+  <script src="{{ url_for('static', filename='js/homepage-3d.js') }}" defer></script>
+  <script src="{{ url_for('static', filename='js/custom-cursor.js') }}" defer></script>
+  <script src="{{ url_for('static', filename='js/page-transitions.js') }}" defer></script>
+  <script src="{{ url_for('static', filename='js/enhanced-features.js') }}" defer></script>
+  {% block extra_head %}{% endblock %}
+</head>
+<body>
+  <!-- Skip to main content for accessibility -->
+  <a href="#main-content" class="skip-to-main">Skip to main content</a>
+  
+  <!-- Scroll Progress Bar -->
+  <div class="scroll-progress" role="progressbar" aria-label="Page scroll progress"></div>
+  
+  <!-- Video Background -->
+  <div class="video-background">
+    <video autoplay muted loop playsinline id="bgVideo">
+      <source src="{{ url_for('static', filename='videos/vid1.mp4') }}" type="video/mp4">
+    </video>
+    <div class="video-overlay"></div>
+  </div>
+  
+  <!-- SVG Icons are now inline or loaded from static files -->
+  
+  <!-- Modern Navigation -->
+  <nav class="modern-nav" role="navigation" aria-label="Main navigation">
+    <div class="nav-container">
+      <div class="nav-logo">
+        <a href="{{ url_for('index') }}" class="logo-link" aria-label="Dhirendra Yadav - Home">
+          <div class="nav-logo-3d">
+            <div class="nav-logo-face front">DY</div>
+            <div class="nav-logo-face back">DY</div>
+            <div class="nav-logo-face top">DY</div>
+            <div class="nav-logo-face bottom">DY</div>
+            <div class="nav-logo-face left">DY</div>
+            <div class="nav-logo-face right">DY</div>
+          </div>
+        </a>
+      </div>
+      <div class="nav-links desktop-nav" role="menubar">
+        <a href="{{ url_for('index') }}" class="nav-link {% if request.path == url_for('index') %}active{% endif %}" role="menuitem" {% if request.path == url_for('index') %}aria-current="page"{% endif %}>Home</a>
+        <a href="{{ url_for('about') }}" class="nav-link {% if request.path == url_for('about') %}active{% endif %}" role="menuitem" {% if request.path == url_for('about') %}aria-current="page"{% endif %}>About</a>
+        <a href="{{ url_for('skills') }}" class="nav-link {% if request.path == url_for('skills') %}active{% endif %}" role="menuitem" {% if request.path == url_for('skills') %}aria-current="page"{% endif %}>Skills</a>
+        <a href="{{ url_for('portfolio') }}" class="nav-link {% if request.path == url_for('portfolio') %}active{% endif %}" role="menuitem" {% if request.path == url_for('portfolio') %}aria-current="page"{% endif %}>Portfolio</a>
+        <a href="{{ url_for('blog') }}" class="nav-link {% if request.path.startswith('/blog') %}active{% endif %}" role="menuitem" {% if request.path.startswith('/blog') %}aria-current="page"{% endif %}>Blog</a>
+        <a href="{{ url_for('contact') }}" class="nav-link {% if request.path == url_for('contact') %}active{% endif %}" role="menuitem" {% if request.path == url_for('contact') %}aria-current="page"{% endif %}>Contact</a>
+      </div>
+      <div class="nav-controls">
+        <div class="theme-toggle">
+          <button class="theme-btn" aria-label="Toggle dark/light mode" title="Toggle dark/light mode" type="button">
+            <i class="fas fa-moon" aria-hidden="true"></i>
+          </button>
+        </div>
+        <button class="mobile-nav-toggle" aria-label="Toggle mobile menu" aria-expanded="false" aria-controls="mobile-navigation" type="button">
+          <span aria-hidden="true"></span>
+          <span aria-hidden="true"></span>
+          <span aria-hidden="true"></span>
+        </button>
+      </div>
+    </div>
+    <div class="mobile-nav" id="mobile-navigation" role="menu" aria-hidden="true">
+      <div class="mobile-nav-links">
+        <a href="{{ url_for('index') }}" class="mobile-nav-link {% if request.path == url_for('index') %}active{% endif %}" role="menuitem" {% if request.path == url_for('index') %}aria-current="page"{% endif %}>Home</a>
+        <a href="{{ url_for('about') }}" class="mobile-nav-link {% if request.path == url_for('about') %}active{% endif %}" role="menuitem" {% if request.path == url_for('about') %}aria-current="page"{% endif %}>About</a>
+        <a href="{{ url_for('skills') }}" class="mobile-nav-link {% if request.path == url_for('skills') %}active{% endif %}" role="menuitem" {% if request.path == url_for('skills') %}aria-current="page"{% endif %}>Skills</a>
+        <a href="{{ url_for('portfolio') }}" class="mobile-nav-link {% if request.path == url_for('portfolio') %}active{% endif %}" role="menuitem" {% if request.path == url_for('portfolio') %}aria-current="page"{% endif %}>Portfolio</a>
+        <a href="{{ url_for('blog') }}" class="mobile-nav-link {% if request.path.startswith('/blog') %}active{% endif %}" role="menuitem" {% if request.path.startswith('/blog') %}aria-current="page"{% endif %}>Blog</a>
+        <a href="{{ url_for('contact') }}" class="mobile-nav-link {% if request.path == url_for('contact') %}active{% endif %}" role="menuitem" {% if request.path == url_for('contact') %}aria-current="page"{% endif %}>Contact</a>
+      </div>
+    </div>
+  </nav>
+
+  <main id="main-content">
+    {% block content %}{% endblock %}
+  </main>
+
+  <!-- Modern Footer -->
+  <footer class="modern-footer" role="contentinfo">
+    <div class="footer-content">
+      <div class="footer-grid">
+        <div class="footer-about">
+          <div class="footer-logo">
+            <div class="footer-logo-text">DY</div>
+          </div>
+          <p>BSc IT Graduate specializing in Cybersecurity, Machine Learning, and AI. Expert in threat detection, vulnerability assessment, and AI-powered security solutions.</p>
+          <div class="social-links" role="list" aria-label="Social media links">
+            <a href="https://github.com/Dhirendra07000" target="_blank" rel="noopener noreferrer" class="social-link" aria-label="GitHub profile (opens in new tab)" role="listitem">
+              <i class="fab fa-github" aria-hidden="true"></i>
+            </a>
+            <a href="https://www.linkedin.com/in/dhirendra-yadav-3040b82b4" target="_blank" rel="noopener noreferrer" class="social-link" aria-label="LinkedIn profile (opens in new tab)" role="listitem">
+              <i class="fab fa-linkedin" aria-hidden="true"></i>
+            </a>
+            <a href="https://www.instagram.com/its_dhiruu_____" target="_blank" rel="noopener noreferrer" class="social-link" aria-label="Instagram profile (opens in new tab)" role="listitem">
+              <i class="fab fa-instagram" aria-hidden="true"></i>
+            </a>
+          </div>
+        </div>
+        <nav class="footer-nav" aria-label="Footer navigation">
+          <h3>Quick Links</h3>
+          <ul role="list">
+            <li role="listitem"><a href="{{ url_for('index') }}">Home</a></li>
+            <li role="listitem"><a href="{{ url_for('about') }}">About</a></li>
+            <li role="listitem"><a href="{{ url_for('skills') }}">Skills</a></li>
+            <li role="listitem"><a href="{{ url_for('portfolio') }}">Portfolio</a></li>
+            <li role="listitem"><a href="{{ url_for('contact') }}">Contact</a></li>
+          </ul>
+        </nav>
+        <div class="footer-contact">
+          <h3>Contact Info</h3>
+          <div class="contact-items" role="list" aria-label="Contact information">
+            <a href="mailto:Dhirendrayadav4999@gmail.com" class="contact-item" role="listitem" aria-label="Send email to Dhirendrayadav4999@gmail.com">
+              <i class="fas fa-envelope contact-icon" aria-hidden="true"></i>
+              <span>Dhirendrayadav4999@gmail.com</span>
+            </a>
+            <a href="tel:+9779845080167" class="contact-item" role="listitem" aria-label="Call +977 9845080167">
+              <i class="fas fa-phone-alt contact-icon" aria-hidden="true"></i>
+              <span>+977 9845080167</span>
+            </a>
+            <div class="contact-item" role="listitem">
+              <i class="fas fa-map-marker-alt contact-icon" aria-hidden="true"></i>
+              <span>Nayathimi, Bhaktapur, Nepal</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2025 Dhirendra Yadav. Crafted with <i class="fas fa-heart" aria-hidden="true"></i> and technology.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Enhanced Mouse Interactions -->
+  <!-- <script src="{{ url_for('static', filename='js/mouse-performance-optimizer.js') }}"></script> DISABLED -->
+  <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+  
+  <!-- Mobile Navigation Toggle -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Mobile Navigation
+      const mobileToggle = document.querySelector('.mobile-nav-toggle');
+      const mobileNav = document.querySelector('.mobile-nav');
+      
+      if (mobileToggle && mobileNav) {
+        mobileToggle.addEventListener('click', function() {
+          const isExpanded = this.getAttribute('aria-expanded') === 'true';
+          
+          // Toggle navigation
+          mobileNav.classList.toggle('active');
+          this.classList.toggle('active');
+          
+          // Update ARIA attributes
+          this.setAttribute('aria-expanded', !isExpanded);
+          mobileNav.setAttribute('aria-hidden', isExpanded);
+          
+          // Focus management
+          if (!isExpanded) {
+            // Focus first link when opening
+            const firstLink = mobileNav.querySelector('.mobile-nav-link');
+            if (firstLink) firstLink.focus();
+          }
+        });
+        
+        // Close mobile nav when clicking a link
+        const mobileLinks = document.querySelectorAll('.mobile-nav-link');
+        mobileLinks.forEach(link => {
+          link.addEventListener('click', function() {
+            mobileNav.classList.remove('active');
+            mobileToggle.classList.remove('active');
+            mobileToggle.setAttribute('aria-expanded', 'false');
+            mobileNav.setAttribute('aria-hidden', 'true');
+          });
+        });
+        
+        // Close mobile nav when pressing Escape
+        document.addEventListener('keydown', function(e) {
+          if (e.key === 'Escape' && mobileNav.classList.contains('active')) {
+            mobileNav.classList.remove('active');
+            mobileToggle.classList.remove('active');
+            mobileToggle.setAttribute('aria-expanded', 'false');
+            mobileNav.setAttribute('aria-hidden', 'true');
+            mobileToggle.focus();
+          }
+        });
+        
+        // Close mobile nav when clicking outside
+        document.addEventListener('click', function(e) {
+          if (!mobileNav.contains(e.target) && !mobileToggle.contains(e.target) && mobileNav.classList.contains('active')) {
+            mobileNav.classList.remove('active');
+            mobileToggle.classList.remove('active');
+            mobileToggle.setAttribute('aria-expanded', 'false');
+            mobileNav.setAttribute('aria-hidden', 'true');
+          }
+        });
+      }
+      
+      // Video Background
+      const bgVideo = document.getElementById('bgVideo');
+      if (bgVideo) {
+        // Ensure video plays
+        bgVideo.play().catch(function(error) {
+          console.log('Video autoplay prevented:', error);
+        });
+        
+        // Pause video on mobile to save bandwidth
+        if (window.innerWidth < 768) {
+          bgVideo.pause();
+        }
+        
+        // Handle visibility change (pause when tab is hidden)
+        document.addEventListener('visibilitychange', function() {
+          if (document.hidden) {
+            bgVideo.pause();
+          } else {
+            bgVideo.play().catch(function(error) {
+              console.log('Video play prevented:', error);
+            });
+          }
+        });
+      }
+    });
+  </script>
+  
+  {% block extra_scripts %}{% endblock %}
+</body>
+</html>

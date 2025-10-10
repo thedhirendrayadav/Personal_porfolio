@@ -1,0 +1,165 @@
+{% extends "admin/base.html" %}
+
+{% block title %}Admin Dashboard{% endblock %}
+
+{% block content %}
+<!-- Stats Cards -->
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; margin-bottom: 2rem;">
+    <div class="admin-card">
+        <div class="admin-card-body" style="text-align: center;">
+            <div style="font-size: 2rem; margin-bottom: 0.5rem;">📁</div>
+            <div style="font-size: 2rem; font-weight: 700; color: #6366f1;">{{ stats.total_projects }}</div>
+            <div style="color: #64748b; font-size: 0.875rem;">Total Projects</div>
+        </div>
+    </div>
+    
+    <div class="admin-card">
+        <div class="admin-card-body" style="text-align: center;">
+            <div style="font-size: 2rem; margin-bottom: 0.5rem;">⭐</div>
+            <div style="font-size: 2rem; font-weight: 700; color: #f59e0b;">{{ stats.featured_projects }}</div>
+            <div style="color: #64748b; font-size: 0.875rem;">Featured Projects</div>
+        </div>
+    </div>
+    
+    <div class="admin-card">
+        <div class="admin-card-body" style="text-align: center;">
+            <div style="font-size: 2rem; margin-bottom: 0.5rem;">✅</div>
+            <div style="font-size: 2rem; font-weight: 700; color: #10b981;">{{ stats.completed_projects }}</div>
+            <div style="color: #64748b; font-size: 0.875rem;">Completed</div>
+        </div>
+    </div>
+    
+    <div class="admin-card">
+        <div class="admin-card-body" style="text-align: center;">
+            <div style="font-size: 2rem; margin-bottom: 0.5rem;">🚧</div>
+            <div style="font-size: 2rem; font-weight: 700; color: #f59e0b;">{{ stats.in_progress_projects }}</div>
+            <div style="color: #64748b; font-size: 0.875rem;">In Progress</div>
+        </div>
+    </div>
+</div>
+
+<!-- Quick Actions -->
+<div class="admin-card">
+    <div class="admin-card-header">
+        <h2>🚀 Quick Actions</h2>
+    </div>
+    <div class="admin-card-body">
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
+            <a href="{{ url_for('admin_add_project') }}" class="btn btn-primary" style="justify-content: center;">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z" />
+                </svg>
+                Add New Project
+            </a>
+            
+            <a href="{{ url_for('admin_projects') }}" class="btn btn-secondary" style="justify-content: center;">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z"/>
+                </svg>
+                Manage Projects
+            </a>
+            
+            <a href="{{ url_for('admin_blog') }}" class="btn btn-secondary" style="justify-content: center;">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/>
+                </svg>
+                Manage Blog
+            </a>
+            
+            <a href="{{ url_for('index') }}" target="_blank" class="btn btn-secondary" style="justify-content: center;">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M19 19H5V5h7V3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2v-7h-2v7zM14 3v2h3.59l-9.83 9.83 1.41 1.41L19 6.41V10h2V3h-7z"/>
+                </svg>
+                View Live Site
+            </a>
+        </div>
+    </div>
+</div>
+
+<!-- Recent Projects -->
+{% if recent_projects %}
+<div class="admin-card">
+    <div class="admin-card-header">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+            <h2>📋 Recent Projects</h2>
+            <a href="{{ url_for('admin_projects') }}" class="btn btn-secondary btn-sm">View All</a>
+        </div>
+    </div>
+    <div class="admin-card-body">
+        <div class="table-container">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Project</th>
+                        <th>Type</th>
+                        <th>Status</th>
+                        <th>Featured</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for project in recent_projects %}
+                    <tr>
+                        <td>
+                            <div>
+                                <strong>{{ project.title }}</strong>
+                                <div style="font-size: 0.875rem; color: #6b7280; margin-top: 0.25rem;">
+                                    {{ project.description[:60] }}{% if project.description|length > 60 %}...{% endif %}
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <span class="badge badge-info">{{ project.project_type }}</span>
+                        </td>
+                        <td>
+                            {% if project.status == 'completed' %}
+                            <span class="badge badge-success">Completed</span>
+                            {% elif project.status == 'in_progress' %}
+                            <span class="badge badge-warning">In Progress</span>
+                            {% else %}
+                            <span class="badge">{{ project.status }}</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if project.featured %}
+                            <span style="color: #f59e0b;">⭐</span>
+                            {% else %}
+                            <span style="color: #9ca3af;">-</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            <div class="actions">
+                                <a href="{{ url_for('admin_edit_project', project_id=project.id) }}"
+                                    class="btn btn-secondary btn-sm">Edit</a>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endif %}
+
+<!-- Welcome Message -->
+<div class="admin-card" style="background: linear-gradient(135deg, #6366f1, #8b5cf6); color: white;">
+    <div class="admin-card-body" style="text-align: center;">
+        <h3 style="color: white; margin-bottom: 1rem;">🎯 Welcome to Your Portfolio Admin Panel!</h3>
+        <p style="opacity: 0.9; margin-bottom: 1.5rem;">
+            Manage your projects, update content, and keep your portfolio fresh. 
+            Your changes will be visible immediately on the live site.
+        </p>
+        <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+            <a href="{{ url_for('admin_add_project') }}" class="btn" 
+               style="background: rgba(255,255,255,0.2); color: white; border: 1px solid rgba(255,255,255,0.3);">
+                Add Your First Project
+            </a>
+            <a href="{{ url_for('index') }}" target="_blank" class="btn" 
+               style="background: rgba(255,255,255,0.2); color: white; border: 1px solid rgba(255,255,255,0.3);">
+                Preview Site
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}
