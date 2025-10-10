@@ -51,43 +51,24 @@ class Database:
     def increment_visit_count(self):
         """Increment and return visit count"""
         try:
-            # Check if record exists (try both table names)
-            existing = None
-            try:
-                existing = self.db_manager.select("site_visits", {"id": 1})
-            except:
-                try:
-                    existing = self.db_manager.select("visits", {"id": 1})
-                except:
-                    pass
+            # Try to get existing visit count from site_visits table
+            existing = self.db_manager.select("site_visits", {"id": 1})
             
-            if existing:
+            if existing and len(existing) > 0:
                 # Update existing count
-                if "visit_count" in existing[0]:
-                    new_count = existing[0]["visit_count"] + 1
-                    table_name = "site_visits"
-                else:
-                    # Using visits table, just increment ID or return current count
-                    new_count = len(existing) + 1
-                    table_name = "visits"
-                
-                try:
-                    self.db_manager.update(table_name, {"visit_count": new_count}, {"id": 1})
-                except:
-                    # If update fails, try insert
-                    self.db_manager.insert("visits", {"visited_at": "now()"})
+                current_count = existing[0].get("visit_count", 0)
+                new_count = current_count + 1
+                self.db_manager.update("site_visits", {"visit_count": new_count}, {"id": 1})
                 return new_count
             else:
                 # Insert first record
-                try:
-                    self.db_manager.insert("site_visits", {"id": 1, "visit_count": 1})
-                except:
-                    self.db_manager.insert("visits", {"visited_at": "now()"})
+                self.db_manager.insert("site_visits", {"id": 1, "visit_count": 1})
                 return 1
                 
         except Exception as e:
             print(f"Visit count error: {e}")
-            return 0
+            # Return a reasonable default if database is not available
+            return 1
 
 
 # Global database instance

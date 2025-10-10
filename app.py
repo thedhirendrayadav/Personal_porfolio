@@ -24,7 +24,11 @@ def ensure_database_and_tables():
 
 def get_visit_count_and_increment() -> int:
     """Get and increment visit count"""
-    return db.increment_visit_count()
+    try:
+        return db.increment_visit_count()
+    except Exception as e:
+        print(f"Visit count error: {e}")
+        return 1  # Return a default value
 
 
 app = Flask(__name__)
@@ -102,7 +106,12 @@ def check_rate_limit(key, limit, window):
     return True
 
 # Ensure DB exists on startup
-ensure_database_and_tables()
+try:
+    ensure_database_and_tables()
+    print("✅ Database initialization completed")
+except Exception as e:
+    print(f"⚠️ Database initialization warning: {e}")
+    # Continue anyway - the app might still work with fallback methods
 
 
 # ===================================

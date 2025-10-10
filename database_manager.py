@@ -34,7 +34,10 @@ class DatabaseManager:
     def _init_supabase(self):
         """Initialize Supabase client"""
         if not SUPABASE_AVAILABLE:
-            raise ImportError("Supabase client not available. Run: pip install supabase")
+            print("⚠️ Supabase client not available, falling back to REST API")
+            self.supabase_url = SUPABASE_CONFIG["url"]
+            self.supabase_key = SUPABASE_CONFIG["key"]
+            return
             
         if not SUPABASE_CONFIG["url"] or not SUPABASE_CONFIG["key"]:
             raise ValueError("Supabase URL and key must be provided")
@@ -46,26 +49,13 @@ class DatabaseManager:
                 SUPABASE_CONFIG["key"]
             )
             print("✅ Supabase client initialized successfully")
-        except TypeError as e:
-            if "proxy" in str(e):
-                print("⚠️ Proxy parameter issue detected, trying alternative initialization...")
-                try:
-                    # Alternative initialization without proxy parameter
-                    from supabase._sync.client import SyncClient
-                    self.supabase_client = SyncClient(
-                        SUPABASE_CONFIG["url"],
-                        SUPABASE_CONFIG["key"]
-                    )
-                    print("✅ Supabase client initialized with alternative method")
-                except Exception as e2:
-                    print(f"❌ Alternative Supabase initialization failed: {e2}")
-                    raise
-            else:
-                print(f"❌ Supabase client initialization error: {e}")
-                raise
         except Exception as e:
-            print(f"❌ Supabase client initialization error: {e}")
-            raise
+            print(f"⚠️ Supabase client initialization failed: {e}")
+            print("⚠️ Falling back to REST API approach")
+            # Fallback to REST API approach
+            self.supabase_url = SUPABASE_CONFIG["url"]
+            self.supabase_key = SUPABASE_CONFIG["key"]
+            self.supabase_client = None
     
     def _init_mysql(self):
         """Initialize MySQL connection"""
@@ -156,10 +146,42 @@ class DatabaseManager:
     
     def _supabase_insert(self, table, data):
         """Supabase insert"""
-        result = self.supabase_client.table(table).insert(data).execute()
-        if result.data:
-            return result.data[0].get('id')
-        return None
+        if self.supabase_client:
+            try:
+                result = self.supabase_client.table(table).insert(data).execute()
+                if result.data:
+                    return result.data[0].get('id')
+                return None
+            except Exception as e:
+                print(f"Supabase client insert failed: {e}")
+                return self._supabase_rest_insert(table, data)
+        else:
+            return self._supabase_rest_insert(table, data)
+    
+    def _supabase_rest_insert(self, table, data):
+        """Fallback REST API insert for Supabase"""
+        import requests
+        url = f"{self.supabase_url}/rest/v1/{table}"
+        headers = {
+            'apikey': self.supabase_key,
+            'Authorization': f'Bearer {self.supabase_key}',
+            'Content-Type': 'application/json',
+            'Prefer': 'return=representation'
+        }
+        
+        try:
+            response = requests.post(url, json=data, headers=headers, timeout=10)
+            if response.status_code in [200, 201]:
+                result = response.json()
+                if result and len(result) > 0:
+                    return result[0].get('id')
+                return True
+            else:
+                print(f"Supabase REST insert failed: {response.status_code} - {response.text}")
+                return None
+        except Exception as e:
+            print(f"Supabase REST API error: {e}")
+            return None
     
     def select(self, table, conditions=None, order_by=None, limit=None, offset=None):
         """Select data from table"""
@@ -192,27 +214,72 @@ class DatabaseManager:
     
     def _supabase_select(self, table, conditions=None, order_by=None, limit=None, offset=None):
         """Supabase select"""
-        query = self.supabase_client.table(table).select("*")
+        if self.supabase_client:
+            try:
+                query = self.supabase_client.table(table).select("*")
+                
+                if conditions:
+                    for key, value in conditions.items():
+                        query = query.eq(key, value)
+                
+                if order_by:
+                    # Parse order_by string (e.g., "created_at DESC")
+                    parts = order_by.split()
+                    column = parts[0]
+                    desc = len(parts) > 1 and parts[1].upper() == "DESC"
+                    query = query.order(column, desc=desc)
+                
+                if limit:
+                    query = query.limit(limit)
+                
+                if offset:
+                    query = query.offset(offset)
+                
+                result = query.execute()
+                return result.data if result.data else []
+            except Exception as e:
+                print(f"Supabase client select failed: {e}")
+                return self._supabase_rest_select(table, conditions, order_by, limit, offset)
+        else:
+            return self._supabase_rest_select(table, conditions, order_by, limit, offset)
+    
+    def _supabase_rest_select(self, table, conditions=None, order_by=None, limit=None, offset=None):
+        """Fallback REST API select for Supabase"""
+        import requests
+        url = f"{self.supabase_url}/rest/v1/{table}"
+        headers = {
+            'apikey': self.supabase_key,
+            'Authorization': f'Bearer {self.supabase_key}',
+        }
         
+        params = {}
         if conditions:
             for key, value in conditions.items():
-                query = query.eq(key, value)
+                params[key] = f"eq.{value}"
         
         if order_by:
-            # Parse order_by string (e.g., "created_at DESC")
+            # Convert "created_at DESC" to "created_at.desc"
             parts = order_by.split()
-            column = parts[0]
-            desc = len(parts) > 1 and parts[1].upper() == "DESC"
-            query = query.order(column, desc=desc)
+            if len(parts) > 1 and parts[1].upper() == "DESC":
+                params['order'] = f"{parts[0]}.desc"
+            else:
+                params['order'] = parts[0]
         
         if limit:
-            query = query.limit(limit)
-        
+            params['limit'] = limit
         if offset:
-            query = query.offset(offset)
+            params['offset'] = offset
         
-        result = query.execute()
-        return result.data if result.data else []
+        try:
+            response = requests.get(url, headers=headers, params=params, timeout=10)
+            if response.status_code == 200:
+                return response.json()
+            else:
+                print(f"Supabase REST select failed: {response.status_code} - {response.text}")
+                return []
+        except Exception as e:
+            print(f"Supabase REST API error: {e}")
+            return []
     
     def update(self, table, data, conditions):
         """Update data in table"""
@@ -240,13 +307,45 @@ class DatabaseManager:
     
     def _supabase_update(self, table, data, conditions):
         """Supabase update"""
-        query = self.supabase_client.table(table).update(data)
+        if self.supabase_client:
+            try:
+                query = self.supabase_client.table(table).update(data)
+                
+                for key, value in conditions.items():
+                    query = query.eq(key, value)
+                
+                result = query.execute()
+                return result.data
+            except Exception as e:
+                print(f"Supabase client update failed: {e}")
+                return self._supabase_rest_update(table, data, conditions)
+        else:
+            return self._supabase_rest_update(table, data, conditions)
+    
+    def _supabase_rest_update(self, table, data, conditions):
+        """Fallback REST API update for Supabase"""
+        import requests
+        url = f"{self.supabase_url}/rest/v1/{table}"
+        headers = {
+            'apikey': self.supabase_key,
+            'Authorization': f'Bearer {self.supabase_key}',
+            'Content-Type': 'application/json',
+        }
         
+        params = {}
         for key, value in conditions.items():
-            query = query.eq(key, value)
+            params[key] = f"eq.{value}"
         
-        result = query.execute()
-        return result.data
+        try:
+            response = requests.patch(url, json=data, headers=headers, params=params, timeout=10)
+            if response.status_code in [200, 204]:
+                return True
+            else:
+                print(f"Supabase REST update failed: {response.status_code} - {response.text}")
+                return False
+        except Exception as e:
+            print(f"Supabase REST update error: {e}")
+            return False
     
     def delete(self, table, conditions):
         """Delete data from table"""
