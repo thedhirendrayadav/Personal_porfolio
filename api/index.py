@@ -41,6 +41,15 @@ except ImportError as e:
     import traceback
     traceback.print_exc()
     
+    # Try to import the minimal app as fallback
+    try:
+        from app_minimal import app as minimal_app
+        app = minimal_app
+        print("✅ Minimal Flask app imported successfully")
+        import_error = None
+    except Exception as minimal_error:
+        print(f"❌ Minimal App Error: {minimal_error}")
+    
 except Exception as e:
     print(f"❌ General Error: {e}")
     import_error = str(e)
