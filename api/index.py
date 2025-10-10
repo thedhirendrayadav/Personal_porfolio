@@ -5,7 +5,7 @@ This file is required for Vercel to properly serve the Flask app
 
 import sys
 import os
-from flask import Flask, jsonify
+from flask import Flask, jsonify, send_from_directory
 
 # Add the parent directory to the path so we can import our app
 current_dir = os.path.dirname(os.path.abspath(__file__))
@@ -59,8 +59,13 @@ except Exception as e:
 # Create fallback app if main app failed to load
 if app is None:
     print("🔄 Creating fallback Flask app")
-    app = Flask(__name__)
+    app = Flask(__name__, static_folder='../static')
     app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'fallback-key')
+    
+    # Add explicit static file handling
+    @app.route('/static/<path:path>')
+    def serve_static(path):
+        return send_from_directory('../static', path)
     
     @app.route('/')
     def hello():
