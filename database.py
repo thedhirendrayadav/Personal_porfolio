@@ -3,18 +3,34 @@ Database Module
 Handles database connections and basic operations using unified database manager
 """
 
-try:
-    from database_manager import db_manager
-    print("✅ Using full database manager")
-except ImportError as e:
-    print(f"⚠️ Full database manager not available: {e}")
+import os
+
+# Check if running in Vercel environment
+is_vercel = os.environ.get('VERCEL') == '1' or os.environ.get('VERCEL_ENV') is not None
+
+if is_vercel:
+    # Use Vercel-optimized database manager
     try:
-        from simple_database_manager import simple_db_manager as db_manager
-        print("✅ Using simple database manager")
-    except ImportError as e2:
-        print(f"⚠️ Simple database manager not available: {e2}")
+        from vercel_database_manager import vercel_db_manager as db_manager
+        print("✅ Using Vercel-optimized database manager")
+    except ImportError as e:
+        print(f"⚠️ Vercel database manager not available: {e}")
         from rest_database_manager import rest_db_manager as db_manager
-        print("✅ Using REST database manager")
+        print("✅ Using REST database manager fallback")
+else:
+    # Use standard database managers for local development
+    try:
+        from database_manager import db_manager
+        print("✅ Using full database manager")
+    except ImportError as e:
+        print(f"⚠️ Full database manager not available: {e}")
+        try:
+            from simple_database_manager import simple_db_manager as db_manager
+            print("✅ Using simple database manager")
+        except ImportError as e2:
+            print(f"⚠️ Simple database manager not available: {e2}")
+            from rest_database_manager import rest_db_manager as db_manager
+            print("✅ Using REST database manager")
 
 from config import DATABASE_TYPE
 

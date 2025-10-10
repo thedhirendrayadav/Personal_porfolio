@@ -9,11 +9,12 @@ from datetime import datetime
 import json
 
 # Import Supabase with error handling
+SUPABASE_AVAILABLE = False
 try:
     from supabase import create_client, Client
     SUPABASE_AVAILABLE = True
 except ImportError as e:
-    print(f"Supabase import error: {e}")
+    print(f"Supabase import not available (expected in Vercel): {e}")
     SUPABASE_AVAILABLE = False
 
 
@@ -33,17 +34,20 @@ class DatabaseManager:
     
     def _init_supabase(self):
         """Initialize Supabase client"""
-        if not SUPABASE_AVAILABLE:
-            print("⚠️ Supabase client not available, falling back to REST API")
-            self.supabase_url = SUPABASE_CONFIG["url"]
-            self.supabase_key = SUPABASE_CONFIG["key"]
-            return
-            
         if not SUPABASE_CONFIG["url"] or not SUPABASE_CONFIG["key"]:
             raise ValueError("Supabase URL and key must be provided")
+            
+        # Always use REST API approach for better compatibility
+        self.supabase_url = SUPABASE_CONFIG["url"]
+        self.supabase_key = SUPABASE_CONFIG["key"]
+        self.supabase_client = None
+        
+        if not SUPABASE_AVAILABLE:
+            print("✅ Using Supabase REST API (client not available)")
+            return
         
         try:
-            # Try the standard create_client method
+            # Try the standard create_client method as fallback
             self.supabase_client = create_client(
                 SUPABASE_CONFIG["url"],
                 SUPABASE_CONFIG["key"]

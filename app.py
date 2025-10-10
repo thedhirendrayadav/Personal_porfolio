@@ -11,15 +11,19 @@ from database import db
 
 def ensure_database_and_tables():
     """Ensure database and tables are set up"""
-    db.ensure_database_setup()
-    
-    # Initialize models to create tables (MySQL only)
-    project_model = ProjectModel()
-    category_model = CategoryModel()
-    blog_model = BlogModel()
-    project_model.create_projects_table()
-    category_model.create_categories_table()
-    blog_model.create_blog_tables()
+    try:
+        db.ensure_database_setup()
+        
+        # Initialize models to create tables (MySQL only)
+        project_model = ProjectModel()
+        category_model = CategoryModel()
+        blog_model = BlogModel()
+        project_model.create_projects_table()
+        category_model.create_categories_table()
+        blog_model.create_blog_tables()
+    except Exception as e:
+        print(f"Database setup error: {e}")
+        # Continue without database for static content
 
 
 def get_visit_count_and_increment() -> int:
