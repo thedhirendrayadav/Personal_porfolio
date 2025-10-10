@@ -3,13 +3,24 @@ from config import DATABASE_TYPE
 import json
 
 # Import database manager with fallbacks
-try:
-    from database_manager import db_manager
-except ImportError:
+import os
+is_vercel = os.environ.get('VERCEL') == '1' or os.environ.get('VERCEL_ENV') is not None
+
+if is_vercel:
+    # Use Vercel-optimized database manager (no MySQL imports)
     try:
-        from simple_database_manager import simple_db_manager as db_manager
+        from vercel_database_manager import vercel_db_manager as db_manager
     except ImportError:
         from rest_database_manager import rest_db_manager as db_manager
+else:
+    # Use standard database managers for local development
+    try:
+        from database_manager import db_manager
+    except ImportError:
+        try:
+            from simple_database_manager import simple_db_manager as db_manager
+        except ImportError:
+            from rest_database_manager import rest_db_manager as db_manager
 
 
 class ProjectModel:

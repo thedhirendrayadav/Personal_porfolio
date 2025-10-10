@@ -4,11 +4,23 @@ This version avoids Python client dependency issues by using direct HTTP request
 """
 
 import os
-import mysql.connector
 import requests
 import json
 from datetime import datetime
-from config import DATABASE_TYPE, MYSQL_CONFIG, SUPABASE_CONFIG
+from config import DATABASE_TYPE, SUPABASE_CONFIG
+
+# Only import MySQL if not in Vercel environment
+is_vercel = os.environ.get('VERCEL') == '1' or os.environ.get('VERCEL_ENV') is not None
+if not is_vercel:
+    try:
+        import mysql.connector
+        from config import MYSQL_CONFIG
+    except ImportError:
+        mysql = None
+        MYSQL_CONFIG = None
+else:
+    mysql = None
+    MYSQL_CONFIG = None
 
 
 class RestDatabaseManager:
@@ -52,6 +64,9 @@ class RestDatabaseManager:
     
     def _init_mysql(self):
         """Initialize MySQL connection"""
+        if mysql is None or MYSQL_CONFIG is None:
+            raise ImportError("MySQL connector not available in this environment")
+        
         try:
             self.connection = mysql.connector.connect(
                 host=MYSQL_CONFIG["host"],
