@@ -27,14 +27,15 @@ body {
 /* Enhanced Navigation with 3D effects */
 .modern-nav {
   backdrop-filter: blur(20px);
-  background: rgba(10, 10, 26, 0.8);
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  -webkit-backdrop-filter: blur(20px);
+  background: rgba(10, 15, 28, 0.95) !important;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
   transition: all 0.3s ease;
 }
 
 .modern-nav.scrolled {
-  background: rgba(10, 10, 26, 0.95);
-  box-shadow: 0 5px 20px rgba(102, 126, 234, 0.2);
+  background: rgba(10, 15, 28, 0.98) !important;
+  box-shadow: 0 5px 20px rgba(74, 155, 255, 0.2);
 }
 
 /* 3D Logo Animation */

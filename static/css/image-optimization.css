@@ -1,0 +1,348 @@
+/* ===================================
+   IMAGE OPTIMIZATION STYLES
+   Enhanced PNG Display for Large Sizes
+   =================================== */
+
+/* Global image optimization */
+img {
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: crisp-edges;
+  image-rendering: optimize-quality;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  -webkit-transform: translateZ(0);
+  transform: translateZ(0);
+}
+
+/* High-resolution PNG optimization */
+.hero-profile-image,
+.shuttle-image,
+.profile-image {
+  /* Enhanced rendering for PNG files */
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: -moz-crisp-edges;
+  image-rendering: crisp-edges;
+  image-rendering: optimize-quality;
+  
+  /* Smooth scaling */
+  -webkit-transform: translateZ(0);
+  transform: translateZ(0);
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  
+  /* Better quality scaling */
+  -webkit-interpolation-mode: bicubic;
+  -ms-interpolation-mode: bicubic;
+  interpolation-mode: bicubic;
+  
+  /* Prevent blurry scaling */
+  -webkit-transform-style: preserve-3d;
+  transform-style: preserve-3d;
+}
+
+/* Enhanced profile image container */
+.profile-frame-about {
+  /* Better shadow and glow effects */
+  box-shadow: 
+    0 25px 80px rgba(99, 102, 241, 0.4),
+    0 0 120px rgba(99, 102, 241, 0.3),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.1);
+  
+  /* Smooth animations */
+  will-change: transform, box-shadow;
+  
+  /* Enhanced gradient border */
+  background: conic-gradient(
+    from 0deg,
+    #6366f1 0deg,
+    #14b8a6 60deg,
+    #f59e0b 120deg,
+    #a855f7 180deg,
+    #ec4899 240deg,
+    #6366f1 300deg,
+    #14b8a6 360deg
+  );
+  
+  /* Improved padding for better image display */
+  padding: clamp(3px, 0.5vw, 6px);
+}
+
+/* Enhanced shuttle container */
+.shuttle-container {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 2rem;
+}
+
+.shuttle-frame {
+  /* Enhanced visual effects */
+  background: linear-gradient(135deg, 
+    rgba(99, 102, 241, 0.15), 
+    rgba(20, 184, 166, 0.15),
+    rgba(245, 158, 11, 0.1)
+  );
+  border: 2px solid rgba(99, 102, 241, 0.4);
+  border-radius: clamp(15px, 2vw, 25px);
+  
+  /* Better shadows */
+  box-shadow: 
+    0 20px 60px rgba(99, 102, 241, 0.3),
+    0 0 80px rgba(99, 102, 241, 0.2),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.1);
+  
+  /* Performance optimization */
+  will-change: transform, box-shadow;
+}
+
+/* Enhanced glow effects */
+.profile-glow-about {
+  /* Larger, more impressive glow */
+  top: clamp(-30px, -3vw, -60px);
+  left: clamp(-30px, -3vw, -60px);
+  right: clamp(-30px, -3vw, -60px);
+  bottom: clamp(-30px, -3vw, -60px);
+  
+  background: radial-gradient(circle, 
+    rgba(99, 102, 241, 0.6) 0%, 
+    rgba(20, 184, 166, 0.4) 25%,
+    rgba(245, 158, 11, 0.3) 50%,
+    rgba(168, 85, 247, 0.2) 75%,
+    transparent 100%);
+  
+  filter: blur(clamp(20px, 3vw, 40px));
+}
+
+.shuttle-glow {
+  position: absolute;
+  top: clamp(-20px, -2vw, -40px);
+  left: clamp(-20px, -2vw, -40px);
+  right: clamp(-20px, -2vw, -40px);
+  bottom: clamp(-20px, -2vw, -40px);
+  
+  background: radial-gradient(circle, 
+    rgba(99, 102, 241, 0.5) 0%, 
+    rgba(20, 184, 166, 0.3) 40%,
+    rgba(245, 158, 11, 0.2) 70%,
+    transparent 100%);
+  
+  border-radius: inherit;
+  filter: blur(clamp(15px, 2vw, 30px));
+  z-index: 1;
+  animation: shuttleGlowPulse 4s ease-in-out infinite;
+}
+
+/* Enhanced hover effects */
+.profile-frame-about:hover {
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: 
+    0 35px 100px rgba(99, 102, 241, 0.5),
+    0 0 150px rgba(99, 102, 241, 0.4),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.2);
+}
+
+.shuttle-frame:hover {
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: 
+    0 30px 80px rgba(99, 102, 241, 0.4),
+    0 0 100px rgba(99, 102, 241, 0.3),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.2);
+}
+
+.profile-frame-about:hover .hero-profile-image {
+  transform: scale(1.03);
+  filter: brightness(1.15) contrast(1.1) saturate(1.15);
+}
+
+.shuttle-frame:hover .shuttle-image {
+  transform: scale(1.05) rotate(2deg);
+  filter: brightness(1.15) contrast(1.1) saturate(1.1);
+}
+
+/* Enhanced animations */
+@keyframes profileRotate {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes shuttleFloat {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  25% {
+    transform: translateY(-15px) rotate(1deg);
+  }
+  50% {
+    transform: translateY(-8px) rotate(-0.5deg);
+  }
+  75% {
+    transform: translateY(-20px) rotate(1.5deg);
+  }
+}
+
+@keyframes shuttleGlowPulse {
+  0%, 100% {
+    opacity: 0.6;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.1);
+  }
+}
+
+/* Responsive optimizations */
+@media (min-width: 1600px) {
+  .profile-frame-about {
+    width: 550px;
+    height: 550px;
+  }
+  
+  .shuttle-frame {
+    width: 500px;
+    height: 500px;
+  }
+}
+
+@media (max-width: 1024px) {
+  .profile-frame-about,
+  .shuttle-frame {
+    margin: 0 auto;
+  }
+}
+
+/* High DPI display optimization */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+  .hero-profile-image,
+  .shuttle-image,
+  .profile-image {
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: optimize-quality;
+  }
+}
+
+/* Performance optimizations */
+.profile-frame-about,
+.shuttle-frame,
+.hero-profile-image,
+.shuttle-image {
+  -webkit-transform: translateZ(0);
+  transform: translateZ(0);
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+}
+
+/* Accessibility improvements */
+@media (prefers-reduced-motion: reduce) {
+  .profile-frame-about,
+  .shuttle-frame {
+    animation: none !important;
+  }
+  
+  .profile-glow-about,
+  .shuttle-glow {
+    animation: none !important;
+  }
+  
+  .profile-frame-about:hover,
+  .shuttle-frame:hover {
+    transform: none !important;
+  }
+  
+  .profile-frame-about:hover .hero-profile-image,
+  .shuttle-frame:hover .shuttle-image {
+    transform: none !important;
+  }
+}
+
+/* Print optimization */
+@media print {
+  .profile-glow-about,
+  .shuttle-glow,
+  .floating-orb {
+    display: none !important;
+  }
+  
+  .hero-profile-image,
+  .shuttle-image {
+    filter: none !important;
+  }
+}
+
+
+/* @media (max-width: 768px) {
+  .hero-profile-section {
+    min-height: 50vh;
+  } */
+  
+  .hero-visual-section {
+    min-height: 40vh;
+    padding: 1rem;
+  }
+  
+  .profile-frame-about {
+    margin-bottom: 2rem;
+  }
+  
+  .shuttle-container {
+    padding: 1rem;
+  }
+
+
+/* ===================================
+   TABLET OPTIMIZATIONS
+   =================================== */
+
+@media (min-width: 768px) and (max-width: 1024px) {
+  .profile-frame-about {
+    width: clamp(300px, 35vw, 380px);
+    height: clamp(300px, 35vw, 380px);
+  }
+  
+  .shuttle-frame {
+    width: clamp(250px, 30vw, 350px);
+    height: clamp(250px, 30vw, 350px);
+  }
+}
+
+/* ===================================
+   LARGE SCREEN OPTIMIZATIONS
+   =================================== */
+
+@media (min-width: 1920px) {
+  .profile-frame-about {
+    width: 600px;
+    height: 600px;
+  }
+  
+  .shuttle-frame {
+    width: 550px;
+    height: 550px;
+  }
+  
+  .hero-profile-section,
+  .hero-visual-section {
+    min-height: 70vh;
+  }
+}
+
+/* ===================================
+   ULTRA-WIDE SCREEN SUPPORT
+   =================================== */
+
+@media (min-width: 2560px) {
+  .profile-frame-about {
+    width: 700px;
+    height: 700px;
+  }
+  
+  .shuttle-frame {
+    width: 650px;
+    height: 650px;
+  }
+}

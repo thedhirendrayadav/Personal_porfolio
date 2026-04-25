@@ -1,0 +1,328 @@
+/* ============================================
+   FRESH MOBILE NAVIGATION - CLEAN START
+   No conflicts, no old code, just working mobile nav
+   ============================================ */
+
+/* ============================================
+   HAMBURGER BUTTON - Desktop Hidden, Mobile Visible
+   ============================================ */
+#mobileNavToggleBtn {
+  display: none;
+  position: fixed;
+  top: 15px;
+  right: 70px; /* Moved left to avoid overlap with theme toggle */
+  width: 44px;
+  height: 44px;
+  background: linear-gradient(135deg, #4a9bff 0%, #00d4ff 100%);
+  border: none;
+  border-radius: 10px;
+  cursor: pointer !important;
+  z-index: 10001;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+  padding: 0;
+  box-shadow: 0 4px 20px rgba(74, 155, 255, 0.4);
+  transition: all 0.3s ease;
+  pointer-events: auto !important;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Text logo - hidden on desktop, shown on mobile */
+.nav-logo-text {
+  display: none;
+}
+
+#mobileNavToggleBtn:hover {
+  transform: scale(1.05);
+  box-shadow: 0 6px 25px rgba(74, 155, 255, 0.5);
+}
+
+#mobileNavToggleBtn:active {
+  transform: scale(0.95);
+}
+
+#mobileNavToggleBtn span {
+  display: block;
+  width: 18px;
+  height: 2px;
+  background: white;
+  border-radius: 2px;
+  transition: all 0.3s ease;
+}
+
+/* X animation when active */
+#mobileNavToggleBtn.active span:nth-child(1) {
+  transform: translateY(9px) rotate(45deg);
+}
+
+#mobileNavToggleBtn.active span:nth-child(2) {
+  opacity: 0;
+}
+
+#mobileNavToggleBtn.active span:nth-child(3) {
+  transform: translateY(-9px) rotate(-45deg);
+}
+
+/* ============================================
+   MOBILE MENU
+   ============================================ */
+.mobile-nav {
+  display: none;
+  position: fixed !important;
+  top: 0;
+  right: -100%;
+  width: 280px;
+  height: 100vh;
+  background: linear-gradient(180deg, #1e293b 0%, #0f172a 100%);
+  z-index: 9999;
+  padding: 100px 30px 30px;
+  overflow-y: auto;
+  transition: right 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  box-shadow: -10px 0 30px rgba(0, 0, 0, 0.5);
+  pointer-events: auto;
+}
+
+.mobile-nav.active {
+  right: 0;
+}
+
+.mobile-nav-links {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.mobile-nav-link {
+  display: block;
+  padding: 16px 20px;
+  color: #e2e8f0;
+  text-decoration: none;
+  font-size: 16px;
+  font-weight: 500;
+  border-radius: 10px;
+  transition: all 0.3s ease;
+  border-left: 3px solid transparent;
+}
+
+.mobile-nav-link:hover {
+  background: rgba(74, 155, 255, 0.15);
+  border-left-color: #4a9bff;
+  transform: translateX(5px);
+  color: white;
+}
+
+.mobile-nav-link.active {
+  background: rgba(74, 155, 255, 0.25);
+  border-left-color: #4a9bff;
+  color: white;
+  font-weight: 600;
+}
+
+/* ============================================
+   BACKDROP
+   ============================================ */
+.mobile-nav-backdrop {
+  display: none;
+  position: fixed !important;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  z-index: 9998;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: auto;
+  cursor: pointer;
+}
+
+.mobile-nav-backdrop.active {
+  opacity: 1;
+}
+
+/* ============================================
+   MOBILE BREAKPOINT
+   ============================================ */
+@media (max-width: 768px) {
+  /* Show hamburger button */
+  #mobileNavToggleBtn {
+    display: flex !important;
+  }
+
+  /* Show mobile nav and backdrop */
+  .mobile-nav,
+  .mobile-nav-backdrop {
+    display: block !important;
+  }
+
+  /* Hide desktop navigation */
+  .nav-links,
+  .desktop-nav {
+    display: none !important;
+  }
+
+  /* Fix navbar background */
+  .modern-nav {
+    background: rgba(10, 15, 28, 0.98) !important;
+    backdrop-filter: blur(20px) !important;
+    -webkit-backdrop-filter: blur(20px) !important;
+    border-bottom: 1px solid rgba(74, 155, 255, 0.3) !important;
+  }
+
+  /* Fix nav container for mobile */
+  .nav-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.75rem 1rem;
+    gap: 1rem;
+  }
+
+  /* Ensure logo is visible on mobile */
+  .nav-logo {
+    display: flex !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    z-index: 10;
+  }
+
+  .nav-logo-3d {
+    width: 40px;
+    height: 40px;
+    transform-style: preserve-3d;
+  }
+
+  .nav-logo-face {
+    width: 40px;
+    height: 40px;
+    font-size: 1.1rem;
+    font-weight: 800;
+  }
+
+  /* Fix 3D cube faces for mobile */
+  .nav-logo-face.front {
+    transform: translateZ(20px);
+  }
+
+  .nav-logo-face.back {
+    transform: rotateY(180deg) translateZ(20px);
+  }
+
+  .nav-logo-face.top {
+    transform: rotateX(90deg) translateZ(20px);
+  }
+
+  .nav-logo-face.bottom {
+    transform: rotateX(-90deg) translateZ(20px);
+  }
+
+  .nav-logo-face.left {
+    transform: rotateY(-90deg) translateZ(20px);
+  }
+
+  .nav-logo-face.right {
+    transform: rotateY(90deg) translateZ(20px);
+  }
+
+  /* Show text logo on mobile, hide 3D cube */
+  .nav-logo-3d {
+    display: none !important;
+  }
+
+  .nav-logo-text {
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    background: linear-gradient(135deg, #4a9bff 0%, #00d4ff 100%);
+    border-radius: 8px;
+    font-size: 1.25rem;
+    font-weight: 800;
+    color: white;
+    text-decoration: none;
+    font-family: 'Orbitron', sans-serif;
+  }
+
+  /* Fix nav controls position */
+  .nav-controls {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    position: relative;
+    z-index: 10;
+  }
+
+  /* Style theme button for mobile */
+  .theme-btn {
+    width: 32px;
+    height: 32px;
+    font-size: 0.75rem;
+    border-radius: 8px;
+  }
+
+  /* Remove body padding that causes white space */
+  body {
+    padding-top: 0 !important;
+    margin-top: 0 !important;
+  }
+
+  /* Main content spacing */
+  main {
+    margin-top: 0 !important;
+    padding-top: 80px !important;
+  }
+
+  /* Lock body scroll when menu is open */
+  body.mobile-nav-open {
+    overflow: hidden;
+    position: fixed;
+    width: 100%;
+  }
+}
+
+/* ============================================
+   DESKTOP BREAKPOINT
+   ============================================ */
+@media (min-width: 769px) {
+  /* Hide all mobile elements on desktop */
+  #mobileNavToggleBtn,
+  .mobile-nav,
+  .mobile-nav-backdrop {
+    display: none !important;
+  }
+
+  /* Show desktop navigation */
+  .nav-links,
+  .desktop-nav {
+    display: flex !important;
+  }
+}
+
+/* ============================================
+   SMALL MOBILE ADJUSTMENTS
+   ============================================ */
+@media (max-width: 480px) {
+  .mobile-nav {
+    width: 85%;
+  }
+
+  #mobileNavToggleBtn {
+    width: 45px;
+    height: 45px;
+    top: 15px;
+    right: 15px;
+  }
+
+  #mobileNavToggleBtn span {
+    width: 22px;
+  }
+}

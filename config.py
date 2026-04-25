@@ -32,3 +32,12 @@ ADMIN_CONFIG = {
     "password": os.getenv("ADMIN_PASSWORD", "Dhire12345@@kumar@@"),
     "secret_key": os.getenv("SECRET_KEY", "your-very-secure-secret-key-for-production-2024")
 }
+
+# Email Configuration (Gmail SMTP)
+EMAIL_CONFIG = {
+    "smtp_server": os.getenv("MAIL_SERVER", "smtp.gmail.com"),
+    "smtp_port": int(os.getenv("MAIL_PORT", "587")),
+    "sender_email": os.getenv("MAIL_USERNAME", ""),
+    "sender_password": os.getenv("MAIL_PASSWORD", ""),  # Gmail App Password
+    "receiver_email": os.getenv("RECEIVER_EMAIL", "Dhirendrayadav4999@gmail.com"),
+}

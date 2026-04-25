@@ -1,8 +1,6 @@
 """
-Unified Models Module
-Imports all model classes for easy access
+Unified models file - combines all model classes
 """
-
 from models.project_model import ProjectModel, CategoryModel
 from models.blog_model import BlogModel
 from models.contact_model import ContactModel

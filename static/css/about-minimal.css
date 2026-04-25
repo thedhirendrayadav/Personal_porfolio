@@ -337,8 +337,15 @@
 
 @media (min-width: 1024px) {
   .hero-layout-about {
-    grid-template-columns: 1.2fr 1fr;
+    grid-template-columns: 1fr 1fr;
     gap: 6rem;
+  }
+}
+
+@media (min-width: 1400px) {
+  .hero-layout-about {
+    grid-template-columns: 1.1fr 1fr;
+    gap: 8rem;
   }
 }
 
@@ -479,6 +486,8 @@
   justify-content: center;
   align-items: center;
   position: relative;
+  padding: 2rem;
+  min-height: 60vh;
 }
 
 .profile-image-container {
@@ -491,8 +500,8 @@
 
 .profile-frame-about {
   position: relative;
-  width: 320px;
-  height: 320px;
+  width: clamp(280px, 25vw, 450px);
+  height: clamp(280px, 25vw, 450px);
   border-radius: 50%;
   overflow: hidden;
   background: conic-gradient(
@@ -511,10 +520,24 @@
     0 0 80px rgba(99, 102, 241, 0.2);
 }
 
+@media (min-width: 1200px) {
+  .profile-frame-about {
+    width: 500px;
+    height: 500px;
+  }
+}
+
 @media (max-width: 767px) {
   .profile-frame-about {
-    width: 280px;
-    height: 280px;
+    width: clamp(250px, 35vw, 320px);
+    height: clamp(250px, 35vw, 320px);
+  }
+}
+
+@media (max-width: 480px) {
+  .profile-frame-about {
+    width: clamp(200px, 50vw, 280px);
+    height: clamp(200px, 50vw, 280px);
   }
 }
 
@@ -522,11 +545,15 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
+  object-position: center;
   border-radius: 50%;
   transition: all 0.5s ease;
   filter: brightness(1.1) contrast(1.05) saturate(1.1);
   position: relative;
   z-index: 2;
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: crisp-edges;
+  image-rendering: optimize-quality;
 }
 
 .profile-frame-about:hover .hero-profile-image {

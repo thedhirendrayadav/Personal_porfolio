@@ -4,299 +4,256 @@
 
 {% block extra_head %}
 <link rel="stylesheet" href="{{ url_for('static', filename='css/portfolio-minimal.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/portfolio-refined.css') }}">
 <script src="{{ url_for('static', filename='js/portfolio-minimal.js') }}" defer></script>
 {% endblock %}
 
 {% block content %}
 
-<!-- Minimal Portfolio Hero Section -->
+<!-- Portfolio Hero -->
 <section class="portfolio-hero-minimal">
-  <!-- 3D Interactive Background -->
   <div class="portfolio-3d-bg">
     <div class="floating-cube cube-1"></div>
     <div class="floating-cube cube-2"></div>
     <div class="floating-cube cube-3"></div>
-    <div class="connecting-lines">
-      <svg class="lines-svg" viewBox="0 0 100 100">
-        <path class="line-path" d="M10,50 Q50,10 90,50" stroke="url(#portfolioGradient)" stroke-width="0.5" fill="none"/>
-        <path class="line-path" d="M10,50 Q50,90 90,50" stroke="url(#portfolioGradient)" stroke-width="0.5" fill="none"/>
-        <defs>
-          <linearGradient id="portfolioGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-            <stop offset="0%" style="stop-color:#6366f1;stop-opacity:0"/>
-            <stop offset="50%" style="stop-color:#6366f1;stop-opacity:1"/>
-            <stop offset="100%" style="stop-color:#f59e0b;stop-opacity:0"/>
-          </linearGradient>
-        </defs>
-      </svg>
-    </div>
   </div>
-
   <div class="container">
     <div class="hero-content-minimal">
       <div class="intro-text">
         <span class="intro-label">Portfolio</span>
         <h1 class="hero-title-minimal">
-          <span class="name-text">Selected Works</span>
-          <span class="role-text">Projects & Case Studies</span>
+          <span class="name-text">My Work</span>
+          <span class="role-text">Enterprise Systems, Platforms & AI Solutions</span>
         </h1>
         <p class="hero-description-minimal">
-          Showcasing thoughtful design and clean development
+          From ERP systems to AI chatbots — building scalable solutions that matter
         </p>
+        <div class="portfolio-stats-bar">
+          <div class="pstat"><span class="pstat-num">10+</span><span class="pstat-label">Enterprise Systems</span></div>
+          <div class="pstat"><span class="pstat-num">5+</span><span class="pstat-label">AI/ML Projects</span></div>
+          <div class="pstat"><span class="pstat-num">15+</span><span class="pstat-label">Web Platforms</span></div>
+          <div class="pstat"><span class="pstat-num">30+</span><span class="pstat-label">Total Projects</span></div>
+        </div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- Projects Section Enhanced -->
-<section class="projects-enhanced">
+<!-- Filter Bar -->
+<section class="portfolio-filter-section">
   <div class="container">
-    <div class="projects-content-enhanced">
-      <!-- Left Side: Project Content -->
-      <div class="projects-left">
-        <div class="projects-header-enhanced">
-          <h2>Featured Projects</h2>
-          <p>Selected works showcasing design and development skills</p>
-        </div>
-        
-        <div class="projects-list-enhanced">
-          {% if projects %}
-            {% for project in projects %}
-            <div class="project-item-enhanced {% if loop.first %}active{% endif %}" data-project="project-{{ project.id }}">
-              <div class="project-number">{{ "%02d"|format(loop.index) }}</div>
-              <div class="project-details">
-                <h3>{{ project.title }}</h3>
-                <p>{{ project.description }}</p>
-                <div class="project-tech-enhanced">
-                  {% for tech in project.technologies %}
-                    <span class="tech-tag-enhanced">{{ tech }}</span>
-                  {% endfor %}
-                </div>
-                <div class="project-links-enhanced">
-                  {% if project.demo_url %}
-                    <a href="{{ project.demo_url }}" class="project-link-enhanced primary" target="_blank">View Live</a>
-                  {% endif %}
-                  {% if project.github_url %}
-                    <a href="{{ project.github_url }}" class="project-link-enhanced secondary" target="_blank">GitHub</a>
-                  {% endif %}
-                  {% if project.case_study_url %}
-                    <a href="{{ project.case_study_url }}" class="project-link-enhanced secondary" target="_blank">Case Study</a>
-                  {% endif %}
-                </div>
-              </div>
-            </div>
+    <div class="filter-bar-v2">
+      <button class="filter-pill active" data-filter="all">All</button>
+      <button class="filter-pill" data-filter="enterprise">Enterprise</button>
+      <button class="filter-pill" data-filter="web">Web & E-Commerce</button>
+      <button class="filter-pill" data-filter="ai">AI & Automation</button>
+      <button class="filter-pill" data-filter="security">Security</button>
+    </div>
+  </div>
+</section>
+
+<!-- Projects Showcase -->
+<section class="portfolio-projects-section">
+  <div class="container">
+
+    <!-- Dynamic projects from DB -->
+    {% if projects %}
+      <div class="portfolio-grid-v2">
+        {% for project in projects %}
+        <div class="portfolio-card-v2 glass-card" data-category="web">
+          <div class="pc-header">
+            <span class="pc-number">{{ "%02d"|format(loop.index) }}</span>
+            <span class="pc-badge">Database</span>
+          </div>
+          <h3 class="pc-title">{{ project.title }}</h3>
+          <p class="pc-desc">{{ project.description }}</p>
+          <div class="pc-tech">
+            {% for tech in project.technologies %}
+              <span>{{ tech }}</span>
             {% endfor %}
-          {% else %}
-            <!-- Fallback content when no projects exist -->
-            <div class="project-item-enhanced active" data-project="coming-soon">
-              <div class="project-number">01</div>
-              <div class="project-details">
-                <h3>Projects Coming Soon</h3>
-                <p>I'm currently working on some exciting projects that will be showcased here soon. Stay tuned!</p>
-                <div class="project-tech-enhanced">
-                  <span class="tech-tag-enhanced">React</span>
-                  <span class="tech-tag-enhanced">Python</span>
-                  <span class="tech-tag-enhanced">JavaScript</span>
-                </div>
-                <div class="project-links-enhanced">
-                  <a href="{{ url_for('contact') }}" class="project-link-enhanced primary">Get in Touch</a>
-                  <a href="https://github.com/Dhirendra07000" class="project-link-enhanced secondary" target="_blank">GitHub</a>
-                </div>
-              </div>
-            </div>
-          {% endif %}
-        </div>
-      </div>
-      
-      <!-- Right Side: 3D Interactive Element -->
-      <div class="projects-right">
-        <div class="portfolio-3d-showcase">
-          <div class="showcase-container">
-            <!-- 3D Project Visualization -->
-            <div class="project-3d-display">
-              <div class="display-screen" data-project-display="portfolio">
-                <div class="screen-content">
-                  <div class="project-preview">
-                    <div class="preview-header">
-                      <div class="preview-dots">
-                        <span class="dot red"></span>
-                        <span class="dot yellow"></span>
-                        <span class="dot green"></span>
-                      </div>
-                      <div class="preview-title">Portfolio</div>
-                    </div>
-                    <div class="preview-body">
-                      <div class="code-lines">
-                        <div class="code-line">
-                          <span class="line-number">1</span>
-                          <span class="code-text">&lt;div class="portfolio"&gt;</span>
-                        </div>
-                        <div class="code-line">
-                          <span class="line-number">2</span>
-                          <span class="code-text">  &lt;h1&gt;Modern Design&lt;/h1&gt;</span>
-                        </div>
-                        <div class="code-line">
-                          <span class="line-number">3</span>
-                          <span class="code-text">  &lt;p&gt;Clean & Responsive&lt;/p&gt;</span>
-                        </div>
-                        <div class="code-line">
-                          <span class="line-number">4</span>
-                          <span class="code-text">&lt;/div&gt;</span>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              
-              <div class="display-screen" data-project-display="dashboard">
-                <div class="screen-content">
-                  <div class="project-preview">
-                    <div class="preview-header">
-                      <div class="preview-dots">
-                        <span class="dot red"></span>
-                        <span class="dot yellow"></span>
-                        <span class="dot green"></span>
-                      </div>
-                      <div class="preview-title">Dashboard</div>
-                    </div>
-                    <div class="preview-body">
-                      <div class="dashboard-preview">
-                        <div class="chart-bar" style="height: 60%"></div>
-                        <div class="chart-bar" style="height: 80%"></div>
-                        <div class="chart-bar" style="height: 45%"></div>
-                        <div class="chart-bar" style="height: 90%"></div>
-                        <div class="chart-bar" style="height: 70%"></div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              
-              <div class="display-screen" data-project-display="ecommerce">
-                <div class="screen-content">
-                  <div class="project-preview">
-                    <div class="preview-header">
-                      <div class="preview-dots">
-                        <span class="dot red"></span>
-                        <span class="dot yellow"></span>
-                        <span class="dot green"></span>
-                      </div>
-                      <div class="preview-title">E-Commerce</div>
-                    </div>
-                    <div class="preview-body">
-                      <div class="ecommerce-preview">
-                        <div class="product-grid">
-                          <div class="product-item"></div>
-                          <div class="product-item"></div>
-                          <div class="product-item"></div>
-                          <div class="product-item"></div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            
-            <!-- Floating Tech Icons -->
-            <div class="floating-tech-icons">
-              <div class="tech-icon icon-1" data-tech="react">
-                <svg viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M12 10.11c1.03 0 1.87.84 1.87 1.89s-.84 1.89-1.87 1.89c-1.03 0-1.87-.84-1.87-1.89s.84-1.89 1.87-1.89M7.37 20c.63.38 2.01-.2 3.6-1.7-.52-.59-1.03-1.23-1.51-1.9a22.7 22.7 0 0 1-2.4-.36c-.51 2.14-.32 3.61.31 3.96m.71-5.74l-.29-.51c-.11.29-.22.58-.29.86.27.06.57.11.88.16l-.3-.51m6.54-.76l.81-1.5-.81-1.5c-.3-.53-.62-1-.91-1.47C13.17 9 12.6 9 12 9s-1.17 0-1.71.03c-.29.47-.61.94-.91 1.47L8.57 12l.81 1.5c.3.53.62 1 .91 1.47.54.03 1.11.03 1.71.03s1.17 0 1.71-.03c.29-.47.61-.94.91-1.47M12 6.78c-.19.22-.39.45-.59.72h1.18c-.2-.27-.4-.5-.59-.72m0 10.44c.19-.22.39-.45.59-.72h-1.18c.2.27.4.5.59.72M16.62 4c-.62-.38-2 .2-3.59 1.7.52.59 1.03 1.23 1.51 1.9.82.08 1.63.2 2.4.36.51-2.14.32-3.61-.32-3.96m-.7 5.74l.29.51c.11-.29.22-.58.29-.86-.27-.06-.57-.11-.88-.16l.3.51m1.45-7.05c1.47.84 1.63 3.05 1.01 5.63 2.54.75 4.37 1.99 4.37 3.68s-1.83 2.93-4.37 3.68c.62 2.58.46 4.79-1.01 5.63-1.46.84-3.45-.12-5.37-1.95-1.92 1.83-3.91 2.79-5.37 1.95-1.47-.84-1.63-3.05-1.01-5.63-2.54-.75-4.37-1.99-4.37-3.68s1.83-2.93 4.37-3.68c-.62-2.58-.46-4.79 1.01-5.63 1.46-.84 3.45.12 5.37 1.95 1.92-1.83 3.91-2.79 5.37-1.95z"/>
-                </svg>
-              </div>
-              
-              <div class="tech-icon icon-2" data-tech="python">
-                <svg viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M19.14 7.5A2.86 2.86 0 0 1 22 10.36v3.78A2.86 2.86 0 0 1 19.14 17H12c0 .39.32.96.71.96h6.43A2.86 2.86 0 0 0 22 15.1V8.9A2.86 2.86 0 0 0 19.14 6H5.86A2.86 2.86 0 0 0 3 8.9v6.2A2.86 2.86 0 0 0 5.86 18H12c0-.39-.32-.96-.71-.96H4.86A2.86 2.86 0 0 1 2 14.18v-3.78A2.86 2.86 0 0 1 4.86 7.5h14.28z"/>
-                </svg>
-              </div>
-              
-              <div class="tech-icon icon-3" data-tech="javascript">
-                <svg viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M3 3h18v18H3V3zm16.525 13.707c-.131-.821-.666-1.511-2.252-2.155-.552-.259-1.165-.438-1.349-.854-.068-.248-.078-.382-.034-.529.113-.484.687-.629 1.137-.495.293.09.563.315.732.676.775-.507.775-.507 1.316-.844-.203-.314-.304-.451-.439-.586-.473-.528-1.103-.798-2.126-.77l-.528.067c-.507.124-.991.395-1.283.754-.855.968-.608 2.655.427 3.354 1.023.765 2.521.933 2.712 1.653.18.878-.652 1.159-1.475 1.058-.607-.136-.945-.439-1.316-.971l-1.372.788c.157.359.337.517.607.832 1.305 1.316 4.568 1.249 5.153-.754.021-.067.18-.528.056-1.237l.034.049zm-6.737-5.434h-1.686c0 1.453-.007 2.898-.007 4.354 0 .924.047 1.772-.104 2.033-.247.517-.886.451-1.175.359-.297-.146-.448-.349-.623-.641-.047-.078-.082-.146-.095-.146l-1.368.844c.229.473.563.879.994 1.137.641.383 1.502.507 2.404.305.588-.17 1.095-.519 1.358-1.059.384-.697.302-1.553.299-2.509.008-1.541 0-3.083 0-4.635l.003-.042z"/>
-                </svg>
-              </div>
-              
-              <div class="tech-icon icon-4" data-tech="css">
-                <svg viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M5 3l-.65 3.34h13.59L17.5 8.5H3.92l-.66 3.33h13.59l-.76 3.81-5.48 1.81-4.75-1.81.33-1.64H2.85l-.79 4 7.85 3 9.05-3 2.04-10.5L21.94 3H5z"/>
-                </svg>
-              </div>
-              
-              <div class="tech-icon icon-5" data-tech="node">
-                <svg viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M12 1.85c-.27 0-.55.07-.78.2l-7.44 4.3c-.48.28-.78.8-.78 1.36v8.58c0 .56.3 1.08.78 1.36l1.95 1.12c.95.46 1.27.46 1.71.46.85 0 1.31-.52 1.31-1.36V9.47c0-.16-.14-.3-.3-.3H7.7c-.16 0-.3.14-.3.3v8.08c0 .78-.81 1.56-2.3.89L3.24 17.3c-.14-.08-.24-.22-.24-.39V8.33c0-.17.1-.31.24-.39l7.44-4.3c.15-.08.33-.08.48 0l7.44 4.3c.14.08.24.22.24.39v8.58c0 .17-.1.31-.24.39l-7.44 4.3c-.15.08-.33.08-.48 0l-1.95-1.12c-.1-.06-.24-.06-.32 0-.96.56-1.15.63-2.07.63-.74 0-1.41-.25-1.91-.68l-2.03-1.17c-.48-.28-.78-.8-.78-1.36V8.33c0-.56.3-1.08.78-1.36l7.44-4.3c.48-.28 1.08-.28 1.56 0l7.44 4.3c.48.28.78.8.78 1.36v8.58c0 .56-.3 1.08-.78 1.36l-7.44 4.3c-.23.13-.51.2-.78.2z"/>
-                </svg>
-              </div>
-            </div>
-            
-            <!-- Interactive Controls -->
-            <div class="showcase-controls">
-              <button class="control-button" data-action="prev">
-                <svg viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/>
-                </svg>
-              </button>
-              <div class="project-indicators">
-                <span class="indicator active" data-project="portfolio"></span>
-                <span class="indicator" data-project="dashboard"></span>
-                <span class="indicator" data-project="ecommerce"></span>
-              </div>
-              <button class="control-button" data-action="next">
-                <svg viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M8.59 16.59L10 18l6-6-6-6-1.41 1.41L13.17 12z"/>
-                </svg>
-              </button>
-            </div>
+          </div>
+          <div class="pc-links">
+            {% if project.demo_url %}<a href="{{ project.demo_url }}" target="_blank">Live Demo</a>{% endif %}
+            {% if project.github_url %}<a href="{{ project.github_url }}" target="_blank">GitHub</a>{% endif %}
           </div>
         </div>
+        {% endfor %}
       </div>
-    </div>
-  </div>
-</section>
+    {% endif %}
 
-<!-- Categories Section -->
-<section class="categories-minimal">
-  <div class="container">
-    <div class="categories-header-minimal">
-      <h2>Specializations</h2>
-      <p>Areas of expertise and focus</p>
-    </div>
-    
-    <div class="categories-grid-minimal">
-      <div class="category-card-minimal" data-category="web">
-        <div class="category-icon-minimal">
-          <svg viewBox="0 0 24 24" fill="currentColor">
-            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/>
-          </svg>
+    <!-- Static Project Showcase -->
+    <div class="portfolio-grid-v2">
+
+      <!-- 01. ERP System -->
+      <div class="portfolio-card-v2 glass-card" data-category="enterprise">
+        <div class="pc-header">
+          <span class="pc-number">01</span>
+          <div class="pc-icon enterprise"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 7V3H2v18h20V7H12zM6 19H4v-2h2v2zm0-4H4v-2h2v2zm0-4H4V9h2v2zm0-4H4V5h2v2zm4 12H8v-2h2v2zm0-4H8v-2h2v2zm0-4H8V9h2v2zm0-4H8V5h2v2zm10 12h-8v-2h2v-2h-2v-2h2v-2h-2V9h8v10zm-2-8h-2v2h2v-2zm0 4h-2v2h2v-2z"/></svg></div>
+          <span class="pc-badge prod">Production</span>
         </div>
-        <h3>Web Development</h3>
-        <p>Full-stack applications with modern frameworks and clean architecture</p>
-        <a href="#" class="category-link-minimal">View Projects</a>
-      </div>
-      
-      <div class="category-card-minimal" data-category="design">
-        <div class="category-icon-minimal">
-          <svg viewBox="0 0 24 24" fill="currentColor">
-            <path d="M12 3c-4.97 0-9 4.03-9 9s4.03 9 9 9c.83 0 1.5-.67 1.5-1.5 0-.39-.15-.74-.39-1.01-.23-.26-.38-.61-.38-.99 0-.83.67-1.5 1.5-1.5H16c2.76 0 5-2.24 5-5 0-4.42-4.03-8-9-8zm-5.5 9c-.83 0-1.5-.67-1.5-1.5S5.67 9 6.5 9 8 9.67 8 10.5 7.33 12 6.5 12zm3-4C8.67 8 8 7.33 8 6.5S8.67 5 9.5 5s1.5.67 1.5 1.5S10.33 8 9.5 8zm5 0c-.83 0-1.5-.67-1.5-1.5S13.67 5 14.5 5s1.5.67 1.5 1.5S15.33 8 14.5 8zm3 4c-.83 0-1.5-.67-1.5-1.5S16.67 9 17.5 9s1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/>
-          </svg>
+        <h3 class="pc-title">ERP Management System</h3>
+        <p class="pc-desc">Enterprise Resource Planning with HR, finance, inventory, procurement & reporting. Multi-tenant architecture serving 50k+ records.</p>
+        <div class="pc-tech"><span>Python</span><span>Django</span><span>PostgreSQL</span><span>REST API</span><span>Docker</span></div>
+        <div class="pc-features">
+          <span><i class="fas fa-check-circle"></i> Multi-tenant</span>
+          <span><i class="fas fa-check-circle"></i> Role-based access</span>
+          <span><i class="fas fa-check-circle"></i> Real-time reports</span>
         </div>
-        <h3>UI/UX Design</h3>
-        <p>User-centered design with focus on accessibility and usability</p>
-        <a href="#" class="category-link-minimal">Design Work</a>
       </div>
-      
-      <div class="category-card-minimal" data-category="data">
-        <div class="category-icon-minimal">
-          <svg viewBox="0 0 24 24" fill="currentColor">
-            <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z"/>
-          </svg>
+
+      <!-- 02. School Management -->
+      <div class="portfolio-card-v2 glass-card" data-category="enterprise">
+        <div class="pc-header">
+          <span class="pc-number">02</span>
+          <div class="pc-icon education"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M5 13.18v4L12 21l7-3.82v-4L12 17l-7-3.82zM12 3L1 9l11 6 9-4.91V17h2V9L12 3z"/></svg></div>
+          <span class="pc-badge prod">Production</span>
         </div>
-        <h3>Data Visualization</h3>
-        <p>Interactive dashboards and meaningful data representations</p>
-        <a href="#" class="category-link-minimal">Dashboards</a>
+        <h3 class="pc-title">School Management System</h3>
+        <p class="pc-desc">Student enrollment, grading, timetable scheduling, fee management & parent/teacher portals for 5k+ students.</p>
+        <div class="pc-tech"><span>Flask</span><span>MySQL</span><span>JavaScript</span><span>Chart.js</span><span>RBAC</span></div>
+        <div class="pc-features">
+          <span><i class="fas fa-check-circle"></i> Multi-role portals</span>
+          <span><i class="fas fa-check-circle"></i> Auto grading</span>
+          <span><i class="fas fa-check-circle"></i> Fee tracking</span>
+        </div>
       </div>
+
+      <!-- 03. Restaurant Management -->
+      <div class="portfolio-card-v2 glass-card" data-category="enterprise">
+        <div class="pc-header">
+          <span class="pc-number">03</span>
+          <div class="pc-icon food"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M11 9H9V2H7v7H5V2H3v7c0 2.12 1.66 3.84 3.75 3.97V22h2.5v-9.03C11.34 12.84 13 11.12 13 9V2h-2v7zm5-3v8h2.5v8H21V2c-2.76 0-5 2.24-5 4z"/></svg></div>
+          <span class="pc-badge prod">Production</span>
+        </div>
+        <h3 class="pc-title">Restaurant Management System</h3>
+        <p class="pc-desc">Table booking, order management, kitchen display, inventory tracking & POS integration with real-time updates.</p>
+        <div class="pc-tech"><span>React</span><span>Node.js</span><span>MongoDB</span><span>Socket.io</span><span>Stripe</span></div>
+        <div class="pc-features">
+          <span><i class="fas fa-check-circle"></i> Real-time KDS</span>
+          <span><i class="fas fa-check-circle"></i> POS integration</span>
+          <span><i class="fas fa-check-circle"></i> Table booking</span>
+        </div>
+      </div>
+
+      <!-- 04. Automated Attendance -->
+      <div class="portfolio-card-v2 glass-card" data-category="ai">
+        <div class="pc-header">
+          <span class="pc-number">04</span>
+          <div class="pc-icon ai"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M9 11.75c-.69 0-1.25.56-1.25 1.25s.56 1.25 1.25 1.25 1.25-.56 1.25-1.25-.56-1.25-1.25-1.25zm6 0c-.69 0-1.25.56-1.25 1.25s.56 1.25 1.25 1.25 1.25-.56 1.25-1.25-.56-1.25-1.25-1.25zM12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8 0-.29.02-.58.05-.86 2.36-1.05 4.23-2.98 5.21-5.37C11.07 8.33 14.05 10 17.42 10c.78 0 1.53-.09 2.25-.26.21.71.33 1.47.33 2.26 0 4.41-3.59 8-8 8z"/></svg></div>
+          <span class="pc-badge ai-badge">AI-Powered</span>
+        </div>
+        <h3 class="pc-title">Automated Attendance System</h3>
+        <p class="pc-desc">Facial recognition with deep learning, real-time face detection, anti-spoofing liveness check & automated reporting.</p>
+        <div class="pc-tech"><span>Python</span><span>OpenCV</span><span>TensorFlow</span><span>dlib</span><span>Flask</span></div>
+        <div class="pc-features">
+          <span><i class="fas fa-check-circle"></i> 98% accuracy</span>
+          <span><i class="fas fa-check-circle"></i> Liveness detect</span>
+          <span><i class="fas fa-check-circle"></i> Auto reports</span>
+        </div>
+      </div>
+
+      <!-- 05. Consultancy Management -->
+      <div class="portfolio-card-v2 glass-card" data-category="enterprise">
+        <div class="pc-header">
+          <span class="pc-number">05</span>
+          <div class="pc-icon consulting"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg></div>
+          <span class="pc-badge prod">Production</span>
+        </div>
+        <h3 class="pc-title">Consultancy Management System</h3>
+        <p class="pc-desc">CRM platform with appointment scheduling, document management, billing, case tracking & analytics dashboard.</p>
+        <div class="pc-tech"><span>Django</span><span>PostgreSQL</span><span>Celery</span><span>Redis</span><span>AWS S3</span></div>
+        <div class="pc-features">
+          <span><i class="fas fa-check-circle"></i> CRM built-in</span>
+          <span><i class="fas fa-check-circle"></i> Auto billing</span>
+          <span><i class="fas fa-check-circle"></i> Doc management</span>
+        </div>
+      </div>
+
+      <!-- 06. E-Commerce -->
+      <div class="portfolio-card-v2 glass-card" data-category="web">
+        <div class="pc-header">
+          <span class="pc-number">06</span>
+          <div class="pc-icon ecommerce"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12.9-1.63h7.45c.75 0 1.41-.41 1.75-1.03l3.58-6.49c.08-.14.12-.31.12-.48 0-.55-.45-1-1-1H5.21l-.94-2H1zm16 16c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2z"/></svg></div>
+          <span class="pc-badge prod">Production</span>
+        </div>
+        <h3 class="pc-title">E-Commerce Platform</h3>
+        <p class="pc-desc">Multi-vendor marketplace with product catalog, payment gateway integration, order tracking & vendor dashboard.</p>
+        <div class="pc-tech"><span>Next.js</span><span>Stripe</span><span>PostgreSQL</span><span>Tailwind</span><span>Prisma</span></div>
+        <div class="pc-features">
+          <span><i class="fas fa-check-circle"></i> Multi-vendor</span>
+          <span><i class="fas fa-check-circle"></i> Payment ready</span>
+          <span><i class="fas fa-check-circle"></i> Order tracking</span>
+        </div>
+      </div>
+
+      <!-- 07. AI Chatbot -->
+      <div class="portfolio-card-v2 glass-card" data-category="ai">
+        <div class="pc-header">
+          <span class="pc-number">07</span>
+          <div class="pc-icon ai"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-3 12H7v-2h10v2zm0-3H7V9h10v2zm0-3H7V6h10v2z"/></svg></div>
+          <span class="pc-badge ai-badge">AI-Powered</span>
+        </div>
+        <h3 class="pc-title">AI-Powered Chatbot</h3>
+        <p class="pc-desc">NLP conversational agent with intent classification, context memory, multi-platform integration & learning capabilities.</p>
+        <div class="pc-tech"><span>Python</span><span>OpenAI</span><span>LangChain</span><span>FastAPI</span><span>WebSocket</span></div>
+        <div class="pc-features">
+          <span><i class="fas fa-check-circle"></i> NLP engine</span>
+          <span><i class="fas fa-check-circle"></i> Context memory</span>
+          <span><i class="fas fa-check-circle"></i> Multi-channel</span>
+        </div>
+      </div>
+
+      <!-- 08. Automated Messaging -->
+      <div class="portfolio-card-v2 glass-card" data-category="ai">
+        <div class="pc-header">
+          <span class="pc-number">08</span>
+          <div class="pc-icon automation"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-7 9h-2V5h2v6zm0 4h-2v-2h2v2z"/></svg></div>
+          <span class="pc-badge prod">Production</span>
+        </div>
+        <h3 class="pc-title">Automated Messaging System</h3>
+        <p class="pc-desc">Bulk notification engine with scheduled delivery, templates, analytics & multi-channel support (SMS, Email, WhatsApp).</p>
+        <div class="pc-tech"><span>Python</span><span>Celery</span><span>RabbitMQ</span><span>Twilio</span><span>SendGrid</span></div>
+        <div class="pc-features">
+          <span><i class="fas fa-check-circle"></i> 100k+ msgs/day</span>
+          <span><i class="fas fa-check-circle"></i> Multi-channel</span>
+          <span><i class="fas fa-check-circle"></i> Analytics</span>
+        </div>
+      </div>
+
+      <!-- 09. Modern Portfolio -->
+      <div class="portfolio-card-v2 glass-card" data-category="web">
+        <div class="pc-header">
+          <span class="pc-number">09</span>
+          <div class="pc-icon web"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg></div>
+          <span class="pc-badge live-badge">Live</span>
+        </div>
+        <h3 class="pc-title">3D Interactive Portfolio</h3>
+        <p class="pc-desc">This very website! Built with Three.js 3D backgrounds, GSAP animations, responsive design & full blog/admin system.</p>
+        <div class="pc-tech"><span>Flask</span><span>Three.js</span><span>GSAP</span><span>Supabase</span><span>Python</span></div>
+        <div class="pc-features">
+          <span><i class="fas fa-check-circle"></i> 3D effects</span>
+          <span><i class="fas fa-check-circle"></i> Blog system</span>
+          <span><i class="fas fa-check-circle"></i> Admin panel</span>
+        </div>
+      </div>
+
+      <!-- 10. AI Threat Scanner -->
+      <div class="portfolio-card-v2 glass-card" data-category="security">
+        <div class="pc-header">
+          <span class="pc-number">10</span>
+          <div class="pc-icon security"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/></svg></div>
+          <span class="pc-badge ai-badge">Research</span>
+        </div>
+        <h3 class="pc-title">AI Threat Detection Scanner</h3>
+        <p class="pc-desc">ML-powered vulnerability scanner with automated pentest, threat classification, real-time monitoring dashboard.</p>
+        <div class="pc-tech"><span>Python</span><span>TensorFlow</span><span>Nmap</span><span>Wireshark</span><span>Docker</span></div>
+        <div class="pc-features">
+          <span><i class="fas fa-check-circle"></i> 95% accuracy</span>
+          <span><i class="fas fa-check-circle"></i> Auto scanning</span>
+          <span><i class="fas fa-check-circle"></i> ML-powered</span>
+        </div>
+      </div>
+
     </div>
   </div>
 </section>
@@ -305,11 +262,11 @@
 <section class="cta-minimal">
   <div class="container">
     <div class="cta-content-minimal">
-      <h2>Let's Create Something</h2>
-      <p>Ready to bring your ideas to life? Let's discuss your next project.</p>
+      <h2>Let's Build Something Great</h2>
+      <p>Have a project in mind? Let's discuss how I can help bring your vision to life.</p>
       <div class="cta-buttons-minimal">
         <a href="{{ url_for('contact') }}" class="btn-minimal btn-primary-minimal">Start a Project</a>
-        <a href="{{ url_for('about') }}" class="btn-minimal btn-secondary-minimal">Learn More</a>
+        <a href="{{ url_for('cv_main') }}" class="btn-minimal btn-secondary-minimal">View My CV</a>
       </div>
     </div>
   </div>

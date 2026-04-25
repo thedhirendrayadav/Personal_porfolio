@@ -140,14 +140,14 @@ body {
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(250, 250, 250, 0.85);
+  background: rgba(10, 15, 28, 0.85);
   backdrop-filter: blur(2px);
   z-index: 1;
 }
 
 @media (prefers-color-scheme: dark) {
   .video-overlay {
-    background: rgba(15, 23, 42, 0.85);
+    background: rgba(10, 15, 28, 0.85);
   }
 }
 
@@ -158,12 +158,12 @@ body {
   }
 
   .video-overlay {
-    background: rgba(250, 250, 250, 0.95);
+    background: rgba(10, 15, 28, 0.95);
   }
 
   @media (prefers-color-scheme: dark) {
     .video-overlay {
-      background: rgba(15, 23, 42, 0.95);
+      background: rgba(10, 15, 28, 0.95);
     }
   }
 }
@@ -723,60 +723,9 @@ textarea.input {
   background: rgba(37, 99, 235, 0.1);
 }
 
+/* Mobile nav styles - handled by mobile-nav-fresh.css */
 .mobile-nav-toggle {
-  display: none;
-  flex-direction: column;
-  gap: 5px;
-  cursor: pointer;
-  padding: 0.5rem;
-}
-
-.mobile-nav-toggle span {
-  width: 24px;
-  height: 2px;
-  background: var(--color-text);
-  border-radius: 2px;
-  transition: all var(--transition-fast);
-}
-
-.mobile-nav {
-  display: none;
-  position: fixed;
-  top: 70px;
-  left: 0;
-  right: 0;
-  background: var(--color-surface);
-  border-bottom: 1px solid var(--color-border);
-  box-shadow: var(--shadow-lg);
-  max-height: 0;
-  overflow: hidden;
-  transition: max-height var(--transition-base);
-}
-
-.mobile-nav.active {
-  max-height: 400px;
-}
-
-.mobile-nav-links {
-  padding: var(--space-md);
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-xs);
-}
-
-.mobile-nav-link {
-  padding: 0.75rem 1rem;
-  color: var(--color-text);
-  text-decoration: none;
-  font-weight: 500;
-  border-radius: var(--radius-md);
-  transition: all var(--transition-fast);
-}
-
-.mobile-nav-link:hover,
-.mobile-nav-link.active {
-  background: rgba(37, 99, 235, 0.1);
-  color: var(--color-accent);
+  display: none !important;
 }
 
 .theme-toggle {
@@ -804,29 +753,28 @@ textarea.input {
   color: var(--color-accent);
 }
 
-@media (max-width: 768px) {
-  .desktop-nav {
-    display: none;
-  }
-
-  .mobile-nav-toggle {
-    display: flex;
-  }
-
-  .mobile-nav {
-    display: block;
-  }
-}
+/* Hamburger animation moved to mobile-nav-fix.css */
 
 /* ===================================
-   REFINED FOOTER
+   REFINED FOOTER - DARK MODE
    =================================== */
 
 .modern-footer {
-  background: var(--color-surface);
-  border-top: 1px solid var(--color-border);
+  background: linear-gradient(135deg, #0a0f1c 0%, #1a1f35 50%, #0f172a 100%) !important;
+  border-top: 1px solid rgba(74, 155, 255, 0.2) !important;
   padding: var(--space-3xl) 0 var(--space-lg);
   margin-top: var(--space-3xl);
+  position: relative;
+}
+
+.modern-footer::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(74, 155, 255, 0.5), transparent);
 }
 
 .footer-content {
@@ -853,12 +801,12 @@ textarea.input {
 .footer-logo-text {
   font-size: 1.5rem;
   font-weight: 700;
-  color: var(--color-text);
+  color: #ffffff !important;
   font-family: var(--font-display);
 }
 
 .footer-about p {
-  color: var(--color-text-secondary);
+  color: rgba(255, 255, 255, 0.7) !important;
   line-height: 1.6;
   margin-bottom: var(--space-md);
 }
@@ -868,7 +816,7 @@ textarea.input {
   font-size: 1rem;
   font-weight: 600;
   margin-bottom: var(--space-md);
-  color: var(--color-text);
+  color: #ffffff !important;
 }
 
 .footer-nav ul {
@@ -882,14 +830,14 @@ textarea.input {
 }
 
 .footer-nav a {
-  color: var(--color-text-secondary);
+  color: rgba(255, 255, 255, 0.7) !important;
   text-decoration: none;
   transition: color var(--transition-fast);
   font-size: 0.9375rem;
 }
 
 .footer-nav a:hover {
-  color: var(--color-accent);
+  color: #4a9bff !important;
 }
 
 .contact-items {
@@ -902,14 +850,14 @@ textarea.input {
   display: flex;
   align-items: center;
   gap: var(--space-sm);
-  color: var(--color-text-secondary);
+  color: rgba(255, 255, 255, 0.7) !important;
   text-decoration: none;
   font-size: 0.9375rem;
   transition: color var(--transition-fast);
 }
 
 .contact-item:hover {
-  color: var(--color-accent);
+  color: #4a9bff !important;
 }
 
 .contact-icon {
@@ -918,19 +866,47 @@ textarea.input {
   display: flex;
   align-items: center;
   justify-content: center;
-  color: var(--color-accent);
+  color: #4a9bff !important;
 }
 
 .footer-bottom {
   padding-top: var(--space-lg);
-  border-top: 1px solid var(--color-border);
+  border-top: 1px solid rgba(74, 155, 255, 0.15) !important;
   text-align: center;
 }
 
 .footer-bottom p {
-  color: var(--color-text-secondary);
+  color: rgba(255, 255, 255, 0.6) !important;
   font-size: 0.875rem;
   margin: 0;
+}
+
+/* Footer social links - dark mode */
+.footer-about .social-links {
+  display: flex;
+  gap: 0.75rem;
+  margin-top: 1rem;
+}
+
+.footer-about .social-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(74, 155, 255, 0.2);
+  color: rgba(255, 255, 255, 0.7);
+  transition: all 0.3s ease;
+}
+
+.footer-about .social-link:hover {
+  transform: translateY(-3px);
+  background: linear-gradient(135deg, #4a9bff 0%, #00d4ff 100%);
+  color: #ffffff;
+  border-color: transparent;
+  box-shadow: 0 4px 15px rgba(74, 155, 255, 0.4);
 }
 
 @media (max-width: 768px) {
@@ -945,7 +921,7 @@ textarea.input {
    =================================== */
 
 body {
-  padding-top: 70px;
+  padding-top: 0;
   /* Account for fixed nav */
 }
 
@@ -1311,3 +1287,4 @@ body {
     color: black;
   }
 }
+/* Mobile navigation styles managed in mobile-nav-fix.css */

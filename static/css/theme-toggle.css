@@ -116,16 +116,34 @@ body {
   background: var(--bg-secondary);
   border: 1px solid var(--border-color);
   color: var(--text-primary);
-  width: 40px;
-  height: 40px;
+  width: 32px;
+  height: 32px;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
   transition: all 0.3s ease;
-  font-size: 1rem;
+  font-size: 0.75rem;
   outline: none;
+}
+
+.theme-btn i,
+.theme-btn .fas,
+.theme-btn [class*="fa-"] {
+  font-size: 0.7rem !important;
+  width: auto !important;
+  height: auto !important;
+  line-height: 1 !important;
+  display: inline-block !important;
+  vertical-align: middle !important;
+}
+
+.theme-btn:hover i,
+.theme-btn:hover .fas,
+.theme-btn:hover [class*="fa-"] {
+  transform: scale(1);
+  color: white;
 }
 
 .theme-btn:hover {
@@ -170,11 +188,11 @@ body {
 
 /* Dark theme specific adjustments */
 [data-theme="dark"] .video-overlay {
-  background: rgba(15, 23, 42, 0.7);
+  background: rgba(10, 15, 28, 0.85);
 }
 
 [data-theme="dark"] .hero-section {
-  background: linear-gradient(135deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.8));
+  background: linear-gradient(135deg, rgba(10, 15, 28, 0.9), rgba(15, 23, 42, 0.8));
 }
 
 [data-theme="dark"] .floating-orb {
@@ -289,9 +307,9 @@ body {
 /* Responsive adjustments */
 @media (max-width: 768px) {
   .theme-btn {
-    width: 36px;
-    height: 36px;
-    font-size: 0.9rem;
+    width: 30px;
+    height: 30px;
+    font-size: 0.7rem;
   }
   
   .scroll-to-top {

@@ -3,8 +3,11 @@ import datetime
 import json
 import os
 import secrets
+import smtplib
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
 from functools import wraps
-from config import APP_CONFIG, ADMIN_CONFIG
+from config import APP_CONFIG, ADMIN_CONFIG, EMAIL_CONFIG
 from unified_models import ProjectModel, CategoryModel, BlogModel, ContactModel
 from database import db
 
@@ -33,6 +36,58 @@ def get_visit_count_and_increment() -> int:
     except Exception as e:
         print(f"Visit count error: {e}")
         return 1  # Return a default value
+
+
+def send_email_notification(name, email, subject, message):
+    """Send email notification when someone submits the contact form"""
+    sender_email = EMAIL_CONFIG["sender_email"]
+    sender_password = EMAIL_CONFIG["sender_password"]
+    receiver_email = EMAIL_CONFIG["receiver_email"]
+
+    if not sender_password:
+        print("Email not sent: SENDER_PASSWORD not configured")
+        return False
+
+    try:
+        msg = MIMEMultipart("alternative")
+        msg["From"] = sender_email
+        msg["To"] = receiver_email
+        msg["Subject"] = f"Portfolio Contact: {subject}"
+        msg["Reply-To"] = email
+
+        html_body = f"""\
+<html>
+<body style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
+  <div style="background: linear-gradient(135deg, #4a9bff, #6c5ce7); padding: 20px; border-radius: 10px 10px 0 0;">
+    <h2 style="color: #fff; margin: 0;">New Contact Form Submission</h2>
+  </div>
+  <div style="background: #f8f9fa; padding: 20px; border: 1px solid #e0e0e0; border-radius: 0 0 10px 10px;">
+    <p><strong>Name:</strong> {name}</p>
+    <p><strong>Email:</strong> <a href="mailto:{email}">{email}</a></p>
+    <p><strong>Subject:</strong> {subject}</p>
+    <hr style="border: none; border-top: 1px solid #e0e0e0;">
+    <p><strong>Message:</strong></p>
+    <p style="white-space: pre-wrap; background: #fff; padding: 15px; border-radius: 5px; border: 1px solid #e0e0e0;">{message}</p>
+  </div>
+  <p style="color: #888; font-size: 12px; margin-top: 15px;">Sent from your portfolio contact form</p>
+</body>
+</html>"""
+
+        text_body = f"Name: {name}\nEmail: {email}\nSubject: {subject}\n\nMessage:\n{message}"
+
+        msg.attach(MIMEText(text_body, "plain"))
+        msg.attach(MIMEText(html_body, "html"))
+
+        with smtplib.SMTP(EMAIL_CONFIG["smtp_server"], EMAIL_CONFIG["smtp_port"]) as server:
+            server.starttls()
+            server.login(sender_email, sender_password)
+            server.sendmail(sender_email, receiver_email, msg.as_string())
+
+        print(f"Email notification sent to {receiver_email}")
+        return True
+    except Exception as e:
+        print(f"Failed to send email: {e}")
+        return False
 
 
 app = Flask(__name__)
@@ -279,6 +334,9 @@ def contact():
                 'status': 'unread'
             }
             contact_model.save_message(message_data)
+            
+            # Send email notification
+            send_email_notification(name, email, subject, message)
             
             # Log the message for debugging
             print(f"Contact form submission saved:")
@@ -670,26 +728,39 @@ def admin_mark_message_read(message_id):
 
 @app.route("/download-cv")
 def download_cv():
-    """Generate and download modern CV as HTML (optimized for PDF printing)"""
+    """Generate and download professional CV as PDF"""
     from flask import make_response
-    
-    # Render the CV template with PDF optimization
-    html_content = render_template('cv_modern.html', pdf_mode=True)
-    
-    # Create response with proper headers for download
-    response = make_response(html_content)
-    response.headers['Content-Type'] = 'text/html; charset=utf-8'
-    response.headers['Content-Disposition'] = 'attachment; filename="Dhirendra_Yadav_CV.html"'
+    from io import BytesIO
+    from xhtml2pdf import pisa
+
+    # Render the print-optimized CV template
+    html_content = render_template('cv_print_optimized.html')
+
+    # Convert HTML to PDF
+    pdf_buffer = BytesIO()
+    pisa_status = pisa.CreatePDF(html_content, dest=pdf_buffer)
+
+    if pisa_status.err:
+        # Fallback: serve HTML if PDF generation fails
+        response = make_response(html_content)
+        response.headers['Content-Type'] = 'text/html; charset=utf-8'
+        response.headers['Content-Disposition'] = 'attachment; filename="Dhirendra_Yadav_CV.html"'
+        return response
+
+    pdf_buffer.seek(0)
+    response = make_response(pdf_buffer.read())
+    response.headers['Content-Type'] = 'application/pdf'
+    response.headers['Content-Disposition'] = 'attachment; filename="Dhirendra_Yadav_CV.pdf"'
     response.headers['Cache-Control'] = 'no-cache, no-store, must-revalidate'
     response.headers['Pragma'] = 'no-cache'
     response.headers['Expires'] = '0'
-    
+
     return response
 
-@app.route("/cv-preview")
-def cv_preview():
-    """Preview CV in browser (optimized for PDF printing)"""
-    return render_template('cv_modern.html', pdf_mode=True)
+@app.route("/cv")
+def cv_main():
+    """Main CV page - print optimized"""
+    return render_template('cv_print_optimized.html')
 
 
 # Debug route to check if static files are accessible

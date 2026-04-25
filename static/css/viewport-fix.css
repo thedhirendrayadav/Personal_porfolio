@@ -1,0 +1,555 @@
+/* ===================================
+   VIEWPORT OVERFLOW FIX
+   Fixes horizontal scroll and layout issues
+   =================================== */
+
+/* Global overflow prevention */
+html {
+  overflow-x: hidden;
+  max-width: 100vw;
+}
+
+body {
+  overflow-x: hidden;
+  max-width: 100vw;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+}
+
+/* Fix all containers to prevent overflow */
+.container,
+.section-container,
+.nav-container,
+.hero-content,
+.hero-content-modern,
+.footer-content,
+.tech-stack-content,
+.about-content-modern,
+.projects-header,
+.projects-grid-modern {
+  max-width: 100%;
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  box-sizing: border-box;
+}
+
+/* Fix hero section */
+.hero-section,
+.modern-hero {
+  width: 100%;
+  max-width: 100vw;
+  overflow-x: hidden;
+  margin: 0;
+  padding: 0;
+}
+
+/* Fix main content area */
+main#main-content {
+  width: 100%;
+  max-width: 100vw;
+  overflow-x: hidden;
+}
+
+/* Fix all sections */
+section {
+  max-width: 100vw;
+  overflow-x: hidden;
+}
+
+/* Fix navigation */
+.modern-nav {
+  width: 100%;
+  max-width: 100vw;
+}
+
+/* Fix footer */
+.modern-footer {
+  width: 100%;
+  max-width: 100vw;
+}
+
+/* Fix grid layouts */
+.projects-grid-modern,
+.tech-grid,
+.about-highlights {
+  max-width: 100%;
+}
+
+/* Fix cards and items */
+.project-card-v2,
+.tech-item,
+.stat-item,
+.highlight-item {
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+/* Fix hero intro and content */
+.hero-intro,
+.hero-title-modern,
+.hero-stats,
+.hero-actions,
+.social-links-modern {
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+/* Fix title elements */
+.title-name,
+.title-role,
+.title-greeting {
+  max-width: 100%;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
+
+/* Fix description text */
+.hero-description-modern {
+  max-width: 100%;
+  padding: 0 1rem;
+  box-sizing: border-box;
+}
+
+/* Fix intro badge */
+.intro-badge {
+  max-width: 90vw;
+}
+
+/* Fix buttons on mobile */
+.btn-modern {
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+/* Fix social links */
+.social-link-modern {
+  flex-shrink: 0;
+}
+
+/* Fix floating stack */
+.floating-stack {
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+/* Fix carousel */
+.projects-carousel-container,
+.projects-carousel {
+  max-width: 100%;
+  overflow-x: auto;
+}
+
+/* Fix filter bar */
+.project-filter-bar {
+  max-width: 100%;
+  flex-wrap: wrap;
+}
+
+.filter-chip {
+  flex-shrink: 0;
+}
+
+/* Fix stats bar */
+.projects-stats-bar {
+  max-width: 100%;
+  flex-wrap: wrap;
+}
+
+.stat-pill {
+  flex-shrink: 0;
+}
+
+/* ===================================
+   MOBILE SPECIFIC FIXES
+   =================================== */
+
+@media (max-width: 768px) {
+  /* Ensure no horizontal scroll */
+  html, body {
+    overflow-x: hidden !important;
+    max-width: 100vw !important;
+  }
+
+  /* Fix all containers */
+  .container {
+    padding-left: 1rem !important;
+    padding-right: 1rem !important;
+    max-width: 100% !important;
+  }
+
+  /* Fix hero content */
+  .hero-content-modern {
+    padding: 1rem !important;
+    max-width: 100% !important;
+  }
+
+  /* Fix hero intro */
+  .hero-intro {
+    width: 100%;
+    max-width: 100%;
+    padding: 0 0.5rem;
+  }
+
+  /* Fix title */
+  .hero-title-modern {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .title-name {
+    font-size: clamp(2rem, 10vw, 4rem);
+    max-width: 100%;
+    word-wrap: break-word;
+  }
+
+  .title-role {
+    font-size: clamp(0.8rem, 3.5vw, 1rem);
+    max-width: 95vw;
+    margin: 0 auto;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    white-space: normal;
+  }
+
+  /* Fix stats */
+  .hero-stats {
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .stat-item {
+    width: 100%;
+    max-width: 280px;
+  }
+
+  /* Fix actions */
+  .hero-actions {
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .btn-modern {
+    width: 100%;
+    max-width: 280px;
+  }
+
+  /* Fix social links */
+  .social-links-modern {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.75rem;
+  }
+
+  /* Fix tech grid */
+  .tech-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .tech-item {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  /* Fix about section */
+  .about-content-modern {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+
+  .about-text {
+    max-width: 100%;
+  }
+
+  .highlight-item {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  /* Fix projects grid */
+  .projects-grid-modern {
+    grid-template-columns: 1fr;
+  }
+
+  .project-card-v2 {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  /* Fix filter bar */
+  .project-filter-bar {
+    justify-content: flex-start;
+    overflow-x: auto;
+    flex-wrap: nowrap;
+    padding-bottom: 0.5rem;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .filter-chip {
+    flex-shrink: 0;
+    white-space: nowrap;
+  }
+
+  /* Fix stats bar */
+  .projects-stats-bar {
+    justify-content: center;
+  }
+
+  /* Fix floating stack */
+  .floating-stack {
+    width: 100%;
+    max-width: 300px;
+    height: auto;
+    min-height: 350px;
+  }
+
+  .stack-card {
+    position: relative;
+    width: 100%;
+    height: auto;
+    min-height: 300px;
+  }
+
+  .back-card-1,
+  .back-card-2 {
+    display: none;
+  }
+
+  /* Fix carousel */
+  .carousel-item {
+    min-width: 90vw;
+  }
+}
+
+@media (max-width: 480px) {
+  /* Extra small screens */
+  .container {
+    padding-left: 0.75rem !important;
+    padding-right: 0.75rem !important;
+  }
+
+  .hero-content-modern {
+    padding: 0.5rem !important;
+  }
+
+  .title-name {
+    font-size: clamp(1.75rem, 12vw, 3rem);
+  }
+
+  .title-role {
+    font-size: clamp(0.7rem, 4vw, 0.9rem);
+    max-width: 90vw;
+  }
+
+  .hero-description-modern {
+    font-size: 0.95rem;
+    padding: 0 0.25rem;
+  }
+
+  .stat-item {
+    padding: 1rem;
+  }
+
+  .stat-number {
+    font-size: 1.5rem;
+  }
+
+  .stat-label {
+    font-size: 0.75rem;
+  }
+
+  .btn-modern {
+    padding: 0.875rem 1.5rem;
+    font-size: 0.9rem;
+  }
+
+  .social-link-modern {
+    width: 40px;
+    height: 40px;
+  }
+
+  .social-link-modern svg {
+    width: 18px;
+    height: 18px;
+  }
+
+  .tech-item {
+    padding: 1.25rem 1rem;
+  }
+
+  .tech-icon {
+    width: 45px;
+    height: 45px;
+  }
+
+  .tech-icon svg {
+    width: 22px;
+    height: 22px;
+  }
+
+  .highlight-icon {
+    width: 45px;
+    height: 45px;
+    font-size: 1.25rem;
+  }
+
+  .project-card-v2 {
+    padding: 1.25rem;
+  }
+
+  .filter-chip {
+    padding: 0.4rem 1rem;
+    font-size: 0.8rem;
+  }
+}
+
+/* ===================================
+   FIX SPECIFIC ELEMENTS
+   =================================== */
+
+/* Fix navbar on mobile */
+@media (max-width: 768px) {
+  .modern-nav {
+    height: 60px !important;
+    min-height: 60px !important;
+  }
+
+  .nav-container {
+    height: 60px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+  }
+
+  .nav-logo {
+    display: flex !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+  }
+
+  .nav-logo-3d,
+  .nav-logo-face {
+    width: 36px !important;
+    height: 36px !important;
+  }
+
+  .nav-logo-face {
+    font-size: 1rem !important;
+  }
+
+  .nav-controls {
+    display: flex !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    margin-right: 0 !important;
+  }
+
+  .theme-btn {
+    width: 36px !important;
+    height: 36px !important;
+  }
+
+  /* Hamburger button position */
+  #mobileNavToggleBtn {
+    right: 60px !important;
+    top: 8px !important;
+  }
+}
+
+/* Fix any element that might cause overflow */
+[class*="hero"],
+[class*="section"],
+[class*="container"],
+[class*="content"],
+[class*="grid"],
+[class*="card"] {
+  box-sizing: border-box;
+}
+
+/* Fix images */
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* Fix SVG icons */
+svg {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Fix video backgrounds */
+.video-background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  overflow: hidden;
+}
+
+.video-background video {
+  min-width: 100%;
+  min-height: 100%;
+  object-fit: cover;
+}
+
+/* Fix scroll progress */
+.scroll-progress {
+  max-width: 100vw;
+}
+
+/* Fix any remaining fixed width elements */
+*[style*="width:"] {
+  max-width: 100%;
+}
+
+/* Fix elements with position absolute that might overflow */
+.shuttle-elements,
+.logo-3d-container,
+.space-background {
+  max-width: 100vw;
+  overflow: hidden;
+}
+
+/* Fix orbital paths and rings */
+.shuttle-ring,
+.orbital-path {
+  max-width: 100%;
+  max-height: 100%;
+}
+
+/* Fix 3D cube */
+.logo-3d-cube {
+  max-width: 100%;
+}
+
+/* ===================================
+   PRINT STYLES
+   =================================== */
+
+@media print {
+  .video-background,
+  .shuttle-elements,
+  .logo-3d-container,
+  .space-background,
+  .scroll-indicator-modern {
+    display: none !important;
+  }
+
+  body {
+    overflow-x: visible !important;
+    max-width: none !important;
+  }
+}
