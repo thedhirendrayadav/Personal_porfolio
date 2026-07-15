@@ -266,7 +266,25 @@ def admin_logout():
 @app.route("/")
 def index():
     visit_count = get_visit_count_and_increment()
-    return render_template("index.html", visit_count=visit_count, app_name=APP_CONFIG["name"]) 
+    try:
+        featured_projects = ProjectModel().get_all_projects(featured_only=True)
+    except Exception as exc:
+        print(f"Homepage project load error: {exc}")
+        featured_projects = []
+
+    try:
+        recent_posts = BlogModel().get_recent_posts(limit=3)
+    except Exception as exc:
+        print(f"Homepage blog load error: {exc}")
+        recent_posts = []
+
+    return render_template(
+        "index.html",
+        visit_count=visit_count,
+        app_name=APP_CONFIG["name"],
+        featured_projects=featured_projects,
+        recent_posts=recent_posts,
+    )
 
 @app.route("/about")
 def about():
