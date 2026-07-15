@@ -357,7 +357,7 @@
     <div class="certificates-gallery-modern">
       <div class="certificate-card-modern glass-card reveal-on-scroll">
         <div class="certificate-image">
-          <img src="{{ url_for('static', filename='images/Django_cerficate.jpg') }}" alt="Django Certificate">
+          <img src="{{ url_for('static', filename='images/Django_cerficate.jpg', v=asset_version) }}" alt="Django Certificate">
           <div class="certificate-overlay">
             <div class="overlay-content">
               <h3>Django Certificate</h3>
@@ -374,7 +374,7 @@
 
       <div class="certificate-card-modern glass-card reveal-on-scroll">
         <div class="certificate-image">
-          <img src="{{ url_for('static', filename='images/Volunter_certificate.jpg') }}" alt="Volunteer Certificate">
+          <img src="{{ url_for('static', filename='images/Volunter_certificate.jpg', v=asset_version) }}" alt="Volunteer Certificate">
           <div class="certificate-overlay">
             <div class="overlay-content">
               <h3>Volunteer Certificate</h3>
@@ -391,7 +391,7 @@
 
       <div class="certificate-card-modern glass-card reveal-on-scroll featured">
         <div class="certificate-image">
-          <img src="{{ url_for('static', filename='images/Ismt_expo.jpg') }}" alt="ISMT Certificate of Appreciation">
+          <img src="{{ url_for('static', filename='images/Ismt_expo.jpg', v=asset_version) }}" alt="ISMT Certificate of Appreciation">
           <div class="certificate-overlay">
             <div class="overlay-content">
               <h3>ISMT Certificate</h3>
@@ -409,7 +409,7 @@
 
       <div class="certificate-card-modern glass-card reveal-on-scroll">
         <div class="certificate-image">
-          <img src="{{ url_for('static', filename='images/Art_and_craft_competion.jpg') }}"
+          <img src="{{ url_for('static', filename='images/Art_and_craft_competion.jpg', v=asset_version) }}"
             alt="Art and Craft Competition">
           <div class="certificate-overlay">
             <div class="overlay-content">
@@ -513,8 +513,8 @@
 {% endblock %}
 
 {% block extra_scripts %}
-<script src="{{ url_for('static', filename='js/skills-enhanced.js') }}"></script>
-<script src="{{ url_for('static', filename='js/skills-solar-system.js') }}"></script>
+<script src="{{ url_for('static', filename='js/skills-enhanced.js', v=asset_version) }}"></script>
+<script src="{{ url_for('static', filename='js/skills-solar-system.js', v=asset_version) }}"></script>
 <script>
   // Enhanced Modern Skills Page Scripts
   document.addEventListener('DOMContentLoaded', function () {

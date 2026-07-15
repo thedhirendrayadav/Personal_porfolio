@@ -73,7 +73,7 @@
   <meta property="og:description" content="{% block og_description %}{{ self.description() }}{% endblock %}" />
   <meta property="og:type" content="website" />
   <meta property="og:url" content="{{ request.url }}" />
-  <meta property="og:image" content="{{ url_for('static', filename='images/og-image.jpg', _external=True) }}" />
+  <meta property="og:image" content="{{ url_for('static', filename='images/og-image.jpg', _external=True, v=asset_version) }}" />
   <meta property="og:site_name" content="Dhirendra Yadav Portfolio" />
   <meta property="og:locale" content="en_US" />
 
@@ -81,33 +81,33 @@
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="{% block twitter_title %}{{ self.title() }}{% endblock %}" />
   <meta name="twitter:description" content="{% block twitter_description %}{{ self.description() }}{% endblock %}" />
-  <meta name="twitter:image" content="{{ url_for('static', filename='images/twitter-card.jpg', _external=True) }}" />
+  <meta name="twitter:image" content="{{ url_for('static', filename='images/twitter-card.jpg', _external=True, v=asset_version) }}" />
   <meta name="twitter:creator" content="@dhirendra_yadav" />
 
   <!-- Favicon and Icons -->
-  <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='favicon.ico') }}" />
-  <link rel="apple-touch-icon" sizes="180x180" href="{{ url_for('static', filename='images/apple-touch-icon.png') }}" />
-  <link rel="icon" type="image/png" sizes="32x32" href="{{ url_for('static', filename='images/favicon-32x32.png') }}" />
-  <link rel="icon" type="image/png" sizes="16x16" href="{{ url_for('static', filename='images/favicon-16x16.png') }}" />
+  <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='favicon.ico', v=asset_version) }}" />
+  <link rel="apple-touch-icon" sizes="180x180" href="{{ url_for('static', filename='images/apple-touch-icon.png', v=asset_version) }}" />
+  <link rel="icon" type="image/png" sizes="32x32" href="{{ url_for('static', filename='images/favicon-32x32.png', v=asset_version) }}" />
+  <link rel="icon" type="image/png" sizes="16x16" href="{{ url_for('static', filename='images/favicon-16x16.png', v=asset_version) }}" />
   <!-- Manifest file not needed for basic functionality -->
   <!-- Styles -->
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/responsive-optimized.css') }}" />
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/minimal-modern.css') }}" />
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/modern-enhancements.css') }}" />
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/3d-enhancements.css') }}" />
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/homepage-modern.css') }}" />
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/about-modern.css') }}" />
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/skills-modern.css') }}" />
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/contact-modern.css') }}" />
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}" />
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/theme-toggle.css') }}" />
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/image-optimization.css') }}" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/responsive-optimized.css', v=asset_version) }}" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/minimal-modern.css', v=asset_version) }}" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/modern-enhancements.css', v=asset_version) }}" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/3d-enhancements.css', v=asset_version) }}" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/homepage-modern.css', v=asset_version) }}" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/about-modern.css', v=asset_version) }}" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/skills-modern.css', v=asset_version) }}" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/contact-modern.css', v=asset_version) }}" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css', v=asset_version) }}" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/theme-toggle.css', v=asset_version) }}" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/image-optimization.css', v=asset_version) }}" />
   
   <!-- FRESH MOBILE NAVIGATION - LOADS LAST -->
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/mobile-nav-fresh.css') }}" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/mobile-nav-fresh.css', v=asset_version) }}" />
   
   <!-- VIEWPORT OVERFLOW FIX - LOADS LAST TO OVERRIDE -->
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/viewport-fix.css') }}" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/viewport-fix.css', v=asset_version) }}" />
 
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -133,15 +133,15 @@
   <!-- <script src="{{ url_for('static', filename='js/global-mouse-interactions.js') }}"></script> -->
 
   <!-- Custom Scripts -->
-  <script src="{{ url_for('static', filename='js/animations.js') }}" defer></script>
-  <script src="{{ url_for('static', filename='js/3d-icons.js') }}" defer></script>
-  <script src="{{ url_for('static', filename='js/3d-background.js') }}" defer></script>
-  <script src="{{ url_for('static', filename='js/homepage-3d.js') }}" defer></script>
-  <script src="{{ url_for('static', filename='js/page-transitions.js') }}" defer></script>
-  <script src="{{ url_for('static', filename='js/enhanced-features.js') }}" defer></script>
+  <script src="{{ url_for('static', filename='js/animations.js', v=asset_version) }}" defer></script>
+  <script src="{{ url_for('static', filename='js/3d-icons.js', v=asset_version) }}" defer></script>
+  <script src="{{ url_for('static', filename='js/3d-background.js', v=asset_version) }}" defer></script>
+  <script src="{{ url_for('static', filename='js/homepage-3d.js', v=asset_version) }}" defer></script>
+  <script src="{{ url_for('static', filename='js/page-transitions.js', v=asset_version) }}" defer></script>
+  <script src="{{ url_for('static', filename='js/enhanced-features.js', v=asset_version) }}" defer></script>
   
   <!-- FRESH MOBILE NAVIGATION -->
-  <script src="{{ url_for('static', filename='js/mobile-nav-fresh.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/mobile-nav-fresh.js', v=asset_version) }}"></script>
   
   {% block extra_head %}{% endblock %}
 </head>
@@ -156,7 +156,7 @@
   <!-- Video Background -->
   <div class="video-background">
     <video autoplay muted loop playsinline id="bgVideo">
-      <source src="{{ url_for('static', filename='videos/vid1.mp4') }}" type="video/mp4">
+      <source src="{{ url_for('static', filename='videos/vid1.mp4', v=asset_version) }}" type="video/mp4">
     </video>
     <div class="video-overlay"></div>
   </div>
@@ -199,7 +199,7 @@
       <div class="nav-controls">
         <div class="theme-toggle">
           <button class="theme-btn" aria-label="Toggle dark/light mode" title="Toggle dark/light mode" type="button">
-            <i class="fas fa-moon" aria-hidden="true"></i>
+            <i class="theme-icon" aria-hidden="true"></i>
           </button>
         </div>
       </div>
@@ -307,7 +307,7 @@
 
   <!-- Enhanced Mouse Interactions -->
   <!-- <script src="{{ url_for('static', filename='js/mouse-performance-optimizer.js') }}"></script> DISABLED -->
-  <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/main.js', v=asset_version) }}"></script>
 
   <script>
     // Video Background

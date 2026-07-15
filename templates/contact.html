@@ -3,8 +3,8 @@
 {% block title %}Contact - Dhirendra Yadav{% endblock %}
 
 {% block extra_head %}
-<link rel="stylesheet" href="{{ url_for('static', filename='css/contact-enhanced.css') }}">
-<script src="{{ url_for('static', filename='js/contact-enhanced.js') }}" defer></script>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/contact-enhanced.css', v=asset_version) }}">
+<script src="{{ url_for('static', filename='js/contact-enhanced.js', v=asset_version) }}" defer></script>
 {% endblock %}
 
 {% block content %}
@@ -71,7 +71,7 @@
         <div class="hero-visual-section">
           <div class="shuttle-container">
             <div class="shuttle-frame">
-              <img src="{{ url_for('static', filename='images/shuttle.png') }}" 
+              <img src="{{ url_for('static', filename='images/shuttle.png', v=asset_version) }}" 
                    alt="Space Shuttle - Innovation and Technology" 
                    class="shuttle-image"
                    loading="eager">
@@ -643,5 +643,4 @@ style.textContent = `
 document.head.appendChild(style);
 </script>
 {% endblock %}
-
 

@@ -3,9 +3,9 @@
 {% block title %}Portfolio - Dhirendra Yadav{% endblock %}
 
 {% block extra_head %}
-<link rel="stylesheet" href="{{ url_for('static', filename='css/portfolio-minimal.css') }}">
-<link rel="stylesheet" href="{{ url_for('static', filename='css/portfolio-refined.css') }}">
-<script src="{{ url_for('static', filename='js/portfolio-minimal.js') }}" defer></script>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/portfolio-minimal.css', v=asset_version) }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/portfolio-refined.css', v=asset_version) }}">
+<script src="{{ url_for('static', filename='js/portfolio-minimal.js', v=asset_version) }}" defer></script>
 {% endblock %}
 
 {% block content %}
@@ -33,6 +33,16 @@
           <div class="pstat"><span class="pstat-num">5+</span><span class="pstat-label">AI/ML Projects</span></div>
           <div class="pstat"><span class="pstat-num">15+</span><span class="pstat-label">Web Platforms</span></div>
           <div class="pstat"><span class="pstat-num">30+</span><span class="pstat-label">Total Projects</span></div>
+        </div>
+        <div class="portfolio-signal-band" aria-hidden="true">
+          <span class="signal-bar"></span>
+          <span class="signal-bar"></span>
+          <span class="signal-bar"></span>
+          <span class="signal-bar"></span>
+          <span class="signal-bar"></span>
+          <span class="signal-bar"></span>
+          <span class="signal-bar"></span>
+          <span class="signal-bar"></span>
         </div>
       </div>
     </div>

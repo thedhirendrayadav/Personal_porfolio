@@ -3,6 +3,13 @@
 // ===================================
 
 document.addEventListener('DOMContentLoaded', function () {
+  // Guard against duplicated contact panels from merged templates/styles.
+  const contactScreens = document.querySelectorAll('.contact-display-screen');
+  if (contactScreens.length > 1) {
+    contactScreens.forEach((screen, idx) => {
+      if (idx > 0) screen.remove();
+    });
+  }
 
   // ===================================
   // FORM HANDLING
@@ -934,20 +941,22 @@ window.addEventListener('scroll', () => {
   lastScrollY = currentScrollY;
 });
 
-// Add scroll progress indicator to page
-const scrollIndicator = document.createElement('div');
-scrollIndicator.className = 'scroll-progress-indicator';
-scrollIndicator.style.cssText = `
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: var(--scroll-progress, 0%);
-    height: 3px;
-    background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
-    z-index: 1000;
-    transition: width 0.1s ease;
-  `;
-document.body.appendChild(scrollIndicator);
+// Add a page-specific progress bar only when the shared one does not exist.
+if (!document.querySelector('.scroll-progress') && !document.querySelector('.scroll-progress-indicator')) {
+  const scrollIndicator = document.createElement('div');
+  scrollIndicator.className = 'scroll-progress-indicator';
+  scrollIndicator.style.cssText = `
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: var(--scroll-progress, 0%);
+      height: 3px;
+      background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+      z-index: 1000;
+      transition: width 0.1s ease;
+    `;
+  document.body.appendChild(scrollIndicator);
+}
 
 // Enhanced touch support for mobile interactions
 let touchStartX = 0;

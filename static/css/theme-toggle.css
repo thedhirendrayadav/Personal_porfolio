@@ -128,15 +128,19 @@ body {
   outline: none;
 }
 
-.theme-btn i,
-.theme-btn .fas,
-.theme-btn [class*="fa-"] {
-  font-size: 0.7rem !important;
-  width: auto !important;
-  height: auto !important;
-  line-height: 1 !important;
-  display: inline-block !important;
-  vertical-align: middle !important;
+.theme-btn .theme-icon {
+  width: 16px;
+  height: 16px;
+  line-height: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.theme-btn .theme-icon svg {
+  width: 16px;
+  height: 16px;
+  display: block;
 }
 
 .theme-btn:hover i,
@@ -264,6 +268,20 @@ body {
   align-items: center;
   justify-content: center;
   font-size: 1.2rem;
+}
+
+.scroll-to-top .scroll-top-icon {
+  width: 20px;
+  height: 20px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.scroll-to-top .scroll-top-icon svg {
+  width: 20px;
+  height: 20px;
+  display: block;
 }
 
 .scroll-to-top.visible {

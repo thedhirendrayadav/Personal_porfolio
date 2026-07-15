@@ -553,3 +553,221 @@ svg {
     max-width: none !important;
   }
 }
+
+/* ===================================
+   ANNOTATION FIXES (MOBILE + LAYOUT)
+   =================================== */
+
+/* Ensure top-right controls stay visible/clickable */
+.modern-nav .nav-controls {
+  position: relative;
+  z-index: 10020;
+}
+
+.theme-btn {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  min-width: 36px;
+  min-height: 36px;
+}
+
+.theme-btn .theme-icon {
+  color: currentColor !important;
+}
+
+/* Scroll-to-top should stay visible above page effects */
+.scroll-to-top {
+  z-index: 10030 !important;
+}
+
+/* Home: keep Contact CTA and footer aligned in the center on tablet/mobile */
+@media (max-width: 900px) {
+  .contact-cta-modern .contact-content {
+    grid-template-columns: 1fr !important;
+    gap: 2rem !important;
+    text-align: center;
+  }
+
+  .contact-cta-modern .contact-text,
+  .contact-cta-modern .contact-visual,
+  .contact-cta-modern .contact-card {
+    margin-left: auto !important;
+    margin-right: auto !important;
+  }
+
+  .contact-cta-modern .contact-actions {
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .modern-footer {
+    margin-top: 0 !important;
+  }
+
+  .modern-footer .footer-grid {
+    grid-template-columns: 1fr !important;
+    gap: 2rem !important;
+  }
+
+  .modern-footer .footer-about,
+  .modern-footer .footer-nav,
+  .modern-footer .footer-contact {
+    text-align: center !important;
+  }
+
+  .modern-footer .social-links {
+    justify-content: center !important;
+  }
+}
+
+/* About: keep profile image visible and reduce excessive empty height */
+.about-hero-minimal .hero-layout-about {
+  min-height: auto !important;
+}
+
+.about-hero-minimal .hero-profile-section {
+  min-height: auto !important;
+  padding: 1rem !important;
+}
+
+.about-hero-minimal .hero-profile-image {
+  opacity: 1 !important;
+  animation: none !important;
+}
+
+.about-hero-minimal .profile-frame-about {
+  background: rgba(15, 23, 42, 0.55);
+  border: 2px solid rgba(74, 155, 255, 0.45);
+  box-shadow: 0 14px 42px rgba(10, 25, 60, 0.35);
+}
+
+/* Skills: remove extra blank space and make universe fit mobile viewports */
+.skills-hero-modern {
+  min-height: 72svh !important;
+  padding-top: 6.25rem !important;
+  padding-bottom: 2rem !important;
+}
+
+.skills-visualization-modern {
+  padding-top: 3rem !important;
+  padding-bottom: 4rem !important;
+}
+
+.skills-3d-modern,
+#skills-3d-container {
+  width: 100% !important;
+  max-width: 100% !important;
+  height: min(62vh, 560px) !important;
+  min-height: 330px !important;
+}
+
+@media (max-width: 768px) {
+  .skills-hero-modern .scroll-indicator-modern {
+    display: none !important;
+  }
+
+  .skills-hero-content {
+    padding: 0 1rem !important;
+  }
+
+  .skills-3d-modern,
+  #skills-3d-container {
+    height: min(52vh, 420px) !important;
+    min-height: 300px !important;
+  }
+}
+
+/* Portfolio hero compactness and animated accent visibility */
+.portfolio-hero-minimal {
+  min-height: 80svh !important;
+}
+
+@media (max-width: 768px) {
+  .portfolio-hero-minimal {
+    min-height: 74svh !important;
+  }
+}
+
+/* Contact: simplify visual block, avoid "double-card" appearance, improve mobile */
+.contact-hero-enhanced {
+  min-height: 82svh !important;
+  padding-top: 6.5rem !important;
+}
+
+.contact-display-screen {
+  height: auto !important;
+  min-height: 0 !important;
+}
+
+.contact-display-screen .screen-header {
+  display: none !important;
+}
+
+.contact-display-screen .screen-content {
+  height: auto !important;
+  padding: 1.25rem !important;
+}
+
+.contact-display-screen .contact-avatar {
+  width: 84px !important;
+  height: 84px !important;
+  margin: 0 auto 1rem !important;
+}
+
+.contact-display-screen .avatar-core {
+  width: 58px !important;
+  height: 58px !important;
+}
+
+.contact-display-screen .avatar-core svg {
+  width: 28px !important;
+  height: 28px !important;
+}
+
+.contact-display-screen .info-item {
+  padding: 0.75rem !important;
+}
+
+.contact-display-screen .info-text {
+  overflow-wrap: anywhere;
+}
+
+.hero-layout-contact .hero-visual-section {
+  min-height: auto !important;
+  padding: 1rem !important;
+}
+
+.hero-layout-contact .shuttle-frame {
+  border-radius: 20px;
+  overflow: hidden;
+  background: rgba(11, 26, 56, 0.5);
+  border: 1px solid rgba(74, 155, 255, 0.35);
+  box-shadow: 0 18px 42px rgba(10, 20, 48, 0.4);
+}
+
+.hero-layout-contact .shuttle-image {
+  object-fit: contain !important;
+  filter: brightness(1.03) contrast(1.05) !important;
+}
+
+.hero-layout-contact .shuttle-glow,
+.hero-layout-contact .shuttle-trail {
+  display: none !important;
+}
+
+@media (max-width: 768px) {
+  .hero-layout-contact {
+    gap: 1.6rem !important;
+  }
+
+  .hero-layout-contact .orbital-rings,
+  .hero-layout-contact .tech-particles,
+  .contact-3d-background .connection-lines {
+    display: none !important;
+  }
+
+  .contact-main-enhanced {
+    padding-top: 4rem !important;
+  }
+}

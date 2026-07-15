@@ -140,12 +140,15 @@
   z-index: 9998;
   opacity: 0;
   transition: opacity 0.3s ease;
-  pointer-events: auto;
+  pointer-events: none;
   cursor: pointer;
+  visibility: hidden;
 }
 
 .mobile-nav-backdrop.active {
   opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
 }
 
 /* ============================================
@@ -157,10 +160,27 @@
     display: flex !important;
   }
 
-  /* Show mobile nav and backdrop */
-  .mobile-nav,
+  /* Keep menu/backdrop mounted for animation, but non-interactive when closed */
+  .mobile-nav {
+    display: block !important;
+    visibility: hidden;
+    pointer-events: none;
+  }
+
+  .mobile-nav.active {
+    visibility: visible;
+    pointer-events: auto;
+  }
+
   .mobile-nav-backdrop {
     display: block !important;
+    pointer-events: none;
+    visibility: hidden;
+  }
+
+  .mobile-nav-backdrop.active {
+    pointer-events: auto;
+    visibility: visible;
   }
 
   /* Hide desktop navigation */
@@ -284,8 +304,6 @@
   /* Lock body scroll when menu is open */
   body.mobile-nav-open {
     overflow: hidden;
-    position: fixed;
-    width: 100%;
   }
 }
 
@@ -319,7 +337,7 @@
     width: 45px;
     height: 45px;
     top: 15px;
-    right: 15px;
+    right: 64px;
   }
 
   #mobileNavToggleBtn span {

@@ -1,3 +1,14 @@
+import sys
+
+# Reconfigure stdout/stderr to UTF-8 so emoji (✅/⚠️) in print() work on Windows
+# consoles (which default to cp1252 and would otherwise raise UnicodeEncodeError).
+if sys.stdout.encoding and sys.stdout.encoding.lower() != "utf-8":
+    try:
+        sys.stdout.reconfigure(encoding="utf-8")
+        sys.stderr.reconfigure(encoding="utf-8")
+    except (AttributeError, ValueError):
+        pass
+
 from flask import Flask, render_template, request, jsonify, session, redirect, url_for, flash
 import datetime
 import json
@@ -91,6 +102,7 @@ def send_email_notification(name, email, subject, message):
 
 
 app = Flask(__name__)
+ASSET_VERSION = os.environ.get('ASSET_VERSION', str(int(datetime.datetime.now().timestamp())))
 
 # Security Configuration
 app.config.update(
@@ -99,7 +111,7 @@ app.config.update(
     SESSION_COOKIE_HTTPONLY=True,
     SESSION_COOKIE_SAMESITE='Lax',
     PERMANENT_SESSION_LIFETIME=datetime.timedelta(hours=2),
-    SEND_FILE_MAX_AGE_DEFAULT=31536000  # 1 year for static files
+    SEND_FILE_MAX_AGE_DEFAULT=0  # disable long-lived static caching in local/dev runs
 )
 
 # Security Headers Middleware
@@ -785,6 +797,10 @@ def inject_current_year():
 @app.context_processor
 def inject_csrf_token():
     return {'csrf_token': generate_csrf_token()}
+
+@app.context_processor
+def inject_asset_version():
+    return {'asset_version': ASSET_VERSION}
 
 if __name__ == "__main__":
     app.run(debug=True, host="127.0.0.1", port=5000)

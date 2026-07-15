@@ -123,10 +123,8 @@ document.addEventListener('DOMContentLoaded', function () {
         initPortfolioPage();
     }
 
-    // Initialize skills page elements if on skills page
-    if (window.location.pathname.includes('skills')) {
-        initSkillsPage();
-    }
+    // Skills page now has a dedicated modern initializer in templates/skills.html.
+    // Keep legacy init disabled to avoid duplicate canvases and conflicting animations.
 });
 
 // Mouse parallax for 3D scene and hero elements

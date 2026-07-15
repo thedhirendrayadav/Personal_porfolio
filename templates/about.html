@@ -3,8 +3,8 @@
 {% block title %}About - Dhirendra Yadav{% endblock %}
 
 {% block extra_head %}
-<link rel="stylesheet" href="{{ url_for('static', filename='css/about-minimal.css') }}">
-<script src="{{ url_for('static', filename='js/about-minimal.js') }}" defer></script>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/about-minimal.css', v=asset_version) }}">
+<script src="{{ url_for('static', filename='js/about-minimal.js', v=asset_version) }}" defer></script>
 {% endblock %}
 
 {% block content %}
@@ -37,7 +37,7 @@
         <div class="hero-profile-section">
           <div class="profile-image-container">
             <div class="profile-frame-about">
-              <img src="{{ url_for('static', filename='images/profile.png') }}" 
+              <img src="{{ url_for('static', filename='images/profile.png', v=asset_version) }}" 
                    alt="Dhirendra Yadav - Cybersecurity Expert" 
                    class="hero-profile-image"
                    loading="eager">
@@ -177,7 +177,7 @@
                         <div class="profile-avatar">
                           <div class="avatar-ring"></div>
                           <div class="avatar-core">
-                            <img src="{{ url_for('static', filename='images/profile.png') }}" 
+                            <img src="{{ url_for('static', filename='images/profile.png', v=asset_version) }}" 
                                  alt="Dhirendra Yadav Profile" 
                                  class="profile-image"
                                  loading="lazy">
