@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block title %}{{ project.title }} — Dhirendra Yadav{% endblock %}
+{% block description %}{{ project.description }}{% endblock %}
+{% block og_title %}{{ project.title }}{% endblock %}
+{% block og_description %}{{ project.description }}{% endblock %}
+{% block extra_head %}{% if project.image_url %}<meta property="og:image" content="{{ project.image_url }}">{% endif %}{% endblock %}
+{% block content %}
+<article class="project-detail" data-section="00 — CASE STUDY">
+  <header class="post-header editorial-grid">
+    <nav class="post-breadcrumb meta" aria-label="Breadcrumb"><a href="{{ url_for('portfolio') }}">SELECTED WORK</a><span>/</span><span>{{ (project.project_type or 'SYSTEM')|upper }}</span></nav>
+    <div class="post-heading"><p class="eyebrow accent">{{ (project.project_type or 'SYSTEM')|upper }} / {{ (project.status or 'COMPLETED')|upper }}</p><h1>{{ project.title }}</h1><p class="post-deck">{{ project.description }}</p></div>
+    <div class="post-byline meta"><span>CASE STUDY</span>{% if project.technologies %}<span>{{ project.technologies|length }} TECHNOLOG{{ 'Y' if project.technologies|length == 1 else 'IES' }}</span>{% endif %}</div>
+    {% if project.image_url %}<figure class="post-image"><img src="{{ project.image_url }}" alt="Preview of {{ project.title }}"></figure>{% endif %}
+  </header>
+  <section class="project-body editorial-grid" data-evidence="project">
+    <aside class="post-aside"><p class="meta">PROJECT PROFILE</p><p>{{ (project.project_type or 'System')|upper }}</p>{% if project.technologies %}<div class="tag-list">{% for technology in project.technologies %}<span class="chip">{{ technology }}</span>{% endfor %}</div>{% endif %}<div class="button-row case-actions">{% if project.demo_url %}<a class="button button-primary" href="{{ project.demo_url }}" target="_blank" rel="noreferrer">Live system ↗</a>{% endif %}{% if project.github_url %}<a class="button" href="{{ project.github_url }}" target="_blank" rel="noreferrer">Source ↗</a>{% endif %}<a class="button" href="{{ url_for('portfolio') }}">Back to work ←</a></div></aside>
+    <div class="project-summary">{% if project.long_description %}<p>{{ project.long_description }}</p>{% else %}<p>{{ project.description }}</p>{% endif %}</div>
+  </section>
+</article>
+{% if previous_project or next_project %}<nav class="project-navigation editorial-grid" aria-label="Project navigation">{% if previous_project %}<a class="button" href="{{ url_for('project_detail', project_id=previous_project.id) }}">Previous: {{ previous_project.title }} ←</a>{% else %}<span></span>{% endif %}{% if next_project %}<a class="button button-primary" href="{{ url_for('project_detail', project_id=next_project.id) }}">Next: {{ next_project.title }} ↗</a>{% endif %}</nav>{% endif %}
+{% endblock %}

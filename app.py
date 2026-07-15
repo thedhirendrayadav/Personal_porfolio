@@ -299,18 +299,53 @@ def portfolio():
     projects = project_model.get_all_projects(featured_only=True)
     categories = category_model.get_all_categories()
     
-    # Parse technologies JSON for each project
+    # Retain model-normalized technology lists while supporting legacy JSON strings.
     for project in projects:
-        if project.get('technologies'):
+        if isinstance(project.get('technologies'), str):
             try:
                 project['technologies'] = json.loads(project['technologies'])
-            except:
+            except json.JSONDecodeError:
                 project['technologies'] = []
     
     return render_template("portfolio.html", 
                          app_name=APP_CONFIG["name"],
                          projects=projects,
                          categories=categories)
+
+
+@app.route("/portfolio/<int:project_id>")
+def project_detail(project_id):
+    project_model = ProjectModel()
+    project = project_model.get_project_by_id(project_id)
+
+    if not project:
+        return render_template("404.html", app_name=APP_CONFIG["name"]), 404
+
+    if isinstance(project.get("technologies"), str):
+        try:
+            project["technologies"] = json.loads(project["technologies"])
+        except json.JSONDecodeError:
+            project["technologies"] = []
+
+    projects = project_model.get_all_projects()
+    project_index = next(
+        (index for index, candidate in enumerate(projects) if candidate.get("id") == project_id),
+        None,
+    )
+    previous_project = projects[project_index - 1] if project_index else None
+    next_project = (
+        projects[project_index + 1]
+        if project_index is not None and project_index + 1 < len(projects)
+        else None
+    )
+
+    return render_template(
+        "project_detail.html",
+        app_name=APP_CONFIG["name"],
+        project=project,
+        previous_project=previous_project,
+        next_project=next_project,
+    )
 
 @app.route("/skills")
 def skills():

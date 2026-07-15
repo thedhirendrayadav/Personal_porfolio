@@ -25,9 +25,9 @@
   <div class="case-list">
     {% if featured_projects %}
       {% for project in featured_projects[:4] %}
-      <article class="case-study" data-reveal data-project-type="{{ project.project_type or 'web' }}">
+      <article class="case-study" data-evidence="project" data-reveal data-project-type="{{ project.project_type or 'web' }}">
         <div class="case-media">{% if project.image_url %}<img src="{{ project.image_url }}" alt="Preview of {{ project.title }}" loading="lazy">{% else %}<div class="case-placeholder"><span>{{ '%02d'|format(loop.index) }}</span></div>{% endif %}</div>
-        <div class="case-copy"><div class="case-meta"><span class="meta">{{ '%02d'|format(loop.index) }} / {{ project.project_type or 'SYSTEM' }}</span><span class="meta">{{ project.status or 'COMPLETED' }}</span></div><h3>{{ project.title }}</h3><p>{{ project.description }}</p>{% if project.technologies %}<div class="button-row case-actions">{% for tech in project.technologies[:5] %}<span class="chip">{{ tech }}</span>{% endfor %}</div>{% endif %}<div class="button-row case-actions">{% if project.demo_url %}<a class="button" href="{{ project.demo_url }}" target="_blank" rel="noreferrer">Live system ↗</a>{% endif %}{% if project.github_url %}<a class="button" href="{{ project.github_url }}" target="_blank" rel="noreferrer">Source ↗</a>{% endif %}</div></div>
+        <div class="case-copy"><div class="case-meta"><span class="meta">{{ '%02d'|format(loop.index) }} / {{ project.project_type or 'SYSTEM' }}</span><span class="meta">{{ (project.status or 'COMPLETED')|upper }}</span></div><h3>{{ project.title }}</h3><p>{{ project.description }}</p>{% if project.technologies %}<div class="button-row case-actions">{% for tech in project.technologies[:5] %}<span class="chip">{{ tech }}</span>{% endfor %}</div>{% endif %}<div class="button-row case-actions">{% if project.id %}<a class="button button-primary" href="{{ url_for('project_detail', project_id=project.id) }}">View case study ↗</a>{% endif %}{% if project.demo_url %}<a class="button" href="{{ project.demo_url }}" target="_blank" rel="noreferrer">Live system ↗</a>{% endif %}{% if project.github_url %}<a class="button" href="{{ project.github_url }}" target="_blank" rel="noreferrer">Source ↗</a>{% endif %}</div></div>
       </article>
       {% endfor %}
     {% else %}
@@ -54,9 +54,9 @@
 <section class="editorial-section editorial-grid" id="lab" data-section="04 — LAB">
   <div class="section-head"><p class="section-kicker accent">04 / LAB</p><h2>Research lab.</h2><p>Small, focused explorations that sharpen the way I design, secure, and ship systems.</p></div>
   <div class="lab-grid">
-    <article class="lab-note"><p class="meta accent">01 / SECURITY</p><h3>Threat modeling</h3><p>Mapping trust boundaries, abuse paths, and controls before implementation creates safer systems with fewer surprises.</p><a class="button" href="{{ url_for('skills') }}">Security methods ↗</a></article>
-    <article class="lab-note"><p class="meta accent">02 / AUTOMATION</p><h3>Detection workflows</h3><p>Turning repeatable security checks into observable, maintainable workflows that support people rather than burying them in alerts.</p><a class="button" href="{{ url_for('portfolio') }}">View systems work ↗</a></article>
-    <article class="lab-note"><p class="meta accent">03 / AI</p><h3>Applied AI research</h3><p>Testing where retrieval, language models, and automation can be useful, accountable, and grounded in real operational context.</p><a class="button" href="{{ url_for('blog') }}">Read field notes ↗</a></article>
+    <article class="lab-note" data-evidence="lab"><p class="meta accent">01 / SECURITY</p><h3>Threat modeling</h3><p>Mapping trust boundaries, abuse paths, and controls before implementation creates safer systems with fewer surprises.</p><a class="button" href="{{ url_for('skills') }}">Security methods ↗</a></article>
+    <article class="lab-note" data-evidence="lab"><p class="meta accent">02 / AUTOMATION</p><h3>Detection workflows</h3><p>Turning repeatable security checks into observable, maintainable workflows that support people rather than burying them in alerts.</p><a class="button" href="{{ url_for('portfolio') }}">View systems work ↗</a></article>
+    <article class="lab-note" data-evidence="lab"><p class="meta accent">03 / AI</p><h3>Applied AI research</h3><p>Testing where retrieval, language models, and automation can be useful, accountable, and grounded in real operational context.</p><a class="button" href="{{ url_for('blog') }}">Read field notes ↗</a></article>
   </div>
 </section>
 
