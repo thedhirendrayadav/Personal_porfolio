@@ -11,12 +11,15 @@ APP_CONFIG = {
 # Database Configuration - Support both MySQL and Supabase
 DATABASE_TYPE = os.getenv("DATABASE_TYPE", "mysql")  # Default to mysql for backward compatibility
 
-# MySQL Configuration (existing)
+# MySQL Configuration
+# On Railway, a linked MySQL plugin injects MYSQLHOST/MYSQLUSER/MYSQLPASSWORD/
+# MYSQLDATABASE/MYSQLPORT. Fall back to local dev values when those are absent.
 MYSQL_CONFIG = {
-    "host": "127.0.0.1",
-    "user": "root",
-    "password": "Dhire12345@@",
-    "database": "personal_portfolio",
+    "host": os.getenv("MYSQLHOST", "127.0.0.1"),
+    "port": int(os.getenv("MYSQLPORT", "3306")),
+    "user": os.getenv("MYSQLUSER", "root"),
+    "password": os.getenv("MYSQLPASSWORD", "Dhire12345@@"),
+    "database": os.getenv("MYSQLDATABASE", "personal_portfolio"),
 }
 
 # Supabase Configuration

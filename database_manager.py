@@ -66,6 +66,7 @@ class DatabaseManager:
         try:
             self.connection = mysql.connector.connect(
                 host=MYSQL_CONFIG["host"],
+                port=MYSQL_CONFIG.get("port", 3306),
                 user=MYSQL_CONFIG["user"],
                 password=MYSQL_CONFIG["password"],
                 database=MYSQL_CONFIG["database"],
@@ -86,6 +87,7 @@ class DatabaseManager:
         try:
             temp_connection = mysql.connector.connect(
                 host=MYSQL_CONFIG["host"],
+                port=MYSQL_CONFIG.get("port", 3306),
                 user=MYSQL_CONFIG["user"],
                 password=MYSQL_CONFIG["password"],
                 autocommit=True
