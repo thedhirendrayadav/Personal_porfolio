@@ -37,6 +37,7 @@ venv.bak/
 
 # Editor / tooling
 .commandcode/
+.worktrees/
 
 # IDE
 .vscode/
