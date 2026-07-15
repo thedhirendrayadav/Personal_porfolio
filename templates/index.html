@@ -50,10 +50,20 @@
   <div class="button-row" style="margin-top:2rem"><a class="button" href="{{ url_for('blog') }}">Browse all writing ↗</a></div>
 </section>
 
-<section class="editorial-section editorial-grid about-preview" id="about" data-section="04 — ABOUT">
-  <div class="section-head"><p class="section-kicker accent">04 / ABOUT</p><h2>Curiosity turned into systems.</h2><p>A BSc IT graduate focused on cybersecurity and intelligent software, based in Nepal and building for real operational needs.</p></div>
+<section class="landmark"><h2><span class="outline-text">RESEARCH</span> <span class="accent">LAB</span></h2></section>
+<section class="editorial-section editorial-grid" id="lab" data-section="04 — LAB">
+  <div class="section-head"><p class="section-kicker accent">04 / LAB</p><h2>Research lab.</h2><p>Small, focused explorations that sharpen the way I design, secure, and ship systems.</p></div>
+  <div class="lab-grid">
+    <article class="lab-note"><p class="meta accent">01 / SECURITY</p><h3>Threat modeling</h3><p>Mapping trust boundaries, abuse paths, and controls before implementation creates safer systems with fewer surprises.</p><a class="button" href="{{ url_for('skills') }}">Security methods ↗</a></article>
+    <article class="lab-note"><p class="meta accent">02 / AUTOMATION</p><h3>Detection workflows</h3><p>Turning repeatable security checks into observable, maintainable workflows that support people rather than burying them in alerts.</p><a class="button" href="{{ url_for('portfolio') }}">View systems work ↗</a></article>
+    <article class="lab-note"><p class="meta accent">03 / AI</p><h3>Applied AI research</h3><p>Testing where retrieval, language models, and automation can be useful, accountable, and grounded in real operational context.</p><a class="button" href="{{ url_for('blog') }}">Read field notes ↗</a></article>
+  </div>
+</section>
+
+<section class="editorial-section editorial-grid about-preview" id="about" data-section="05 — ABOUT">
+  <div class="section-head"><p class="section-kicker accent">05 / ABOUT</p><h2>Curiosity turned into systems.</h2><p>A BSc IT graduate focused on cybersecurity and intelligent software, based in Nepal and building for real operational needs.</p></div>
   <div class="about-split"><div class="portrait-treatment"><img src="{{ url_for('static', filename='images/profile.png', v=asset_version) }}" alt="Portrait of Dhirendra Yadav" loading="lazy"></div><div><p class="about-lead">I approach technology as both an engineering discipline and a way to make complex work clearer, safer, and more effective.</p><div class="button-row"><a class="button" href="{{ url_for('about') }}">Read my story ↗</a><a class="button" href="{{ url_for('download_cv') }}">Download CV ↓</a></div></div></div>
 </section>
 
-<section class="landmark" id="contact" data-section="05 — CONTACT"><h2><span class="outline-text">LET'S BUILD</span> <span class="accent">BETTER.</span></h2></section>
+<section class="landmark" id="contact" data-section="06 — CONTACT"><h2><span class="outline-text">LET'S BUILD</span> <span class="accent">BETTER.</span></h2></section>
 {% endblock %}

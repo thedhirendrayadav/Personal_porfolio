@@ -36,6 +36,8 @@
     --line: rgba(16, 18, 18, .18);
     --line-strong: rgba(16, 18, 18, .4);
   }
+  html[data-accent="lime"] { --accent: #c7f36b; }
+  html[data-accent="coral"] { --accent: #ff9b85; }
 }
 
 @layer base {
@@ -114,7 +116,7 @@
   .footer-meta nav { display: flex; gap: 1.25rem; color: var(--ink); }
   .status-rail {
     position: fixed; z-index: 120; inset: auto 0 0; height: var(--rail-h);
-    display: grid; grid-template-columns: minmax(5rem, .6fr) auto 1fr auto auto;
+    display: grid; grid-template-columns: minmax(5rem, .6fr) auto 1fr auto auto auto;
     align-items: center; gap: 1.25rem; padding-inline: var(--gutter);
     border-top: 1px solid var(--line); background: var(--canvas);
     font-family: var(--mono); font-size: .58rem; letter-spacing: .1em;
@@ -269,6 +271,12 @@
   .featured-article h2 { margin-block: auto 1rem; font-size: clamp(2rem, 3.5vw, 4rem); line-height: .95; letter-spacing: -.045em; }
   .featured-article p { margin-bottom: 1.5rem; color: var(--muted); }
   .featured-article .button { width: max-content; }
+  .lab-grid { display: grid; grid-template-columns: repeat(3, 1fr); border-block: 1px solid var(--line); }
+  .lab-note { min-height: 25rem; display: flex; flex-direction: column; gap: 1.5rem; padding: clamp(1.5rem, 3vw, 2.5rem); border-right: 1px solid var(--line); }
+  .lab-note:last-child { border-right: 0; }
+  .lab-note h3 { margin-top: auto; font-size: clamp(2rem, 3.5vw, 4rem); line-height: .93; letter-spacing: -.045em; }
+  .lab-note > p:not(.meta) { color: var(--muted); max-width: 38ch; }
+  .lab-note .button { width: max-content; margin-top: auto; }
   .post-header { padding-block: clamp(4rem, 8vw, 8rem); }
   .post-breadcrumb { display: flex; gap: .75rem; color: var(--muted); }
   .post-heading { max-width: 72rem; margin-block: clamp(4rem, 9vw, 9rem); }
@@ -312,6 +320,9 @@
     .featured-article-grid { grid-template-columns: 1fr; }
     .featured-article { min-height: 20rem; border-right: 0; border-bottom: 1px solid var(--line); }
     .featured-article:last-child { border-bottom: 0; }
+    .lab-grid { grid-template-columns: 1fr; }
+    .lab-note { min-height: 20rem; border-right: 0; border-bottom: 1px solid var(--line); }
+    .lab-note:last-child { border-bottom: 0; }
     .error-copy { grid-template-columns: 1fr; }
     .error-copy .button-row { grid-column: 1; }
   }

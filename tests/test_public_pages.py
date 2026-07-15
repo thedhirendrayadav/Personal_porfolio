@@ -97,6 +97,8 @@ def test_public_shell_uses_editorial_assets_without_legacy_3d(client):
 
     assert 'class="site-header"' in html
     assert 'class="status-rail"' in html
+    assert 'data-accent-toggle' in html
+    assert 'href="/#lab"' in html
     assert "editorial-portfolio.css" in html
     assert "editorial-portfolio.js" in html
     assert "three.min.js" not in html
@@ -107,10 +109,19 @@ def test_public_shell_uses_editorial_assets_without_legacy_3d(client):
 def test_homepage_has_editorial_sections_and_accessible_portrait(client):
     html = client.get("/").get_data(as_text=True)
 
-    for section_id in ("intro", "work", "expertise", "writing", "about", "contact"):
+    for section_id in ("intro", "work", "expertise", "writing", "lab", "about", "contact"):
         assert f'id="{section_id}"' in html
     assert 'src="/static/images/profile.png' in html
     assert 'alt="Portrait of Dhirendra Yadav"' in html
+
+
+def test_homepage_exposes_research_lab_content(client):
+    html = client.get("/").get_data(as_text=True)
+
+    assert 'data-section="04 — LAB"' in html
+    assert "Research lab." in html
+    assert "Threat modeling" in html
+    assert "Applied AI research" in html
 
 
 def test_homepage_renders_dynamic_project_and_post_content(client, monkeypatch):

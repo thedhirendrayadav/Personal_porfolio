@@ -34,6 +34,21 @@
     localStorage.setItem("portfolio-theme", next);
   });
 
+  const accents = ["aqua", "lime", "coral"];
+  const accentToggle = document.querySelector("[data-accent-toggle]");
+  const applyAccent = (accent) => {
+    root.dataset.accent = accent;
+    accentToggle?.setAttribute("aria-label", `Cycle site accent colour. Current: ${accent}.`);
+  };
+  const savedAccent = localStorage.getItem("portfolio-accent");
+  applyAccent(accents.includes(savedAccent) ? savedAccent : "aqua");
+  accentToggle?.addEventListener("click", () => {
+    const current = root.dataset.accent || "aqua";
+    const next = accents[(accents.indexOf(current) + 1) % accents.length];
+    applyAccent(next);
+    localStorage.setItem("portfolio-accent", next);
+  });
+
   const progressBar = document.querySelector("[data-scroll-progress]");
   const progressValue = document.querySelector("[data-scroll-value]");
   let scrollFrame = 0;

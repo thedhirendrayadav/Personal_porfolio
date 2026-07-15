@@ -30,9 +30,10 @@
     <nav class="editorial-nav" aria-label="Primary navigation">
       <a href="{{ url_for('index') }}#work" {% if request.path == url_for('index') %}aria-current="page"{% endif %}>01/WORK</a>
       <a href="{{ url_for('skills') }}" {% if request.path == url_for('skills') %}aria-current="page"{% endif %}>02/EXPERTISE</a>
-      <a href="{{ url_for('about') }}" {% if request.path == url_for('about') %}aria-current="page"{% endif %}>03/ABOUT</a>
-      <a href="{{ url_for('blog') }}" {% if request.path.startswith('/blog') %}aria-current="page"{% endif %}>04/WRITING</a>
-      <a href="{{ url_for('contact') }}" {% if request.path == url_for('contact') %}aria-current="page"{% endif %}>05/CONTACT</a>
+      <a href="{{ url_for('blog') }}" {% if request.path.startswith('/blog') %}aria-current="page"{% endif %}>03/WRITING</a>
+      <a href="{{ url_for('index') }}#lab" {% if request.path == url_for('index') %}aria-current="page"{% endif %}>04/LAB</a>
+      <a href="{{ url_for('about') }}" {% if request.path == url_for('about') %}aria-current="page"{% endif %}>05/ABOUT</a>
+      <a href="{{ url_for('contact') }}" {% if request.path == url_for('contact') %}aria-current="page"{% endif %}>06/CONTACT</a>
     </nav>
     <a class="header-cta" href="mailto:Dhirendrayadav4999@gmail.com">LET'S TALK <span aria-hidden="true">↗</span></a>
     <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="mobile-menu">
@@ -43,9 +44,10 @@
     <nav aria-label="Mobile navigation">
       <a href="{{ url_for('index') }}#work"><span>01</span> Work</a>
       <a href="{{ url_for('skills') }}"><span>02</span> Expertise</a>
-      <a href="{{ url_for('about') }}"><span>03</span> About</a>
-      <a href="{{ url_for('blog') }}"><span>04</span> Writing</a>
-      <a href="{{ url_for('contact') }}"><span>05</span> Contact</a>
+      <a href="{{ url_for('blog') }}"><span>03</span> Writing</a>
+      <a href="{{ url_for('index') }}#lab"><span>04</span> Lab</a>
+      <a href="{{ url_for('about') }}"><span>05</span> About</a>
+      <a href="{{ url_for('contact') }}"><span>06</span> Contact</a>
     </nav>
   </div>
   <main id="main-content">{% block content %}{% endblock %}</main>
@@ -66,6 +68,7 @@
     <span data-scroll-value>SCRL 0.00</span>
     <span data-active-section>00 — INTRO</span>
     <button type="button" data-theme-toggle aria-label="Toggle colour theme">THEME <i aria-hidden="true"></i></button>
+    <button type="button" data-accent-toggle aria-label="Cycle site accent colour">ACCENT <i aria-hidden="true"></i></button>
     <time data-local-time>--:--:-- NPT</time>
   </aside>
   <script src="{{ url_for('static', filename='js/editorial-portfolio.js', v=asset_version) }}" defer></script>
