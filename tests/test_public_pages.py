@@ -89,3 +89,15 @@ def test_contact_form_contract(client):
 
     assert 'id="contactFormEnhanced"' in html
     assert 'id="formStatus"' in html
+
+
+def test_public_shell_uses_editorial_assets_without_legacy_3d(client):
+    html = client.get("/").get_data(as_text=True)
+
+    assert 'class="site-header"' in html
+    assert 'class="status-rail"' in html
+    assert "editorial-portfolio.css" in html
+    assert "editorial-portfolio.js" in html
+    assert "three.min.js" not in html
+    assert "homepage-3d.js" not in html
+    assert 'id="bgVideo"' not in html
