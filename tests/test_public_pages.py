@@ -101,3 +101,45 @@ def test_public_shell_uses_editorial_assets_without_legacy_3d(client):
     assert "three.min.js" not in html
     assert "homepage-3d.js" not in html
     assert 'id="bgVideo"' not in html
+
+
+def test_homepage_has_editorial_sections_and_accessible_portrait(client):
+    html = client.get("/").get_data(as_text=True)
+
+    for section_id in ("intro", "work", "expertise", "writing", "about", "contact"):
+        assert f'id="{section_id}"' in html
+    assert 'src="/static/images/profile.png' in html
+    assert 'alt="Portrait of Dhirendra Yadav"' in html
+
+
+def test_homepage_renders_dynamic_project_and_post_content(client, monkeypatch):
+    monkeypatch.setattr(
+        portfolio_app.ProjectModel,
+        "get_all_projects",
+        lambda self, featured_only=False: [{
+            "title": "Security Platform",
+            "description": "Detection automation",
+            "technologies": ["Python"],
+            "project_type": "web",
+        }],
+    )
+    monkeypatch.setattr(
+        portfolio_app.BlogModel,
+        "get_recent_posts",
+        lambda self, limit=3: [{
+            "title": "Threat Modeling",
+            "slug": "threat-modeling",
+            "excerpt": "Practical modeling",
+            "reading_time": 5,
+        }],
+    )
+
+    html = client.get("/").get_data(as_text=True)
+    assert "Security Platform" in html
+    assert "Threat Modeling" in html
+
+
+def test_skills_page_has_five_competency_groups(client):
+    html = client.get("/skills").get_data(as_text=True)
+    for group in ("Security", "AI / ML", "Engineering", "Infrastructure", "Tools"):
+        assert group in html

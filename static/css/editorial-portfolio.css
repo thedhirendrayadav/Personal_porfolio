@@ -212,3 +212,64 @@
     [data-reveal] { opacity: 1; transform: none; }
   }
 }
+
+@layer pages {
+  .home-hero { min-height: calc(100svh - var(--header-h)); padding-block: clamp(2rem, 4vw, 4rem) calc(3rem + var(--rail-h)); display: grid; grid-template-rows: auto 1fr auto; gap: 1.5rem; }
+  .hero-meta { display: flex; justify-content: space-between; gap: 2rem; }
+  .hero-meta .meta { text-align: right; }
+  .hero-display { position: relative; min-height: 29rem; display: flex; align-items: center; }
+  .hero-display h1 { position: relative; z-index: 2; font-size: clamp(5rem, 12vw, 12.5rem); line-height: .72; letter-spacing: -.065em; }
+  .hero-display h1 span, .hero-display h1 strong { display: block; }
+  .hero-display h1 strong { color: var(--accent); }
+  .hero-portrait { position: absolute; inset: 0 0 0 auto; width: min(40vw, 36rem); height: 100%; }
+  .hero-bottom { position: relative; z-index: 3; display: grid; grid-template-columns: minmax(18rem, 34rem) auto; align-items: end; justify-content: space-between; gap: 2rem; }
+  .hero-bottom > p { font-size: clamp(1.15rem, 2vw, 1.65rem); line-height: 1.35; }
+  .about-split, .about-profile { display: grid; grid-template-columns: minmax(18rem, .8fr) minmax(0, 1.2fr); gap: clamp(2rem, 7vw, 7rem); align-items: center; }
+  .about-split .portrait-treatment { aspect-ratio: 4 / 5; max-height: 45rem; }
+  .about-lead, .about-copy h2 { font-size: clamp(2rem, 4vw, 4.8rem); line-height: 1; letter-spacing: -.045em; margin-bottom: 2rem; }
+  .about-profile figure { aspect-ratio: 4 / 5; }
+  .about-copy > p { max-width: 62ch; color: var(--muted); margin-bottom: 1.25rem; }
+  .about-copy .eyebrow { color: var(--accent); }
+  .page-hero { min-height: 72svh; padding-block: clamp(4rem, 8vw, 8rem); display: flex; flex-direction: column; justify-content: space-between; }
+  .page-hero h1 { font-size: clamp(5rem, 14vw, 13rem); line-height: .72; letter-spacing: -.065em; }
+  .page-hero > p:last-child { max-width: 44ch; font-size: 1.25rem; color: var(--muted); align-self: flex-end; }
+  .page-landmark { padding-top: clamp(5rem, 10vw, 9rem); }
+  .timeline-row { display: grid; grid-template-columns: 10rem minmax(16rem, .7fr) minmax(0, 1fr); gap: 1.5rem; padding-block: 2rem; border-top: 1px solid var(--line); }
+  .timeline-row h3 { font-size: clamp(1.4rem, 2.4vw, 2.5rem); line-height: 1; }
+  .timeline-row p { color: var(--muted); max-width: 62ch; }
+  .evidence-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; }
+  .evidence-grid figure { border: 1px solid var(--line); background: var(--surface); }
+  .evidence-grid img { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; filter: grayscale(1); }
+  .evidence-grid figcaption { padding: 1rem; }
+  .filter-row { display: flex; flex-wrap: wrap; gap: .6rem; }
+  .filter-row button { cursor: pointer; color: var(--ink); background: transparent; }
+  .skill-group { display: grid; grid-template-columns: minmax(15rem, .65fr) minmax(0, 1.35fr); gap: 1.5rem 3rem; padding-block: clamp(2rem, 5vw, 4rem); border-top: 1px solid var(--line); }
+  .skill-group:last-child { border-bottom: 1px solid var(--line); }
+  .skill-group-head { display: flex; gap: 1rem; align-items: baseline; }
+  .skill-group h2 { font-size: clamp(2.2rem, 5vw, 5rem); line-height: .9; letter-spacing: -.05em; }
+  .skill-tools { font-size: clamp(1.2rem, 2.2vw, 2rem); line-height: 1.35; }
+  .skill-group > .muted { grid-column: 2; max-width: 62ch; }
+
+  @media (max-width: 820px) {
+    .hero-display { align-items: end; min-height: 37rem; }
+    .hero-display h1 { font-size: clamp(4.4rem, 18vw, 8rem); }
+    .hero-portrait { width: 65%; height: 72%; opacity: .82; }
+    .hero-bottom, .about-split, .about-profile { grid-template-columns: 1fr; }
+    .hero-bottom .button-row { justify-content: flex-start; }
+    .timeline-row { grid-template-columns: 6rem 1fr; }
+    .timeline-row p { grid-column: 2; }
+    .evidence-grid { grid-template-columns: 1fr 1fr; }
+    .skill-group { grid-template-columns: 1fr; }
+    .skill-group > .muted { grid-column: 1; }
+  }
+  @media (max-width: 520px) {
+    .hero-meta { display: grid; }
+    .hero-meta .meta { text-align: left; }
+    .hero-display { min-height: 31rem; }
+    .hero-display h1 { font-size: clamp(3.8rem, 19vw, 6rem); }
+    .hero-portrait { width: 80%; height: 70%; }
+    .evidence-grid { grid-template-columns: 1fr; }
+    .timeline-row { grid-template-columns: 1fr; }
+    .timeline-row p { grid-column: 1; }
+  }
+}
