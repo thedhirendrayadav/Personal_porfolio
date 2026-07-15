@@ -114,6 +114,73 @@
     });
   }));
 
+  const workDeck = document.querySelector("[data-work-deck]");
+  const workDeckCards = workDeck ? [...workDeck.querySelectorAll("[data-work-card]")] : [];
+  const workDeckTicks = workDeck ? [...workDeck.querySelectorAll("[data-work-tick]")] : [];
+  const workDeckIndex = workDeck?.querySelector("[data-work-index]");
+  const workDeckTotal = workDeck?.querySelector("[data-work-total]");
+  const workDeckSticky = workDeck?.querySelector(".work-deck-sticky");
+  const workDeckMotionQuery = matchMedia("(min-width: 981px) and (prefers-reduced-motion: no-preference)");
+  let workDeckFrame = 0;
+
+  const updateWorkDeck = () => {
+    workDeckFrame = 0;
+    if (!workDeck || !workDeckCards.length) return;
+
+    const total = workDeckCards.length;
+    const enabled = workDeckMotionQuery.matches;
+    workDeck.style.setProperty("--work-deck-count", total);
+    if (workDeckTotal) workDeckTotal.textContent = String(total).padStart(2, "0");
+
+    if (!enabled) {
+      workDeck.removeAttribute("data-work-deck-ready");
+      workDeck.style.setProperty("--work-deck-progress", "0");
+      workDeck.style.setProperty("--work-deck-shift", "0%");
+      if (workDeckIndex) workDeckIndex.textContent = "01";
+      workDeckCards.forEach((card) => {
+        card.classList.remove("is-active", "is-past", "is-future");
+        card.removeAttribute("aria-hidden");
+        card.inert = false;
+      });
+      workDeckTicks.forEach((tick, index) => tick.classList.toggle("is-active", index === 0));
+      return;
+    }
+
+    workDeck.dataset.workDeckReady = "true";
+    const start = workDeck.getBoundingClientRect().top + scrollY;
+    const stickyHeight = workDeckSticky?.offsetHeight || innerHeight;
+    const range = Math.max(1, workDeck.offsetHeight - stickyHeight);
+    const progress = Math.min(1, Math.max(0, (scrollY - start) / range));
+    const activeIndex = Math.min(total - 1, Math.floor(progress * total));
+    if (sectionLabel && scrollY >= start && scrollY <= start + range) {
+      sectionLabel.textContent = workDeck.dataset.section || "01 — WORK";
+    }
+    workDeck.style.setProperty("--work-deck-progress", progress.toFixed(3));
+    workDeck.style.setProperty("--work-deck-shift", `-${(progress * 18).toFixed(2)}%`);
+    if (workDeckIndex) workDeckIndex.textContent = String(activeIndex + 1).padStart(2, "0");
+
+    workDeckCards.forEach((card, index) => {
+      const active = index === activeIndex;
+      card.classList.toggle("is-active", active);
+      card.classList.toggle("is-past", index < activeIndex);
+      card.classList.toggle("is-future", index > activeIndex);
+      card.setAttribute("aria-hidden", String(!active));
+      card.inert = !active;
+    });
+    workDeckTicks.forEach((tick, index) => tick.classList.toggle("is-active", index === activeIndex));
+  };
+
+  const requestWorkDeckUpdate = () => {
+    if (!workDeckFrame) workDeckFrame = requestAnimationFrame(updateWorkDeck);
+  };
+
+  if (workDeckCards.length) {
+    addEventListener("scroll", requestWorkDeckUpdate, { passive: true });
+    addEventListener("resize", requestWorkDeckUpdate);
+    workDeckMotionQuery.addEventListener?.("change", requestWorkDeckUpdate);
+    updateWorkDeck();
+  }
+
   const contactForm = document.querySelector("#contactFormEnhanced");
   const formStatus = document.querySelector("#formStatus");
   contactForm?.addEventListener("submit", async (event) => {

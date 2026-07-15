@@ -19,21 +19,24 @@
   </div>
 </section>
 
-<section class="landmark" aria-labelledby="work-title"><h2 id="work-title"><span class="outline-text">SELECTED</span> <span class="accent">WORK</span></h2></section>
-<section class="editorial-section editorial-grid" id="work" data-section="01 — WORK">
-  <div class="section-head"><p class="section-kicker accent">01 / WORK</p><h2>Systems built to solve real problems.</h2><p>Selected security, automation, and product engineering projects. Each one balances technical depth with practical delivery.</p></div>
-  <div class="case-list">
+<section class="work-deck" id="work" data-section="01 — WORK" data-work-deck aria-labelledby="work-title">
+  <div class="work-deck-sticky editorial-grid">
+    <div class="work-deck-heading"><h2 id="work-title" class="work-deck-screen-reader-title">Selected work</h2><div class="work-deck-marquee" data-work-marquee aria-hidden="true"><span><b class="outline-text">SELECTED</b> <b class="accent">WORK</b></span><span><b class="outline-text">SELECTED</b> <b class="accent">WORK</b></span><span><b class="outline-text">SELECTED</b> <b class="accent">WORK</b></span></div></div>
+    <div class="work-deck-intro"><p class="section-kicker accent">01 / WORK</p><p>Selected security, automation, and product engineering projects shaped by security thinking and practical delivery.</p></div>
+    <div class="work-deck-cards">
     {% if featured_projects %}
       {% for project in featured_projects[:4] %}
-      <article class="case-study" data-evidence="project" data-reveal data-project-type="{{ project.project_type or 'web' }}">
+      <article class="case-study" data-work-card data-evidence="project" data-project-type="{{ project.project_type or 'web' }}">
         <div class="case-media">{% if project.image_url %}<img src="{{ project.image_url }}" alt="Preview of {{ project.title }}" loading="lazy">{% else %}<div class="case-placeholder"><span>{{ '%02d'|format(loop.index) }}</span></div>{% endif %}</div>
         <div class="case-copy"><div class="case-meta"><span class="meta">{{ '%02d'|format(loop.index) }} / {{ project.project_type or 'SYSTEM' }}</span><span class="meta">{{ (project.status or 'COMPLETED')|upper }}</span></div><h3>{{ project.title }}</h3><p>{{ project.description }}</p>{% if project.technologies %}<div class="button-row case-actions">{% for tech in project.technologies[:5] %}<span class="chip">{{ tech }}</span>{% endfor %}</div>{% endif %}<div class="button-row case-actions">{% if project.id %}<a class="button button-primary" href="{{ url_for('project_detail', project_id=project.id) }}">View case study ↗</a>{% endif %}{% if project.demo_url %}<a class="button" href="{{ project.demo_url }}" target="_blank" rel="noreferrer">Live system ↗</a>{% endif %}{% if project.github_url %}<a class="button" href="{{ project.github_url }}" target="_blank" rel="noreferrer">Source ↗</a>{% endif %}</div></div>
       </article>
       {% endfor %}
     {% else %}
       {% set fallbacks = [('Secure Operations Platform','Threat visibility, controlled access, and workflow automation for security teams.'),('AI Knowledge Assistant','Context-aware retrieval and automation designed for useful, accountable answers.'),('Enterprise Management Suite','A modular operations platform with reporting, roles, and reliable data flows.')] %}
-      {% for title, description in fallbacks %}<article class="case-study" data-reveal><div class="case-media"><div class="case-placeholder"><span>{{ '%02d'|format(loop.index) }}</span></div></div><div class="case-copy"><div class="case-meta"><span class="meta">{{ '%02d'|format(loop.index) }} / CONCEPT</span><span class="meta">CASE STUDY</span></div><h3>{{ title }}</h3><p>{{ description }}</p><div class="button-row case-actions"><a class="button" href="{{ url_for('portfolio') }}">View work ↗</a></div></div></article>{% endfor %}
+      {% for title, description in fallbacks %}<article class="case-study" data-work-card><div class="case-media"><div class="case-placeholder"><span>{{ '%02d'|format(loop.index) }}</span></div></div><div class="case-copy"><div class="case-meta"><span class="meta">{{ '%02d'|format(loop.index) }} / CONCEPT</span><span class="meta">CASE STUDY</span></div><h3>{{ title }}</h3><p>{{ description }}</p><div class="button-row case-actions"><a class="button" href="{{ url_for('portfolio') }}">View work ↗</a></div></div></article>{% endfor %}
     {% endif %}
+    </div>
+    <div class="work-deck-footer" data-work-progress><span class="meta"><b data-work-index>01</b> / <b data-work-total>{% if featured_projects %}{{ '%02d'|format(featured_projects[:4]|length) }}{% else %}03{% endif %}</b></span><span class="work-deck-ticks" aria-hidden="true">{% if featured_projects %}{% for project in featured_projects[:4] %}<i data-work-tick></i>{% endfor %}{% else %}{% for position in range(3) %}<i data-work-tick></i>{% endfor %}{% endif %}</span></div>
   </div>
 </section>
 

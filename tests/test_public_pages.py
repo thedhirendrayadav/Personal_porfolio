@@ -151,6 +151,36 @@ def test_homepage_renders_dynamic_project_and_post_content(client, monkeypatch):
     assert "Threat Modeling" in html
 
 
+def test_homepage_exposes_scroll_work_deck_hooks(client, monkeypatch):
+    projects = [
+        {
+            "id": 1,
+            "title": "Access Map",
+            "description": "A project for the first deck position.",
+            "technologies": ["Python"],
+        },
+        {
+            "id": 2,
+            "title": "Signal Ledger",
+            "description": "A project for the second deck position.",
+            "technologies": ["Flask"],
+        },
+    ]
+    monkeypatch.setattr(
+        portfolio_app.ProjectModel,
+        "get_all_projects",
+        lambda self, featured_only=False: projects,
+    )
+
+    html = client.get("/").get_data(as_text=True)
+
+    assert "data-work-deck" in html
+    assert html.count("data-work-card") == 2
+    assert "data-work-progress" in html
+    assert "data-work-index" in html
+    assert html.count("data-work-tick") == 2
+
+
 def test_evidence_layer_renders_available_project_fields_without_empty_actions(client, monkeypatch):
     project = {
         "id": 7,
