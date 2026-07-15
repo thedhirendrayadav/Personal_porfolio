@@ -1,4 +1,5 @@
 from contextlib import contextmanager
+from datetime import datetime
 
 import pytest
 from flask import template_rendered
@@ -143,3 +144,68 @@ def test_skills_page_has_five_competency_groups(client):
     html = client.get("/skills").get_data(as_text=True)
     for group in ("Security", "AI / ML", "Engineering", "Infrastructure", "Tools"):
         assert group in html
+
+
+def test_contact_uses_editorial_form_contract(client):
+    html = client.get("/contact").get_data(as_text=True)
+
+    assert '<form id="contactFormEnhanced"' in html
+    assert 'method="post"' in html
+    assert 'action="/contact"' in html
+    assert 'class="button button-primary submit-btn-enhanced"' in html
+    assert "contact-enhanced.css" not in html
+    assert "contact-enhanced.js" not in html
+
+
+def test_blog_views_use_public_routes_and_render_trusted_article_content(client, monkeypatch):
+    post = {
+        "id": 7,
+        "title": "Practical Threat Modeling",
+        "slug": "practical-threat-modeling",
+        "excerpt": "A field guide for engineering teams.",
+        "content": "<h2>Map the system</h2><p>Start with trust boundaries.</p>",
+        "category": "Security",
+        "created_at": datetime(2025, 2, 14),
+        "reading_time": 6,
+        "views": 12,
+        "featured_image": None,
+        "tags": ["security", "architecture"],
+    }
+    monkeypatch.setattr(portfolio_app.BlogModel, "get_all_posts", lambda self, status="published", limit=None, offset=0: [post])
+    monkeypatch.setattr(portfolio_app.BlogModel, "get_featured_posts", lambda self, limit=3: [post])
+    monkeypatch.setattr(portfolio_app.BlogModel, "get_post_by_slug", lambda self, slug: post)
+    monkeypatch.setattr(portfolio_app.BlogModel, "increment_views", lambda self, post_id: None)
+    monkeypatch.setattr(portfolio_app.BlogModel, "get_posts_by_category", lambda self, category, limit=None: [post])
+    monkeypatch.setattr(portfolio_app.BlogModel, "search_posts", lambda self, query: [post])
+
+    responses = {
+        "index": client.get("/blog"),
+        "post": client.get("/blog/practical-threat-modeling"),
+        "category": client.get("/blog/category/security"),
+        "search": client.get("/blog/search?q=threat"),
+    }
+
+    for response in responses.values():
+        assert response.status_code == 200
+        html = response.get_data(as_text=True)
+        assert "Practical Threat Modeling" in html
+        assert "blog.index" not in html
+        assert "blog.post" not in html
+        assert "blog.search" not in html
+
+    index_html = responses["index"].get_data(as_text=True)
+    assert 'action="/blog/search"' in index_html
+    assert 'href="/blog/practical-threat-modeling"' in index_html
+    assert '<main class="rich-text">' in responses["post"].get_data(as_text=True)
+    assert "<h2>Map the system</h2>" in responses["post"].get_data(as_text=True)
+
+
+def test_404_uses_shared_editorial_shell(client):
+    html = client.get("/missing-page").get_data(as_text=True)
+
+    assert client.get("/missing-page").status_code == 404
+    assert 'class="error-code"' in html
+    assert "Page not found" in html
+    assert 'href="/"' in html
+    assert "glass-card" not in html
+    assert "gsap" not in html.lower()
