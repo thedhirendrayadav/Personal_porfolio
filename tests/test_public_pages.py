@@ -351,6 +351,7 @@ def test_work_deck_grid_children_do_not_expand_to_marquee_width(client):
     assert ".work-deck-heading { min-width: 0;" in css
     assert ".work-deck-cards { min-width: 0;" in css
     assert ".work-deck[data-work-deck-ready] .case-copy { padding-block:" in css
+    assert "@media (min-width: 981px) and (min-height: 700px) and (prefers-reduced-motion: no-preference)" in css
 
 
 def test_public_shell_declares_the_branded_favicon(client):

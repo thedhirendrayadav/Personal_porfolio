@@ -326,7 +326,7 @@
   .work-deck-ticks i { display: block; width: 2px; height: 1.75rem; background: var(--line-strong); transition: background .25s ease, transform .25s ease; }
   .work-deck-ticks i.is-active { background: var(--accent); transform: scaleY(1.2); }
 
-  @media (min-width: 981px) and (prefers-reduced-motion: no-preference) {
+  @media (min-width: 981px) and (min-height: 700px) and (prefers-reduced-motion: no-preference) {
     .work-deck[data-work-deck-ready] { min-height: calc((var(--work-deck-count) + 1) * 100svh); padding-block: 0; }
     .work-deck[data-work-deck-ready] .work-deck-sticky { position: sticky; top: var(--header-h); height: calc(100svh - var(--header-h)); display: grid; grid-template-rows: auto auto minmax(0, 1fr) auto; overflow: hidden; }
     .work-deck[data-work-deck-ready] .work-deck-heading { align-self: start; }
