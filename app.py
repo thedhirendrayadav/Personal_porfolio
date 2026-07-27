@@ -9,7 +9,7 @@ if sys.stdout.encoding and sys.stdout.encoding.lower() != "utf-8":
     except (AttributeError, ValueError):
         pass
 
-from flask import Flask, render_template, request, jsonify, session, redirect, url_for, flash
+from flask import Flask, render_template, request, jsonify, session, redirect, url_for, flash, Response
 import datetime
 import json
 import os
@@ -109,6 +109,10 @@ def send_email_notification(name, email, subject, message):
 
 app = Flask(__name__)
 ASSET_VERSION = os.environ.get('ASSET_VERSION', str(int(datetime.datetime.now().timestamp())))
+SITE_URL = os.environ.get('SITE_URL', 'https://www.dhirendrayadav.site').rstrip('/')
+SITE_NAME = 'Dhirendra Yadav'
+SITE_DESCRIPTION = 'Dhirendra Yadav builds secure automation, AI/ML systems, and practical digital products from Bhaktapur, Nepal.'
+INDEXNOW_KEY = os.environ.get('INDEXNOW_KEY', 'dy-portfolio-indexnow-20260728')
 
 # Security Configuration
 app.config.update(
@@ -139,6 +143,10 @@ def add_security_headers(response):
     # Only add HSTS in production with HTTPS
     if request.is_secure:
         response.headers['Strict-Transport-Security'] = 'max-age=31536000; includeSubDomains'
+    # Keep private/tooling endpoints out of search indexes even if discovered
+    # through a link, while leaving the public content graph indexable.
+    if request.path.startswith(('/admin', '/api', '/debug', '/blog/search')):
+        response.headers['X-Robots-Tag'] = 'noindex, nofollow, noarchive'
     return response
 
 # CSRF Protection
@@ -906,6 +914,154 @@ def inject_csrf_token():
 @app.context_processor
 def inject_asset_version():
     return {'asset_version': ASSET_VERSION}
+
+
+@app.context_processor
+def inject_seo_context():
+    """Provide stable, query-free canonical URLs and JSON-LD entity data."""
+    path = request.path or '/'
+    canonical_url = f"{SITE_URL}{path if path == '/' else path.rstrip('/')}"
+    return {
+        'site_url': SITE_URL,
+        'site_name': SITE_NAME,
+        'site_description': SITE_DESCRIPTION,
+        'canonical_url': canonical_url,
+        'default_og_image': f"{SITE_URL}/static/images/profile-hero.jpg",
+        'google_site_verification': os.environ.get('GOOGLE_SITE_VERIFICATION', ''),
+        'bing_site_verification': os.environ.get('BING_SITE_VERIFICATION', ''),
+    }
+
+
+@app.route('/robots.txt')
+def robots_txt():
+    """Explicit crawl policy for search and answer engines."""
+    body = f"""User-agent: *
+Allow: /
+Disallow: /admin
+Disallow: /api/
+Disallow: /debug/
+Disallow: /blog/search
+
+Sitemap: {SITE_URL}/sitemap.xml
+"""
+    return Response(body, mimetype='text/plain')
+
+
+@app.route('/sitemap.xml')
+def sitemap_xml():
+    """Generate a discoverable sitemap from public routes and content."""
+    urls = [
+        ('/', '1.0'), ('/about', '0.8'), ('/skills', '0.8'),
+        ('/portfolio', '0.9'), ('/contact', '0.7'), ('/blog', '0.8'),
+        ('/faq', '0.6'),
+    ]
+    try:
+        urls.extend((f"/work/{project['slug']}", '0.7') for project in load_curated_projects())
+    except Exception:
+        pass
+    try:
+        posts = BlogModel().get_all_posts(status='published', limit=200, offset=0)
+        urls.extend((f"/blog/{post['slug']}", '0.7') for post in posts if post.get('slug'))
+    except Exception:
+        pass
+    # Deduplicate routes so crawlers receive one canonical URL per resource.
+    unique_urls = {}
+    for path, priority in urls:
+        unique_urls[path] = max(priority, unique_urls.get(path, '0.0'))
+    lastmod = datetime.date.today().isoformat()
+    entries = ''.join(
+        f'<url><loc>{SITE_URL}{path}</loc><lastmod>{lastmod}</lastmod><changefreq>monthly</changefreq><priority>{priority}</priority></url>'
+        for path, priority in unique_urls.items()
+    )
+    xml = f'<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">{entries}</urlset>'
+    return Response(xml, mimetype='application/xml')
+
+
+@app.route('/llms.txt')
+def llms_txt():
+    """Compact entity and content map for AI answer engines."""
+    return Response(f"""# {SITE_NAME}
+
+> {SITE_DESCRIPTION}
+
+## Entity
+- Name: Dhirendra Yadav
+- Location: Bhaktapur, Nepal
+- Focus: cybersecurity, AI/ML, systems engineering, secure automation, and product engineering
+- Website: {SITE_URL}
+- Contact: mailto:thedhirendrayadav@gmail.com
+- GitHub: https://github.com/thedhirendrayadav
+- LinkedIn: https://www.linkedin.com/in/dhirendra-yadav-3040b82b4
+
+## Public pages
+- Home: {SITE_URL}/
+- About: {SITE_URL}/about
+- Expertise: {SITE_URL}/skills
+- Selected work: {SITE_URL}/portfolio
+- Writing: {SITE_URL}/blog
+- FAQ: {SITE_URL}/faq
+- Contact: {SITE_URL}/contact
+
+## Editorial standard
+Project pages distinguish claims, sources, constraints, and verified outcomes. Treat prototypes and in-development systems as such; do not describe them as production deployments unless the page explicitly says so.
+    """, mimetype='text/plain')
+
+
+@app.route('/humans.txt')
+def humans_txt():
+    """Publish a lightweight authorship and contact signal for people and agents."""
+    return Response(f"""/* TEAM */
+Name: {SITE_NAME}
+Role: Cybersecurity, AI/ML, and systems engineer
+Location: Bhaktapur, Nepal
+Website: {SITE_URL}
+Contact: thedhirendrayadav@gmail.com
+
+/* SITE */
+Standards: HTTPS, semantic HTML, JSON-LD, RSS, XML sitemap
+Last updated: {datetime.date.today().isoformat()}
+""", mimetype='text/plain')
+
+
+@app.route('/manifest.webmanifest')
+def manifest_webmanifest():
+    """Minimal install metadata with a stable canonical identity."""
+    return jsonify({
+        "name": "Dhirendra Yadav — Security Fieldwork",
+        "short_name": "Dhirendra Yadav",
+        "start_url": "/",
+        "scope": "/",
+        "display": "standalone",
+        "background_color": "#0b0c0c",
+        "theme_color": "#9df9f3",
+        "description": SITE_DESCRIPTION,
+        "icons": [{"src": "/static/svg/favicon.svg", "sizes": "any", "type": "image/svg+xml"}],
+    })
+
+
+@app.route(f'/{INDEXNOW_KEY}.txt')
+def indexnow_key_file():
+    """IndexNow ownership key used by Bing, Yahoo, and Yandex discovery."""
+    return Response(INDEXNOW_KEY, mimetype='text/plain')
+
+
+@app.route('/feed.xml')
+def feed_xml():
+    """RSS feed for published field notes."""
+    try:
+        posts = BlogModel().get_all_posts(status='published', limit=20, offset=0)
+    except Exception:
+        posts = []
+    items = []
+    for post in posts:
+        slug = post.get('slug')
+        if not slug:
+            continue
+        title = post.get('title', '')
+        excerpt = post.get('excerpt') or ''
+        items.append(f'<item><title>{title}</title><link>{SITE_URL}/blog/{slug}</link><guid>{SITE_URL}/blog/{slug}</guid><description>{excerpt}</description></item>')
+    xml = f'<?xml version="1.0" encoding="UTF-8"?><rss version="2.0"><channel><title>{SITE_NAME} — Field Notes</title><link>{SITE_URL}/blog</link><description>{SITE_DESCRIPTION}</description>{"".join(items)}</channel></rss>'
+    return Response(xml, mimetype='application/rss+xml')
 
 if __name__ == "__main__":
     # Bind to 0.0.0.0 and honor Railway's $PORT; disable debug in production.

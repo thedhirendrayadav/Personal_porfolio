@@ -6,17 +6,86 @@
   <meta name="theme-color" content="#0b0c0c">
   <link rel="icon" type="image/svg+xml" href="{{ url_for('static', filename='svg/favicon.svg') }}">
   <link rel="apple-touch-icon" href="{{ url_for('static', filename='svg/favicon.svg') }}">
+  <link rel="manifest" href="{{ url_for('manifest_webmanifest') }}">
   <title>{% block title %}Dhirendra Yadav — Cybersecurity · AI/ML · Systems{% endblock %}</title>
   <meta name="description" content="{% block description %}Dhirendra Yadav builds secure automation, AI systems, and practical digital products.{% endblock %}">
   <meta name="keywords" content="{% block keywords %}cybersecurity, artificial intelligence, machine learning, systems engineering, Python{% endblock %}">
   <meta name="author" content="Dhirendra Yadav">
-  <meta name="robots" content="index, follow">
-  <link rel="canonical" href="{{ request.url }}">
+  <meta name="robots" content="{% block robots %}index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1{% endblock %}">
+  <link rel="canonical" href="{{ canonical_url }}">
+  <link rel="sitemap" type="application/xml" href="{{ site_url }}/sitemap.xml">
+  <link rel="alternate" type="application/rss+xml" title="Dhirendra Yadav — Field Notes" href="{{ site_url }}/feed.xml">
+  <link rel="alternate" type="text/plain" title="AI-readable site map" href="{{ site_url }}/llms.txt">
   <meta property="og:title" content="{% block og_title %}Dhirendra Yadav Portfolio{% endblock %}">
   <meta property="og:description" content="{% block og_description %}Cybersecurity, AI/ML, and systems engineering portfolio.{% endblock %}">
   <meta property="og:type" content="website">
-  <meta property="og:url" content="{{ request.url }}">
+  <meta property="og:url" content="{{ canonical_url }}">
+  <meta property="og:site_name" content="Dhirendra Yadav">
+  <meta property="og:locale" content="en_US">
+  <meta property="og:locale:alternate" content="en_NP">
+  <meta property="og:image" content="{% block og_image %}{{ default_og_image }}{% endblock %}">
+  <meta property="og:image:alt" content="Dhirendra Yadav — cybersecurity and systems engineering">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
   <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="{% block twitter_title %}Dhirendra Yadav — Cybersecurity · AI/ML · Systems{% endblock %}">
+  <meta name="twitter:description" content="{% block twitter_description %}{{ site_description }}{% endblock %}">
+  <meta name="twitter:image" content="{% block twitter_image %}{{ default_og_image }}{% endblock %}">
+  <meta name="geo.region" content="NP-P3">
+  <meta name="geo.placename" content="Bhaktapur, Nepal">
+  <meta name="geo.position" content="27.6710;85.4298">
+  <meta name="ICBM" content="27.6710, 85.4298">
+  {% if google_site_verification %}<meta name="google-site-verification" content="{{ google_site_verification }}">{% endif %}
+  {% if bing_site_verification %}<meta name="msvalidate.01" content="{{ bing_site_verification }}">{% endif %}
+  <script type="application/ld+json">{{ {
+    '@context': 'https://schema.org',
+    '@graph': [
+      {
+        '@type': 'Person',
+        '@id': site_url ~ '/#person',
+        'name': 'Dhirendra Yadav',
+        'url': site_url ~ '/',
+        'jobTitle': 'Cybersecurity and Systems Engineer',
+        'description': site_description,
+        'email': 'mailto:thedhirendrayadav@gmail.com',
+        'image': default_og_image,
+        'address': {'@type': 'PostalAddress', 'addressLocality': 'Bhaktapur', 'addressCountry': 'NP'},
+        'sameAs': ['https://github.com/thedhirendrayadav', 'https://www.linkedin.com/in/dhirendra-yadav-3040b82b4']
+      },
+      {
+        '@type': 'ProfessionalService',
+        '@id': site_url ~ '/#service',
+        'name': 'Dhirendra Yadav — Security Fieldwork',
+        'url': site_url ~ '/',
+        'description': site_description,
+        'image': default_og_image,
+        'email': 'mailto:thedhirendrayadav@gmail.com',
+        'founder': {'@id': site_url ~ '/#person'},
+        'areaServed': ['Bhaktapur', 'Nepal', 'Worldwide'],
+        'serviceType': ['Cybersecurity engineering', 'AI/ML systems', 'Secure automation', 'Product engineering'],
+        'address': {'@type': 'PostalAddress', 'addressLocality': 'Bhaktapur', 'addressCountry': 'NP'}
+      },
+      {
+        '@type': 'WebSite',
+        '@id': site_url ~ '/#website',
+        'url': site_url ~ '/',
+        'name': 'Dhirendra Yadav — Security Fieldwork',
+        'description': site_description,
+        'publisher': {'@id': site_url ~ '/#person'},
+        'inLanguage': 'en'
+      },
+      {
+        '@type': 'WebPage',
+        '@id': canonical_url ~ '#webpage',
+        'url': canonical_url,
+        'name': self.title(),
+        'description': self.description(),
+        'isPartOf': {'@id': site_url ~ '/#website'},
+        'about': {'@id': site_url ~ '/#person'},
+        'inLanguage': 'en'
+      }
+    ]
+  } | tojson | safe }}</script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@75..125,300..900&family=Barlow+Condensed:wght@300;400;500;600;700;800&family=DM+Mono:wght@400;500&family=IBM+Plex+Mono:wght@400;500&family=JetBrains+Mono:wght@400;500&family=Manrope:wght@300..800&family=Roboto+Mono:wght@400;500&family=Rubik:ital,wght@0,300..900;1,300..900&family=Space+Grotesk:wght@300..700&family=Space+Mono:wght@400;700&family=Syne:wght@400..800&display=swap" rel="stylesheet">
