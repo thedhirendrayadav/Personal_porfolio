@@ -253,6 +253,40 @@ def test_public_shell_exposes_font_appearance_control(client):
     assert "Roboto+Mono" in html
 
 
+def test_appearance_script_declares_curated_accent_and_font_allowlists(client):
+    javascript = client.get("/static/js/editorial-portfolio.js").get_data(as_text=True)
+
+    for token in (
+        'const accents = [',
+        '"#9df9f3"',
+        '"#79c7ff"',
+        '"#b8a1ff"',
+        '"#ff8fc8"',
+        '"#ff7f73"',
+        '"#f4bf4f"',
+        '"#d7f171"',
+        '"#75e6a4"',
+        '"#64d8cb"',
+        '"#a8c7fa"',
+        '"#f7a76c"',
+        '"#c4f0c5"',
+        'const fontPresets = [',
+        'id: "rubik"',
+        'id: "space"',
+        'id: "archivo"',
+        '"portfolio-font"',
+    ):
+        assert token in javascript
+
+
+def test_editorial_css_uses_variable_font_contract(client):
+    css = client.get("/static/css/editorial-portfolio.css").get_data(as_text=True)
+
+    assert '--display: "Rubik", Arial, sans-serif;' in css
+    assert '--mono: "IBM Plex Mono", Consolas, monospace;' in css
+    assert ".footer-hud-font" in css
+
+
 def test_public_shell_declares_the_branded_favicon(client):
     html = client.get("/").get_data(as_text=True)
 

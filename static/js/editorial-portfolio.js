@@ -1,7 +1,6 @@
 (() => {
   "use strict";
 
-  const root = document.documentElement;
   const body = document.body;
   const menuButton = document.querySelector(".menu-toggle");
   const mobileMenu = document.querySelector(".mobile-menu");
@@ -26,83 +25,138 @@
     if (event.key === "Escape") closeMenu();
   });
 
-  const savedTheme = localStorage.getItem("portfolio-theme");
-  if (savedTheme === "light" || savedTheme === "dark") root.dataset.theme = savedTheme;
-  document.querySelector("[data-theme-toggle]")?.addEventListener("click", () => {
-    const next = root.dataset.theme === "light" ? "dark" : "light";
-    root.dataset.theme = next;
-    localStorage.setItem("portfolio-theme", next);
-  });
-
-  const accents = ["aqua", "lime", "coral"];
-  const accentToggle = document.querySelector("[data-accent-toggle]");
-  const applyAccent = (accent) => {
-    root.dataset.accent = accent;
-    accentToggle?.setAttribute("aria-label", `Cycle site accent colour. Current: ${accent}.`);
-  };
-  const savedAccent = localStorage.getItem("portfolio-accent");
-  applyAccent(accents.includes(savedAccent) ? savedAccent : "aqua");
-  accentToggle?.addEventListener("click", () => {
-    const current = root.dataset.accent || "aqua";
-    const next = accents[(accents.indexOf(current) + 1) % accents.length];
-    applyAccent(next);
-    localStorage.setItem("portfolio-accent", next);
-  });
-
-  const progressBar = document.querySelector("[data-scroll-progress]");
-  const progressValue = document.querySelector("[data-scroll-value]");
+  const progressBar = document.querySelector("[data-evidence-progress]");
+  const scrollReadout = document.querySelector("[data-scroll-readout]");
   let scrollFrame = 0;
   const updateScroll = () => {
     scrollFrame = 0;
     const max = Math.max(1, document.documentElement.scrollHeight - innerHeight);
     const progress = Math.min(1, Math.max(0, scrollY / max));
-    if (progressBar) progressBar.style.transform = `scaleX(${progress})`;
-    if (progressValue) progressValue.textContent = `SCRL ${progress.toFixed(2)}`;
+    progressBar?.style.setProperty("--evidence-progress", progress.toFixed(3));
+    if (scrollReadout) scrollReadout.textContent = progress.toFixed(2);
   };
   addEventListener("scroll", () => {
     if (!scrollFrame) scrollFrame = requestAnimationFrame(updateScroll);
   }, { passive: true });
   updateScroll();
 
-  const sectionLabel = document.querySelector("[data-active-section]");
+  const sectionLabels = [...document.querySelectorAll("[data-evidence-section], [data-evidence-announcer], [data-hud-section]")];
+  const updateSectionLabel = (label) => {
+    sectionLabels.forEach((element) => {
+      element.textContent = label;
+    });
+  };
   const sections = [...document.querySelectorAll("[data-section]")];
-  if (sectionLabel && sections.length && "IntersectionObserver" in window) {
+  if (sectionLabels.length && sections.length && "IntersectionObserver" in window) {
     const observer = new IntersectionObserver((entries) => {
       const active = entries
         .filter((entry) => entry.isIntersecting)
         .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
-      if (active) sectionLabel.textContent = active.target.dataset.section;
+      if (active) updateSectionLabel(active.target.dataset.section);
     }, { rootMargin: "-25% 0px -55%", threshold: [0, .2, .5] });
     sections.forEach((section) => observer.observe(section));
   }
 
-  const revealItems = document.querySelectorAll("[data-reveal]");
-  if ("IntersectionObserver" in window && !matchMedia("(prefers-reduced-motion: reduce)").matches) {
-    const revealObserver = new IntersectionObserver((entries, observer) => {
-      entries.forEach((entry) => {
-        if (!entry.isIntersecting) return;
-        entry.target.classList.add("is-visible");
-        observer.unobserve(entry.target);
-      });
-    }, { threshold: .12 });
-    revealItems.forEach((item) => revealObserver.observe(item));
-  } else {
+  const revealItems = [...document.querySelectorAll("[data-reveal]")];
+  const reduceMotion = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  if (!revealItems.length) {
+    // nothing to reveal
+  } else if (reduceMotion || !("requestAnimationFrame" in window)) {
     revealItems.forEach((item) => item.classList.add("is-visible"));
+  } else {
+    const revealPoint = () => innerHeight * 0.85;
+    const updateReveal = () => {
+      const trigger = revealPoint();
+      revealItems.forEach((item) => {
+        if (item.classList.contains("is-visible")) return;
+        const rect = item.getBoundingClientRect();
+        if (rect.top <= trigger && rect.bottom > 0) item.classList.add("is-visible");
+      });
+    };
+    let revealFrame = 0;
+    const requestReveal = () => {
+      if (revealFrame) return;
+      revealFrame = requestAnimationFrame(() => { revealFrame = 0; updateReveal(); });
+    };
+    addEventListener("scroll", requestReveal, { passive: true });
+    addEventListener("resize", requestReveal);
+    updateReveal();
   }
 
-  const clock = document.querySelector("[data-local-time]");
-  const updateClock = () => {
-    if (!clock) return;
-    clock.textContent = `${new Intl.DateTimeFormat("en-GB", {
-      timeZone: "Asia/Kathmandu",
-      hour: "2-digit",
-      minute: "2-digit",
-      second: "2-digit",
-      hour12: false,
-    }).format(new Date())} NPT`;
+  const themeToggle = document.querySelector("[data-theme-toggle]");
+  const themeValue = document.querySelector("[data-theme-value]");
+  const accentCycle = document.querySelector("[data-accent-cycle]");
+  const accentCode = document.querySelector("[data-accent-code]");
+  const fontCycle = document.querySelector("[data-font-cycle]");
+  const fontValue = document.querySelector("[data-font-value]");
+  const store = (key, value) => { try { localStorage.setItem(key, value); } catch {} };
+  const read = (key) => { try { return localStorage.getItem(key); } catch { return null; } };
+  const accents = [
+    "#9df9f3", "#79c7ff", "#b8a1ff", "#ff8fc8",
+    "#ff7f73", "#f4bf4f", "#d7f171", "#75e6a4",
+    "#64d8cb", "#a8c7fa", "#f7a76c", "#c4f0c5",
+  ];
+  const fontPresets = [
+    {
+      id: "rubik",
+      label: "RUBIK",
+      display: '"Rubik", Arial, sans-serif',
+      mono: '"IBM Plex Mono", Consolas, monospace',
+    },
+    {
+      id: "space",
+      label: "SPACE",
+      display: '"Space Grotesk", Arial, sans-serif',
+      mono: '"IBM Plex Mono", Consolas, monospace',
+    },
+    {
+      id: "archivo",
+      label: "ARCHIVO",
+      display: '"Archivo", Arial, sans-serif',
+      mono: '"Roboto Mono", Consolas, monospace',
+    },
+  ];
+
+  const applyTheme = (theme) => {
+    document.documentElement.setAttribute("data-theme", theme);
+    themeToggle?.setAttribute("aria-pressed", String(theme === "light"));
+    if (themeValue) themeValue.textContent = theme.toUpperCase();
   };
-  updateClock();
-  if (clock) setInterval(updateClock, 1000);
+  const savedTheme = read("portfolio-theme");
+  applyTheme(savedTheme === "light" ? "light" : "dark");
+  themeToggle?.addEventListener("click", () => {
+    const next = document.documentElement.getAttribute("data-theme") === "light" ? "dark" : "light";
+    applyTheme(next);
+    store("portfolio-theme", next);
+  });
+
+  const applyAccent = (candidate) => {
+    const color = accents.includes(candidate?.toLowerCase()) ? candidate.toLowerCase() : accents[0];
+    document.documentElement.style.setProperty("--accent", color);
+    if (accentCode) accentCode.textContent = color.toUpperCase();
+    return color;
+  };
+  let activeAccent = applyAccent(read("portfolio-accent"));
+  accentCycle?.addEventListener("click", () => {
+    const next = accents[(accents.indexOf(activeAccent) + 1) % accents.length];
+    activeAccent = applyAccent(next);
+    store("portfolio-accent", activeAccent);
+  });
+
+  const applyFont = (candidate) => {
+    const preset = fontPresets.find(({ id }) => id === candidate) || fontPresets[0];
+    document.documentElement.style.setProperty("--display", preset.display);
+    document.documentElement.style.setProperty("--mono", preset.mono);
+    document.documentElement.dataset.font = preset.id;
+    if (fontValue) fontValue.textContent = preset.label;
+    return preset.id;
+  };
+  let activeFont = applyFont(read("portfolio-font"));
+  fontCycle?.addEventListener("click", () => {
+    const currentIndex = fontPresets.findIndex(({ id }) => id === activeFont);
+    activeFont = applyFont(fontPresets[(currentIndex + 1) % fontPresets.length].id);
+    store("portfolio-font", activeFont);
+  });
 
   const filterButtons = document.querySelectorAll("[data-project-filter]");
   const projects = document.querySelectorAll("[data-project-type]");
@@ -152,8 +206,8 @@
     const range = Math.max(1, workDeck.offsetHeight - stickyHeight);
     const progress = Math.min(1, Math.max(0, (scrollY - start) / range));
     const activeIndex = Math.min(total - 1, Math.floor(progress * total));
-    if (sectionLabel && scrollY >= start && scrollY <= start + range) {
-      sectionLabel.textContent = workDeck.dataset.section || "01 — WORK";
+    if (sectionLabels.length && scrollY >= start && scrollY <= start + range) {
+      updateSectionLabel(workDeck.dataset.section || "01 — WORK");
     }
     workDeck.style.setProperty("--work-deck-progress", progress.toFixed(3));
     workDeck.style.setProperty("--work-deck-shift", `-${(progress * 18).toFixed(2)}%`);
