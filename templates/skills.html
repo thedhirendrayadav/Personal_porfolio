@@ -14,9 +14,39 @@
   ] %}
   {% for number, title, tools, context in groups %}<article class="skill-group" data-reveal><div class="skill-group-head"><span class="meta accent">{{ number }}</span><h2>{{ title }}</h2></div><p class="skill-tools">{{ tools }}</p><p class="muted">{{ context }}</p></article>{% endfor %}
 </section>
+<section class="editorial-section editorial-grid" data-section="02 — CAPABILITY MATRIX">
+  <div class="section-head"><p class="section-kicker accent">02 / CAPABILITY MATRIX</p><h2>Capability described by decisions and outputs.</h2><p>The matrix connects an operating question to the practices used, the artifact produced, and the evidence needed before treating the work as complete.</p></div>
+  <div class="capability-matrix" role="table" aria-label="Capability matrix">
+    <div class="matrix-row matrix-head" role="row"><span role="columnheader">DISCIPLINE</span><span role="columnheader">OPERATING QUESTION</span><span role="columnheader">PRACTICES</span><span role="columnheader">OUTPUT / EVIDENCE</span></div>
+    <div class="matrix-row" role="row"><strong role="cell">01 / Security</strong><span role="cell">What can fail, be abused, or cross a trust boundary?</span><span role="cell">Threat modeling · surface review · vulnerability validation · control mapping</span><span role="cell">Risk record · reproducible finding · control decision · verification note</span></div>
+    <div class="matrix-row" role="row"><strong role="cell">02 / AI &amp; ML</strong><span role="cell">What decision or workflow benefits from model assistance?</span><span role="cell">Data preparation · retrieval design · evaluation cases · refusal boundaries</span><span role="cell">Dataset contract · evaluation set · grounded output · limitation statement</span></div>
+    <div class="matrix-row" role="row"><strong role="cell">03 / Engineering</strong><span role="cell">What is the smallest reliable behavior the user needs?</span><span role="cell">API contracts · state modeling · accessible interfaces · automated tests</span><span role="cell">Working slice · test evidence · error states · maintenance notes</span></div>
+    <div class="matrix-row" role="row"><strong role="cell">04 / Infrastructure</strong><span role="cell">Can the system be released, observed, and recovered safely?</span><span role="cell">Environment contracts · migrations · health checks · deployment diagnostics</span><span role="cell">Release record · readiness signal · rollback path · configuration inventory</span></div>
+    <div class="matrix-row" role="row"><strong role="cell">05 / Investigation</strong><span role="cell">What happened, what supports that conclusion, and what remains unknown?</span><span role="cell">Traffic inspection · log analysis · timeline building · hypothesis testing</span><span role="cell">Evidence ledger · finding confidence · competing explanation · next collection step</span></div>
+  </div>
+</section>
 <section class="editorial-section editorial-grid">
-  <div class="section-head"><p class="section-kicker accent">02 / METHOD</p><h2>From question to verified system.</h2><p>A repeatable process that keeps security and user value connected.</p></div>
+  <div class="section-head"><p class="section-kicker accent">03 / METHOD</p><h2>From question to verified system.</h2><p>A repeatable process that keeps security and user value connected.</p></div>
   {% for n, title, copy in [('01','Map','Clarify the user, assets, boundaries, dependencies, and definition of success.'),('02','Model','Choose the smallest architecture that can make behavior visible and testable.'),('03','Build','Implement in focused slices with explicit data, interface, and failure contracts.'),('04','Verify','Test behavior, accessibility, responsiveness, deployment, and operational signals.')] %}<div class="capability-row" data-reveal><span class="meta accent">{{ n }}</span><h3>{{ title }}</h3><p>{{ copy }}</p></div>{% endfor %}
+</section>
+<section class="editorial-section editorial-grid" data-section="04 — TRUST MAP">
+  <div class="section-head"><p class="section-kicker accent">04 / TRUST MAP</p><h2>Controls connected across the system.</h2><p>Security decisions become useful when they follow data and authority through the full operating path—not when they remain isolated tool results.</p></div>
+  <div class="trust-map" role="img" aria-label="Trust map linking identity, application, data, and operations controls">
+    <div class="trust-node"><span>01</span><strong>IDENTITY</strong><small>Authentication · roles · session boundaries</small></div>
+    <div class="trust-node"><span>02</span><strong>APPLICATION</strong><small>Validation · authorization · safe failure</small></div>
+    <div class="trust-core"><span>CONTROL PATH</span><b>VERIFY EVERY CROSSING</b></div>
+    <div class="trust-node"><span>03</span><strong>DATA</strong><small>Classification · integrity · retention</small></div>
+    <div class="trust-node"><span>04</span><strong>OPERATIONS</strong><small>Secrets · telemetry · recovery</small></div>
+  </div>
+</section>
+<section class="editorial-section editorial-grid" data-section="05 — WORKING PRINCIPLES">
+  <div class="section-head"><p class="section-kicker accent">05 / WORKING PRINCIPLES</p><h2>How the tools are used matters.</h2><p>Tools change quickly; the operating principles behind their use should remain inspectable.</p></div>
+  <div class="manual-grid">
+    <article class="manual-panel"><p class="meta accent">01 / MINIMUM AUTHORITY</p><h3>Scope access before adding capability.</h3><p>Identity, permissions, secrets, and destructive actions are bounded to the smallest useful surface.</p></article>
+    <article class="manual-panel"><p class="meta accent">02 / VISIBLE FAILURE</p><h3>Make degraded states diagnosable.</h3><p>Validation, structured errors, health signals, and recovery notes turn failure into usable evidence.</p></article>
+    <article class="manual-panel"><p class="meta accent">03 / HUMAN REVIEW</p><h3>Keep consequential decisions accountable.</h3><p>Automation and AI can prepare, classify, and recommend; approval boundaries remain explicit where impact matters.</p></article>
+  </div>
+  <div class="toolchain-ledger"><div><span class="meta">ANALYZE</span><p>Nmap · Wireshark · Burp Suite · logs · structured inspection</p></div><div><span class="meta">BUILD</span><p>Python · Flask · Django · JavaScript · SQL · REST contracts</p></div><div><span class="meta">EVALUATE</span><p>pytest · accessibility checks · responsive checks · evidence review</p></div><div><span class="meta">OPERATE</span><p>Git · Linux · Railway · Vercel · environment and release diagnostics</p></div></div>
 </section>
 <section class="landmark"><h2><span class="outline-text">READY TO</span> <span class="accent">APPLY IT.</span></h2></section>
 {% endblock %}

@@ -354,6 +354,59 @@ def test_work_deck_grid_children_do_not_expand_to_marquee_width(client):
     assert "@media (min-width: 981px) and (min-height: 700px) and (prefers-reduced-motion: no-preference)" in css
 
 
+def test_field_manual_sections_add_evidence_led_depth_and_graphics(client):
+    homepage = client.get("/").get_data(as_text=True)
+    skills = client.get("/skills").get_data(as_text=True)
+    blog = client.get("/blog").get_data(as_text=True)
+    contact = client.get("/contact").get_data(as_text=True)
+    css = client.get("/static/css/editorial-portfolio.css").get_data(as_text=True)
+
+    for token in (
+        "FIELDWORK PROTOCOL",
+        "EVIDENCE MODEL",
+        "DELIVERY LOOP",
+        "LAB PIPELINE",
+        "RESEARCH HYPOTHESIS",
+        "IN DEVELOPMENT",
+    ):
+        assert token in homepage
+
+    for token in (
+        "CAPABILITY MATRIX",
+        "TRUST MAP",
+        "WORKING PRINCIPLES",
+        "OPERATING QUESTION",
+    ):
+        assert token in skills
+
+    for token in (
+        "RESEARCH COMPASS",
+        "SIGNAL MAP",
+        "PUBLISHING STANDARD",
+        "OPERATIONAL TAKEAWAY",
+    ):
+        assert token in blog
+
+    for token in (
+        "ENGAGEMENT FIT",
+        "PROJECT BRIEF",
+        "RESPONSE ROUTE",
+        "Do not submit passwords, API keys, credentials, or production secrets",
+    ):
+        assert token in contact
+
+    for selector in (
+        ".manual-panel",
+        ".system-flow",
+        ".capability-matrix",
+        ".trust-map",
+        ".research-compass",
+        ".lab-dossier",
+        ".response-route",
+    ):
+        assert selector in css
+
+
 def test_public_shell_declares_the_branded_favicon(client):
     html = client.get("/").get_data(as_text=True)
 
@@ -374,9 +427,9 @@ def test_homepage_exposes_research_lab_content(client):
     html = client.get("/").get_data(as_text=True)
 
     assert 'data-section="04 — LAB"' in html
-    assert "Research lab." in html
-    assert "Threat modeling" in html
-    assert "Applied AI research" in html
+    assert "Questions turned into controlled experiments." in html
+    assert "Threat-model workbench" in html
+    assert "Retrieval-grounded assistant" in html
 
 
 def test_homepage_renders_dynamic_project_and_post_content(client, monkeypatch):
@@ -485,7 +538,7 @@ def test_evidence_layer_adds_truthful_lab_writing_and_about_markers(client, monk
     writing = client.get("/blog").get_data(as_text=True)
     about = client.get("/about").get_data(as_text=True)
 
-    assert homepage.count('data-evidence="lab"') == 3
+    assert homepage.count('data-evidence="lab"') == 4
     assert 'data-evidence="article"' in writing
     assert "01 / 14.02.2025" in writing
     assert "SECURITY" in writing
