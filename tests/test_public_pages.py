@@ -317,11 +317,15 @@ def test_about_surfaces_use_the_separated_full_body_cutout(client):
     about_page = client.get("/about").get_data(as_text=True)
     css = client.get("/static/css/editorial-portfolio.css").get_data(as_text=True)
     asset = client.get("/static/images/profile-about-cutout.png")
+    full_asset = client.get("/static/images/profile-about-full.png")
 
     assert asset.status_code == 200
+    assert full_asset.status_code == 200
+    assert 'class="portrait-treatment about-portrait-cutout"' in homepage
+    assert 'src="/static/images/profile-about-cutout.png' in homepage
+    assert 'class="portrait-treatment about-portrait-cutout"' in about_page
+    assert 'src="/static/images/profile-about-full.png' in about_page
     for html in (homepage, about_page):
-        assert 'class="portrait-treatment about-portrait-cutout"' in html
-        assert 'src="/static/images/profile-about-cutout.png' in html
         assert 'alt="Portrait of Dhirendra Yadav"' in html
     assert ".about-portrait-cutout::before" in css
     assert ".about-portrait-cutout::after" in css
