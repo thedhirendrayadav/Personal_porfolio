@@ -1,0 +1,555 @@
+[
+  {
+    "slug": "multi-channel-ai-messaging",
+    "title": "Multi-Channel AI Messaging Platform",
+    "short_title": "AI Messaging",
+    "description": "A prototype messaging backend that normalizes channel operations behind adapters and moves message work through Redis-backed queues.",
+    "project_type": "Application Platform",
+    "status": "Prototype",
+    "featured": true,
+    "image_url": "static/images/projects/multi-channel-ai-messaging-field-journal.png",
+    "image_width": 1536,
+    "image_height": 1024,
+    "technologies": [
+      "TypeScript",
+      "Fastify",
+      "PostgreSQL",
+      "Prisma",
+      "Redis",
+      "BullMQ"
+    ],
+    "thesis": "Separate channel-specific delivery from conversation state and asynchronous processing so each boundary can be inspected independently.",
+    "problem": "Inbound webhooks, channel APIs, user authorization, and background processing cross different trust and failure boundaries.",
+    "role": "The inspected repository establishes implementation artifacts but does not establish an individual contributor role.",
+    "scope": "The audited slice covers API registration, channel contracts, queue configuration, authorization middleware, rate limiting, and relational state.",
+    "constraints": "No customer, delivery-volume, uptime, or deployment claim is made; the audit is limited to local source and schema artifacts.",
+    "claim_sources": {
+      "title": ["backend/src/app.ts"],
+      "short_title": ["backend/src/app.ts"],
+      "description": ["backend/src/channels/channel.interface.ts", "backend/src/queue/queue.config.ts"],
+      "project_type": ["backend/src/app.ts"],
+      "status": ["backend/src/app.ts"],
+      "technologies": ["backend/src/app.ts", "backend/src/queue/queue.config.ts", "prisma/schema.prisma"],
+      "thesis": ["backend/src/channels/channel.interface.ts", "backend/src/queue/queue.config.ts"],
+      "problem": ["backend/src/app.ts", "backend/src/middleware/auth.ts"],
+      "role": ["backend/src/app.ts"],
+      "scope": ["backend/src/app.ts", "prisma/schema.prisma"],
+      "constraints": ["backend/src/app.ts"]
+    },
+    "architecture": [
+      {
+        "label": "Fastify API",
+        "category": "internal",
+        "relationship": "registers webhook, conversation, analytics, handoff, agent, and order routes",
+        "source": "backend/src/app.ts"
+      },
+      {
+        "label": "Channel adapters",
+        "category": "boundary",
+        "relationship": "define text, template, interactive, and media delivery operations",
+        "source": "backend/src/channels/channel.interface.ts"
+      },
+      {
+        "label": "BullMQ queues",
+        "category": "internal",
+        "relationship": "configure inbound, outbound, follow-up, and embedding job queues with shared retry policy",
+        "source": "backend/src/queue/queue.config.ts"
+      },
+      {
+        "label": "PostgreSQL model",
+        "category": "data",
+        "relationship": "stores organizations, conversations, messages, roles, and audit records",
+        "source": "prisma/schema.prisma"
+      }
+    ],
+    "trust_boundaries": [
+      {
+        "name": "Public request to API",
+        "crossing": "Webhook payloads and authenticated API requests enter Fastify routes.",
+        "source": "backend/src/app.ts"
+      },
+      {
+        "name": "API to queue",
+        "crossing": "Message work crosses into Redis-backed job queues with retry policy.",
+        "source": "backend/src/queue/queue.config.ts"
+      }
+    ],
+    "security_decisions": [
+      {
+        "risk": "Unauthenticated or inactive users reaching protected operations.",
+        "control": "JWT verification reloads the user and exposes role checks to route handlers.",
+        "source": "backend/src/middleware/auth.ts"
+      },
+      {
+        "risk": "Burst traffic exhausting global API capacity.",
+        "control": "The Fastify application registers a global rate-limit plugin with configured limits and windows.",
+        "source": "backend/src/app.ts"
+      },
+      {
+        "risk": "Burst traffic exhausting capacity on routes that use the custom limiter.",
+        "control": "A Redis counter-based middleware enforces a supplied maximum and time window.",
+        "source": "backend/src/middleware/rateLimiter.ts"
+      }
+    ],
+    "evidence": [
+      {
+        "type": "source",
+        "label": "backend/src/app.ts",
+        "title": "API composition",
+        "claim": "Fastify registers security middleware, health checks, metrics, and domain routes."
+      },
+      {
+        "type": "source",
+        "label": "backend/src/queue/queue.config.ts",
+        "title": "Queue policy",
+        "claim": "Four BullMQ queues share bounded retries and exponential backoff."
+      },
+      {
+        "type": "schema",
+        "label": "prisma/schema.prisma",
+        "title": "Conversation data model",
+        "claim": "The schema defines channel, role, conversation-state, message-status, and audit-log records."
+      },
+      {
+        "type": "test",
+        "label": "tests/unit/statemachine.test.ts",
+        "title": "Conversation state tests",
+        "claim": "A local unit-test artifact exercises the conversation state machine."
+      }
+    ],
+    "outcomes": [
+      {
+        "claim": "Channel delivery behavior is represented by one adapter contract.",
+        "source": "backend/src/channels/channel.interface.ts"
+      },
+      {
+        "claim": "Conversation and message lifecycles have explicit persisted states.",
+        "source": "prisma/schema.prisma"
+      }
+    ],
+    "hardening": [
+      {
+        "item": "Verify authorization middleware coverage route by route before presenting the API as tenant-isolated.",
+        "source": "backend/src/app.ts"
+      }
+    ]
+  },
+  {
+    "slug": "nepse-market-intelligence",
+    "title": "NEPSE Market Intelligence",
+    "short_title": "NEPSE Intelligence",
+    "description": "A research system connecting price ingestion, technical indicators, news sentiment, ensemble prediction, backtesting, an API, and a dashboard.",
+    "project_type": "Research System",
+    "status": "Research System",
+    "featured": true,
+    "image_url": "static/images/projects/nepse-market-intelligence-field-journal.png",
+    "image_width": 1536,
+    "image_height": 1024,
+    "technologies": [
+      "Python",
+      "pandas",
+      "XGBoost",
+      "TensorFlow",
+      "FastAPI",
+      "Streamlit"
+    ],
+    "thesis": "Keep data provenance, feature construction, model inference, and evaluation visible as separate research stages.",
+    "problem": "Market data availability, synthetic fallbacks, model dependencies, and test assumptions can materially change what a prediction represents.",
+    "role": "The inspected repository establishes a local research implementation but does not establish an individual contributor role.",
+    "scope": "The audited slice covers ingestion, indicator generation, sentiment paths, the three-model ensemble, backtesting, API routes, dashboard code, and the generated report.",
+    "constraints": "The ingestion path can synthesize historical prices, sentiment can fall back to generated or rule-based data, and no accuracy or return metric is published here.",
+    "claim_sources": {
+      "title": ["reports/final_report.md"],
+      "short_title": ["reports/final_report.md"],
+      "description": ["src/data_ingest.py", "src/news_sentiment.py", "src/indicators.py", "src/predictor.py", "src/backtest.py", "api/main.py", "dashboard/app.py"],
+      "project_type": ["reports/final_report.md"],
+      "status": ["src/data_ingest.py"],
+      "technologies": ["src/predictor.py", "api/main.py", "dashboard/app.py"],
+      "thesis": ["src/data_ingest.py", "src/indicators.py", "src/predictor.py", "src/backtest.py"],
+      "problem": ["src/data_ingest.py", "src/news_sentiment.py"],
+      "role": ["reports/final_report.md"],
+      "scope": ["reports/final_report.md", "api/main.py", "dashboard/app.py"],
+      "constraints": ["src/data_ingest.py", "src/news_sentiment.py"]
+    },
+    "architecture": [
+      {
+        "label": "Price ingestion",
+        "category": "data",
+        "relationship": "loads cached price history, attempts current market data, or generates a synthetic fallback",
+        "source": "src/data_ingest.py"
+      },
+      {
+        "label": "News sentiment",
+        "category": "data",
+        "relationship": "uses generated news fallbacks and transformer or rule-based sentiment analysis",
+        "source": "src/news_sentiment.py"
+      },
+      {
+        "label": "Feature pipeline",
+        "category": "internal",
+        "relationship": "derives trend, momentum, volatility, and volume indicators",
+        "source": "src/indicators.py"
+      },
+      {
+        "label": "Ensemble predictor",
+        "category": "internal",
+        "relationship": "combines XGBoost, LSTM, and Transformer probabilities",
+        "source": "src/predictor.py"
+      },
+      {
+        "label": "API and dashboard",
+        "category": "boundary",
+        "relationship": "expose analysis through FastAPI routes and a Streamlit interface",
+        "source": "api/main.py"
+      }
+    ],
+    "trust_boundaries": [
+      {
+        "name": "Price data to research dataset",
+        "crossing": "Downloaded, cached, current, or generated price values enter feature construction.",
+        "source": "src/data_ingest.py"
+      },
+      {
+        "name": "News text to sentiment features",
+        "crossing": "Scraped or generated headlines enter transformer or rule-based sentiment analysis.",
+        "source": "src/news_sentiment.py"
+      },
+      {
+        "name": "HTTP client to model execution",
+        "crossing": "Ticker, date range, and strategy parameters reach prediction and backtest functions.",
+        "source": "api/main.py"
+      }
+    ],
+    "security_decisions": [
+      {
+        "risk": "Malformed ticker input reaching model and data-loading paths.",
+        "control": "The prediction route normalizes ticker text and bounds its length.",
+        "source": "api/main.py"
+      },
+      {
+        "risk": "Research consumers mistaking generated history for observed market history.",
+        "control": "The ingestion code emits an explicit synthetic-data message, but provenance still needs stronger propagation into outputs.",
+        "source": "src/data_ingest.py"
+      }
+    ],
+    "evidence": [
+      {
+        "type": "source",
+        "label": "src/indicators.py",
+        "title": "Indicator engine",
+        "claim": "The feature code computes moving-average, momentum, volatility, and volume families."
+      },
+      {
+        "type": "source",
+        "label": "src/predictor.py",
+        "title": "Ensemble path",
+        "claim": "The predictor trains and combines XGBoost, LSTM, and Transformer components."
+      },
+      {
+        "type": "source",
+        "label": "src/backtest.py",
+        "title": "Backtest engine",
+        "claim": "The engine models positions, transaction costs, slippage, and evaluation metrics."
+      },
+      {
+        "type": "report",
+        "label": "reports/final_report.md",
+        "title": "System report",
+        "claim": "The local report documents architecture and methodology without a fixed performance result."
+      }
+    ],
+    "outcomes": [
+      {
+        "claim": "Research stages are callable through prediction, sentiment, and backtest API routes.",
+        "source": "api/main.py"
+      },
+      {
+        "claim": "A local Streamlit interface renders price history, indicators, and model-facing views.",
+        "source": "dashboard/app.py"
+      }
+    ],
+    "hardening": [
+      {
+        "item": "Carry observed-versus-generated provenance into every API and dashboard result.",
+        "source": "src/data_ingest.py"
+      },
+      {
+        "item": "Replace unrestricted API CORS with an explicit consumer allowlist before network exposure.",
+        "source": "api/main.py"
+      }
+    ]
+  },
+  {
+    "slug": "secure-portfolio-platform",
+    "title": "Secure Portfolio Platform",
+    "short_title": "Portfolio Platform",
+    "description": "A Flask portfolio and content-management application with database fallbacks, contact protections, response headers, and public-page contract tests.",
+    "project_type": "Web Platform",
+    "status": "In Development",
+    "featured": true,
+    "image_url": "static/images/projects/secure-portfolio-platform-field-journal.png",
+    "image_width": 1536,
+    "image_height": 1024,
+    "technologies": [
+      "Python",
+      "Flask",
+      "Jinja",
+      "MySQL",
+      "Supabase",
+      "pytest"
+    ],
+    "thesis": "Treat portfolio content, contact submission, administration, and deployment adapters as distinct boundaries with explicit controls and tests.",
+    "problem": "A public site combines untrusted form input, authenticated administration, mutable content, database variability, and multiple runtime entry points.",
+    "role": "The inspected repository establishes implementation and test artifacts but does not establish an individual contributor role.",
+    "scope": "The audited slice covers Flask routes, contact CSRF and throttling, response headers, project persistence, database-manager selection, runtime entry points, and public-page tests.",
+    "constraints": "The contact limiter is process-local, the session cookie secure flag is disabled in current configuration, and runtime entry points do not prove a live deployment.",
+    "claim_sources": {
+      "title": ["app.py"],
+      "short_title": ["app.py"],
+      "description": ["app.py", "models/project_model.py", "tests/test_public_pages.py"],
+      "project_type": ["app.py"],
+      "status": ["app.py"],
+      "technologies": ["app.py", "models/project_model.py", "tests/test_public_pages.py"],
+      "thesis": ["app.py", "models/project_model.py", "api/index.py"],
+      "problem": ["app.py", "models/project_model.py"],
+      "role": ["tests/test_public_pages.py"],
+      "scope": ["app.py", "models/project_model.py", "api/index.py", "Procfile", "tests/test_public_pages.py"],
+      "constraints": ["app.py", "api/index.py"]
+    },
+    "architecture": [
+      {
+        "label": "Flask routes and templates",
+        "category": "boundary",
+        "relationship": "serve public, blog, contact, project, and administrative views",
+        "source": "app.py"
+      },
+      {
+        "label": "Unified models",
+        "category": "internal",
+        "relationship": "select database-manager implementations and normalize project records",
+        "source": "models/project_model.py"
+      },
+      {
+        "label": "MySQL or Supabase",
+        "category": "data",
+        "relationship": "persist managed content through selected database adapters",
+        "source": "database_manager.py"
+      },
+      {
+        "label": "Runtime entry points",
+        "category": "external",
+        "relationship": "expose the Flask application to process and serverless runtimes",
+        "source": "api/index.py"
+      }
+    ],
+    "trust_boundaries": [
+      {
+        "name": "Browser to contact handler",
+        "crossing": "Names, addresses, subjects, and message text enter validation, persistence, and mail paths.",
+        "source": "app.py"
+      },
+      {
+        "name": "Application to database provider",
+        "crossing": "Content records cross either a MySQL connection or Supabase client and REST paths.",
+        "source": "database_manager.py"
+      }
+    ],
+    "security_decisions": [
+      {
+        "risk": "Cross-site or automated contact submissions.",
+        "control": "The contact POST validates a session token, applies a per-client process-local limit, and bounds input lengths.",
+        "source": "app.py"
+      },
+      {
+        "risk": "Browser interpretation and framing of public responses.",
+        "control": "An after-request hook sets content-type, frame, referrer, content-security, and conditional transport headers.",
+        "source": "app.py"
+      }
+    ],
+    "evidence": [
+      {
+        "type": "source",
+        "label": "app.py",
+        "title": "Public and security controls",
+        "claim": "The Flask application implements route handling, CSRF checks, throttling, validation, and response headers."
+      },
+      {
+        "type": "source",
+        "label": "models/project_model.py",
+        "title": "Content persistence",
+        "claim": "Project records retain integer route compatibility and select provider-specific database managers."
+      },
+      {
+        "type": "test",
+        "label": "tests/test_public_pages.py",
+        "title": "Public-page contracts",
+        "claim": "The pytest suite exercises public pages, contact markup, project details, blog views, and shared not-found rendering."
+      },
+      {
+        "type": "source",
+        "label": "api/index.py",
+        "title": "Serverless entry point",
+        "claim": "A Vercel-facing module imports and exports the Flask application with fallback handling."
+      }
+    ],
+    "outcomes": [
+      {
+        "claim": "The public route and sparse project-detail contracts are executable in pytest.",
+        "source": "tests/test_public_pages.py"
+      },
+      {
+        "claim": "The project model supports MySQL and Supabase-oriented persistence paths without changing its public methods.",
+        "source": "models/project_model.py"
+      }
+    ],
+    "hardening": [
+      {
+        "item": "Move contact throttling to shared storage before relying on it across multiple processes.",
+        "source": "app.py"
+      },
+      {
+        "item": "Require secure session cookies in HTTPS deployments and remove permissive inline content policy directives where feasible.",
+        "source": "app.py"
+      }
+    ]
+  },
+  {
+    "slug": "runpod-media-orchestrator",
+    "title": "RunPod Media Orchestrator",
+    "short_title": "Media Orchestrator",
+    "description": "A prototype command-line workflow that provisions a RunPod GPU, transfers generated prompts, executes a remote media pipeline, retrieves an output, and terminates the pod.",
+    "project_type": "Automation Prototype",
+    "status": "Prototype",
+    "featured": true,
+    "image_url": "static/images/projects/runpod-media-orchestrator-field-journal.png",
+    "image_width": 1536,
+    "image_height": 1024,
+    "technologies": [
+      "Python",
+      "RunPod GraphQL",
+      "Paramiko",
+      "SFTP",
+      "SCP"
+    ],
+    "thesis": "Make the temporary GPU lifecycle explicit from operator confirmation through provisioning, transfer, execution, retrieval, and teardown.",
+    "problem": "API credentials, generated prompts, remote shell access, output files, and paid compute cross several privilege and data boundaries.",
+    "role": "The inspected repository establishes an automation implementation but does not establish an individual contributor role.",
+    "scope": "The audited slice covers channel selection, prompt assembly, operator confirmation, RunPod GraphQL calls, readiness polling, SSH and SFTP transfer, remote execution, SCP retrieval, and termination.",
+    "constraints": "SSH host keys are accepted automatically, exceptions are handled broadly, and no cost, reliability, audience, or production claim is made.",
+    "claim_sources": {
+      "title": ["runpod_auto.py"],
+      "short_title": ["runpod_auto.py"],
+      "description": ["runpod_auto.py"],
+      "project_type": ["runpod_auto.py"],
+      "status": ["runpod_auto.py"],
+      "technologies": ["runpod_auto.py"],
+      "thesis": ["runpod_auto.py"],
+      "problem": ["runpod_auto.py"],
+      "role": ["runpod_auto.py"],
+      "scope": ["runpod_auto.py", "channel_manager.py", "prompt_generator.py"],
+      "constraints": ["runpod_auto.py"]
+    },
+    "architecture": [
+      {
+        "label": "Channel selection",
+        "category": "internal",
+        "relationship": "loads local channel configuration and requires an interactive selection",
+        "source": "channel_manager.py"
+      },
+      {
+        "label": "Prompt assembly",
+        "category": "internal",
+        "relationship": "generates video, voice, and music prompt components through Gemini with local fallbacks",
+        "source": "prompt_generator.py"
+      },
+      {
+        "label": "RunPod GraphQL lifecycle",
+        "category": "external",
+        "relationship": "creates a secure-cloud GPU request, polls readiness, and terminates the pod",
+        "source": "runpod_auto.py"
+      },
+      {
+        "label": "SSH and SFTP execution",
+        "category": "boundary",
+        "relationship": "uploads prompt data and invokes the remote pipeline",
+        "source": "runpod_auto.py"
+      },
+      {
+        "label": "SCP retrieval",
+        "category": "boundary",
+        "relationship": "copies the generated media output back to the operator host",
+        "source": "runpod_auto.py"
+      }
+    ],
+    "trust_boundaries": [
+      {
+        "name": "Operator host to RunPod API",
+        "crossing": "Provisioning and termination requests use an authorization header assembled from configuration.",
+        "source": "runpod_auto.py"
+      },
+      {
+        "name": "Operator host to temporary pod",
+        "crossing": "Prompts, commands, logs, and media files cross SSH-based channels.",
+        "source": "runpod_auto.py"
+      }
+    ],
+    "security_decisions": [
+      {
+        "risk": "Compute provisioning starts without final operator intent.",
+        "control": "The workflow requires an explicit confirmation before creating a pod.",
+        "source": "runpod_auto.py"
+      },
+      {
+        "risk": "A readiness timeout leaves temporary compute active.",
+        "control": "The timeout branch invokes pod termination before returning.",
+        "source": "runpod_auto.py"
+      }
+    ],
+    "evidence": [
+      {
+        "type": "source",
+        "label": "runpod_auto.py",
+        "title": "Pod lifecycle",
+        "claim": "GraphQL mutations create and terminate the pod around readiness polling and remote execution."
+      },
+      {
+        "type": "source",
+        "label": "runpod_auto.py",
+        "title": "Transfer and execution path",
+        "claim": "SFTP writes prompt data, SSH starts the remote pipeline, and SCP retrieves the final media file."
+      },
+      {
+        "type": "source",
+        "label": "channel_manager.py",
+        "title": "Local channel selection",
+        "claim": "The command-line manager loads JSON channel configurations and requires an interactive selection."
+      },
+      {
+        "type": "source",
+        "label": "prompt_generator.py",
+        "title": "Prompt generation",
+        "claim": "The generator assembles video, voice, and music prompts with explicit local fallbacks."
+      }
+    ],
+    "outcomes": [
+      {
+        "claim": "Provisioning, readiness polling, remote execution, retrieval, and teardown are represented in one operator-visible workflow.",
+        "source": "runpod_auto.py"
+      },
+      {
+        "claim": "The workflow has an explicit cancellation point before compute allocation.",
+        "source": "runpod_auto.py"
+      }
+    ],
+    "hardening": [
+      {
+        "item": "Replace automatic SSH host-key acceptance with pinned or pre-provisioned host verification.",
+        "source": "runpod_auto.py"
+      },
+      {
+        "item": "Guarantee pod termination with structured cleanup around every post-provisioning failure path.",
+        "source": "runpod_auto.py"
+      }
+    ]
+  }
+]
