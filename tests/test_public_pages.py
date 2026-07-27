@@ -329,6 +329,13 @@ def test_public_shell_loads_image_fallback_and_field_motifs(client):
     assert "@media (prefers-reduced-motion: reduce)" in css
 
 
+def test_work_deck_grid_children_do_not_expand_to_marquee_width(client):
+    css = client.get("/static/css/editorial-portfolio.css").get_data(as_text=True)
+
+    assert ".work-deck-heading { min-width: 0;" in css
+    assert ".work-deck-cards { min-width: 0;" in css
+
+
 def test_public_shell_declares_the_branded_favicon(client):
     html = client.get("/").get_data(as_text=True)
 

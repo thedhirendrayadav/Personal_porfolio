@@ -314,12 +314,12 @@
 
 @layer pages {
   .work-deck { --work-deck-count: 1; --work-deck-progress: 0; --work-deck-shift: 0%; padding-block: clamp(4.5rem, 9vw, 9rem); border-block: 1px dotted var(--line-strong); }
-  .work-deck-heading { overflow-x: clip; overflow-y: visible; border-block: 1px solid var(--line); }
+  .work-deck-heading { min-width: 0; overflow-x: clip; overflow-y: visible; border-block: 1px solid var(--line); }
   .work-deck-marquee { display: flex; width: max-content; gap: .18em; padding: .65rem var(--gutter); font-size: clamp(4.4rem, 12vw, 11rem); font-weight: 800; line-height: .75; letter-spacing: -.055em; white-space: nowrap; transform: translate3d(var(--work-deck-shift), 0, 0); }
   .work-deck-marquee span { display: flex; gap: .18em; }
   .work-deck-intro { display: grid; grid-template-columns: 5rem minmax(0, 43rem); gap: 1.5rem; padding-block: 1.5rem clamp(2.5rem, 5vw, 4rem); }
   .work-deck-intro > p:last-child { color: var(--muted); }
-  .work-deck-cards { display: grid; }
+  .work-deck-cards { min-width: 0; display: grid; }
   .work-deck [data-work-card]:last-child { border-bottom: 1px solid var(--line); }
   .work-deck-footer { display: flex; align-items: center; justify-content: space-between; gap: 1.5rem; padding-top: 1rem; }
   .work-deck-ticks { display: flex; gap: .45rem; }
