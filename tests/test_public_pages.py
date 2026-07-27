@@ -78,8 +78,19 @@ def test_homepage_context_includes_featured_projects_and_recent_posts(client, mo
 def test_homepage_uses_curated_projects_when_database_is_empty(client):
     html = client.get("/").get_data(as_text=True)
 
-    assert "Multi-Channel AI Messaging Platform" in html
-    assert "NEPSE Market Intelligence" in html
+    for title in (
+        "Multi-Channel AI Messaging Platform",
+        "NEPSE Market Intelligence",
+        "Hotmail Automation",
+        "ERP System",
+        "School Management",
+        "Restaurant Management",
+        "Attendance Management",
+        "Accounting Software",
+        "Billing Software",
+        "Staff Management System",
+    ):
+        assert title in html
     assert "Secure Operations Platform" not in html
 
 

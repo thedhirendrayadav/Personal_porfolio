@@ -20,6 +20,14 @@ EXPECTED_SLUGS = [
     "nepse-market-intelligence",
     "secure-portfolio-platform",
     "runpod-media-orchestrator",
+    "hotmail-automation",
+    "erp-system",
+    "school-management",
+    "restaurant-management",
+    "attendance-management",
+    "accounting-software",
+    "billing-software",
+    "staff-management-system",
 ]
 REQUIRED_FIELDS = {
     "slug",
@@ -110,6 +118,14 @@ def test_curated_projects_reference_field_journal_artwork():
         "nepse-market-intelligence": "static/images/projects/nepse-market-intelligence-field-journal.png",
         "secure-portfolio-platform": "static/images/projects/secure-portfolio-platform-field-journal.png",
         "runpod-media-orchestrator": "static/images/projects/runpod-media-orchestrator-field-journal.png",
+        "hotmail-automation": "static/images/projects/hotmail-automation-field-journal.png",
+        "erp-system": "static/images/projects/erp-system-field-journal.png",
+        "school-management": "static/images/projects/school-management-field-journal.png",
+        "restaurant-management": "static/images/projects/restaurant-management-field-journal.png",
+        "attendance-management": "static/images/projects/attendance-management-field-journal.png",
+        "accounting-software": "static/images/projects/accounting-software-field-journal.png",
+        "billing-software": "static/images/projects/billing-software-field-journal.png",
+        "staff-management-system": "static/images/projects/staff-management-system-field-journal.png",
     }
 
     projects = load_curated_projects()

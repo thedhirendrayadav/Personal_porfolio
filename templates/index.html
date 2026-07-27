@@ -25,7 +25,7 @@
     <div class="work-deck-intro"><p class="section-kicker accent">01 / WORK</p><p>Selected security, automation, and product engineering projects shaped by security thinking and practical delivery.</p></div>
     <div class="work-deck-cards">
     {% if featured_projects %}
-      {% for project in featured_projects[:4] %}
+      {% for project in featured_projects %}
       <article class="case-study" data-work-card data-reveal data-evidence="project" data-project-type="{{ project.project_type or 'web' }}">
         <div class="case-media field-art">
           <span class="field-art-label meta" data-field-mark aria-hidden="true">{{ '%02d'|format(loop.index) }} / SYSTEM MAP</span>
@@ -41,7 +41,7 @@
       {% endfor %}
     {% endif %}
     </div>
-    <div class="work-deck-footer" data-work-progress><span class="meta"><b data-work-index>01</b> / <b data-work-total>{% if featured_projects %}{{ '%02d'|format(featured_projects[:4]|length) }}{% else %}03{% endif %}</b></span><span class="work-deck-ticks" aria-hidden="true">{% if featured_projects %}{% for project in featured_projects[:4] %}<i data-work-tick></i>{% endfor %}{% else %}{% for position in range(3) %}<i data-work-tick></i>{% endfor %}{% endif %}</span></div>
+    <div class="work-deck-footer" data-work-progress><span class="meta"><b data-work-index>01</b> / <b data-work-total>{% if featured_projects %}{{ '%02d'|format(featured_projects|length) }}{% else %}03{% endif %}</b></span><span class="work-deck-ticks" aria-hidden="true">{% if featured_projects %}{% for project in featured_projects %}<i data-work-tick></i>{% endfor %}{% else %}{% for position in range(3) %}<i data-work-tick></i>{% endfor %}{% endif %}</span></div>
   </div>
 </section>
 
