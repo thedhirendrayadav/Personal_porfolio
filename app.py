@@ -21,6 +21,12 @@ from functools import wraps
 from config import APP_CONFIG, ADMIN_CONFIG, EMAIL_CONFIG
 from unified_models import ProjectModel, CategoryModel, BlogModel, ContactModel
 from database import db
+from project_content import (
+    get_curated_neighbors,
+    get_curated_project,
+    load_curated_projects,
+)
+from slug_utils import slugify_text
 
 
 def ensure_database_and_tables():
@@ -267,10 +273,14 @@ def admin_logout():
 def index():
     visit_count = get_visit_count_and_increment()
     try:
-        featured_projects = ProjectModel().get_all_projects(featured_only=True)
+        database_projects = ProjectModel().get_all_projects(featured_only=True)
     except Exception as exc:
         print(f"Homepage project load error: {exc}")
-        featured_projects = []
+        database_projects = []
+    featured_projects = database_projects or [
+        project for project in load_curated_projects() if project["featured"]
+    ]
+    content_source = "database" if database_projects else "curated"
 
     try:
         recent_posts = BlogModel().get_recent_posts(limit=3)
@@ -284,6 +294,7 @@ def index():
         app_name=APP_CONFIG["name"],
         featured_projects=featured_projects,
         recent_posts=recent_posts,
+        content_source=content_source,
     )
 
 @app.route("/about")
@@ -294,10 +305,16 @@ def about():
 def portfolio():
     project_model = ProjectModel()
     category_model = CategoryModel()
-    
-    # Get featured projects for display
-    projects = project_model.get_all_projects(featured_only=True)
-    categories = category_model.get_all_categories()
+
+    try:
+        database_projects = project_model.get_all_projects(featured_only=True)
+        categories = category_model.get_all_categories()
+    except Exception as exc:
+        print(f"Portfolio project load error: {exc}")
+        database_projects = []
+        categories = []
+    projects = database_projects or load_curated_projects()
+    content_source = "database" if database_projects else "curated"
     
     # Retain model-normalized technology lists while supporting legacy JSON strings.
     for project in projects:
@@ -310,7 +327,38 @@ def portfolio():
     return render_template("portfolio.html", 
                          app_name=APP_CONFIG["name"],
                          projects=projects,
-                         categories=categories)
+                         categories=categories,
+                         content_source=content_source)
+
+
+@app.route("/work/<slug>")
+def curated_project_detail(slug):
+    project = get_curated_project(slug)
+    if not project:
+        alias_project = next(
+            (
+                candidate
+                for candidate in load_curated_projects()
+                if slugify_text(candidate["title"]) == slug
+            ),
+            None,
+        )
+        if alias_project:
+            return redirect(
+                url_for("curated_project_detail", slug=alias_project["slug"]),
+                code=301,
+            )
+        return render_template("404.html", app_name=APP_CONFIG["name"]), 404
+
+    previous_project, next_project = get_curated_neighbors(slug)
+    return render_template(
+        "project_detail.html",
+        app_name=APP_CONFIG["name"],
+        project=project,
+        previous_project=previous_project,
+        next_project=next_project,
+        project_source="curated",
+    )
 
 
 @app.route("/portfolio/<int:project_id>")
@@ -345,6 +393,7 @@ def project_detail(project_id):
         project=project,
         previous_project=previous_project,
         next_project=next_project,
+        project_source="database",
     )
 
 @app.route("/skills")
@@ -678,10 +727,11 @@ def admin_add_blog_post():
     """Add new blog post"""
     if request.method == 'POST':
         blog_model = BlogModel()
-        
+        title = request.form.get('title', '').strip()
+        submitted_slug = request.form.get('slug', '').strip()
         post_data = {
-            'title': request.form.get('title'),
-            'slug': request.form.get('slug'),
+            'title': title,
+            'slug': submitted_slug or slugify_text(title),
             'excerpt': request.form.get('excerpt'),
             'content': request.form.get('content'),
             'featured_image': request.form.get('featured_image', ''),
@@ -709,9 +759,11 @@ def admin_edit_blog_post(post_id):
     blog_model = BlogModel()
     
     if request.method == 'POST':
+        title = request.form.get('title', '').strip()
+        submitted_slug = request.form.get('slug', '').strip()
         post_data = {
-            'title': request.form.get('title'),
-            'slug': request.form.get('slug'),
+            'title': title,
+            'slug': submitted_slug or slugify_text(title),
             'excerpt': request.form.get('excerpt'),
             'content': request.form.get('content'),
             'featured_image': request.form.get('featured_image', ''),
