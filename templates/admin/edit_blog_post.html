@@ -27,8 +27,8 @@
             </div>
 
             <div class="form-group">
-                <label for="slug">Slug *</label>
-                <input type="text" id="slug" name="slug" value="{{ post.slug }}" required>
+                <label for="slug">Slug <small>(keep stable after publishing)</small></label>
+                <input type="text" id="slug" name="slug" value="{{ post.slug }}" placeholder="generated-from-title">
                 <small>URL-friendly version of the title</small>
             </div>
         </div>

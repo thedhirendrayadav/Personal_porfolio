@@ -308,8 +308,29 @@ def test_appearance_script_declares_curated_accent_and_font_allowlists(client):
 def test_homepage_uses_the_dedicated_hero_portrait(client):
     html = client.get("/").get_data(as_text=True)
 
-    assert 'src="/static/images/profile-hero.jpg' in html
+    assert 'src="/static/images/profile-hero-cutout.png' in html
     assert 'src="/static/images/profile.png' in html
+
+
+def test_homepage_hero_uses_depth_cutout_and_mission_brief_treatment(client):
+    html = client.get("/").get_data(as_text=True)
+    css = client.get("/static/css/editorial-portfolio.css").get_data(as_text=True)
+
+    assert 'class="outline-text hero-name-depth"' in html
+    assert 'data-text="DHIRENDRA"' in html
+    assert "MISSION BRIEF" in html
+    assert "hero-portrait-cutout" in html
+    assert ".hero-name-depth::before" in css
+    assert ".hero-name-depth::after" in css
+    assert ".hero-portrait-cutout::before" in css
+    assert ".mission-brief" in css
+
+
+def test_title_derived_project_alias_redirects_to_stable_canonical_slug(client):
+    response = client.get("/work/multi-channel-ai-messaging-platform")
+
+    assert response.status_code == 301
+    assert response.headers["Location"].endswith("/work/multi-channel-ai-messaging")
 
 
 def test_editorial_css_uses_variable_font_contract(client):
