@@ -336,7 +336,7 @@
     .work-deck[data-work-deck-ready] [data-work-card].is-active { opacity: 1; pointer-events: auto; transform: none; }
     .work-deck[data-work-deck-ready] [data-work-card].is-past { transform: translate3d(0, -14%, 0); }
     .work-deck[data-work-deck-ready] .case-media, .work-deck[data-work-deck-ready] .case-placeholder { min-height: 0; }
-    .work-deck[data-work-deck-ready] .case-copy { min-height: 0; }
+    .work-deck[data-work-deck-ready] .case-copy { padding-block: clamp(1rem, 2.5vh, 1.5rem); min-height: 0; }
   }
 
   @media (max-width: 980px), (prefers-reduced-motion: reduce) {
