@@ -1,9 +1,11 @@
 <!doctype html>
-<html lang="en" data-theme="dark">
+<html lang="en">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#0b0c0c">
+  <link rel="icon" type="image/svg+xml" href="{{ url_for('static', filename='svg/favicon.svg') }}">
+  <link rel="apple-touch-icon" href="{{ url_for('static', filename='svg/favicon.svg') }}">
   <title>{% block title %}Dhirendra Yadav — Cybersecurity · AI/ML · Systems{% endblock %}</title>
   <meta name="description" content="{% block description %}Dhirendra Yadav builds secure automation, AI systems, and practical digital products.{% endblock %}">
   <meta name="keywords" content="{% block keywords %}cybersecurity, artificial intelligence, machine learning, systems engineering, Python{% endblock %}">
@@ -17,7 +19,7 @@
   <meta name="twitter:card" content="summary_large_image">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Rubik:ital,wght@0,300..900;1,300..900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@75..125,300..900&family=IBM+Plex+Mono:wght@400;500&family=Roboto+Mono:wght@400;500&family=Rubik:ital,wght@0,300..900;1,300..900&family=Space+Grotesk:wght@300..700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="{{ url_for('static', filename='css/editorial-portfolio.css', v=asset_version) }}">
   {% block extra_head %}{% endblock %}
 </head>
@@ -25,7 +27,7 @@
   <a class="skip-link" href="#main-content">Skip to content</a>
   <header class="site-header" data-header>
     <a class="wordmark" href="{{ url_for('index') }}" aria-label="Dhirendra Yadav, home">
-      <span class="wordmark-mark">DY.</span><span class="wordmark-copy">PORTFOLIO/2026</span>
+      <span class="wordmark-mark">DY.</span><span class="wordmark-copy">SECURITY FIELDWORK</span>
     </a>
     <nav class="editorial-nav" aria-label="Primary navigation">
       <a href="{{ url_for('index') }}#work" {% if request.path == url_for('index') %}aria-current="page"{% endif %}>01/WORK</a>
@@ -35,7 +37,7 @@
       <a href="{{ url_for('about') }}" {% if request.path == url_for('about') %}aria-current="page"{% endif %}>05/ABOUT</a>
       <a href="{{ url_for('contact') }}" {% if request.path == url_for('contact') %}aria-current="page"{% endif %}>06/CONTACT</a>
     </nav>
-    <a class="header-cta" href="mailto:Dhirendrayadav4999@gmail.com">LET'S TALK <span aria-hidden="true">↗</span></a>
+    <a class="header-cta" href="mailto:thedhirendrayadav@gmail.com">LET'S TALK <span aria-hidden="true">↗</span></a>
     <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="mobile-menu">
       <span class="menu-label">MENU</span><span class="menu-icon" aria-hidden="true"></span>
     </button>
@@ -53,7 +55,7 @@
   <main id="main-content">{% block content %}{% endblock %}</main>
   <footer class="site-footer editorial-grid">
     <p class="eyebrow">OPEN TO COLLABORATION</p>
-    <a class="footer-email" href="mailto:Dhirendrayadav4999@gmail.com">DHIRENDRAYADAV4999@<br>GMAIL.COM <span aria-hidden="true">↗</span></a>
+    <a class="footer-email" href="mailto:thedhirendrayadav@gmail.com">THEDHIRENDRAYADAV@<br>GMAIL.COM <span aria-hidden="true">↗</span></a>
     <div class="footer-meta">
       <p>Cybersecurity · AI/ML · Systems Engineering</p>
       <nav aria-label="Social links">
@@ -63,13 +65,30 @@
       <p>© {{ current_year }} Dhirendra Yadav</p>
     </div>
   </footer>
-  <aside class="status-rail" aria-label="Site status">
-    <span class="status-progress"><i data-scroll-progress></i></span>
-    <span data-scroll-value>SCRL 0.00</span>
-    <span data-active-section>00 — INTRO</span>
-    <button type="button" data-theme-toggle aria-label="Toggle colour theme">THEME <i aria-hidden="true"></i></button>
-    <button type="button" data-accent-toggle aria-label="Cycle site accent colour">ACCENT <i aria-hidden="true"></i></button>
-    <time data-local-time>--:--:-- NPT</time>
+  <div class="footer-hud" aria-label="Site status and appearance controls">
+    <span class="footer-hud-scroll" aria-hidden="true">SCRL <span data-scroll-readout>0.00</span></span>
+    <span class="footer-hud-section" data-hud-section aria-hidden="true">00 — INTRO</span>
+    <div class="footer-hud-actions">
+      <button type="button" class="footer-hud-mode" data-theme-toggle aria-pressed="false" title="Switch between dark and light mode" aria-label="Switch between dark and light mode">
+        <span>MODE</span>
+        <span data-theme-value>DARK</span>
+      </button>
+      <button type="button" class="footer-hud-theme" data-accent-cycle title="Cycle accent colour" aria-label="Cycle the site accent colour">
+        <span>THEME</span>
+        <span class="footer-hud-swatch" aria-hidden="true"></span>
+        <span data-accent-code>#9DF9F3</span>
+      </button>
+      <button type="button" class="footer-hud-font" data-font-cycle title="Cycle font pairing" aria-label="Cycle the site font pairing">
+        <span>FONT</span>
+        <span data-font-value>RUBIK</span>
+      </button>
+    </div>
+  </div>
+  <aside class="evidence-spine" aria-label="Reading position">
+    <span class="evidence-spine-mark">FIELD LOG / 2026</span>
+    <span class="evidence-spine-track" aria-hidden="true"><i data-evidence-progress></i></span>
+    <span class="evidence-spine-section" data-evidence-section>00 — INTRO</span>
+    <span class="visually-hidden" data-evidence-announcer aria-live="polite">00 — INTRO</span>
   </aside>
   <script src="{{ url_for('static', filename='js/editorial-portfolio.js', v=asset_version) }}" defer></script>
   {% block extra_scripts %}{% endblock %}

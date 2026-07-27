@@ -75,6 +75,111 @@ def test_homepage_context_includes_featured_projects_and_recent_posts(client, mo
     assert templates[0][1]["recent_posts"] == posts
 
 
+def test_homepage_uses_curated_projects_when_database_is_empty(client):
+    html = client.get("/").get_data(as_text=True)
+
+    assert "Multi-Channel AI Messaging Platform" in html
+    assert "NEPSE Market Intelligence" in html
+    assert "Secure Operations Platform" not in html
+
+
+def test_database_projects_take_precedence_over_curated_projects(client, monkeypatch):
+    database_projects = [{
+        "id": 41,
+        "title": "Database Project",
+        "description": "Stored project evidence.",
+        "technologies": ["Python"],
+    }]
+    monkeypatch.setattr(
+        portfolio_app.ProjectModel,
+        "get_all_projects",
+        lambda self, featured_only=False: database_projects,
+    )
+
+    with captured_templates(portfolio_app.app) as templates:
+        response = client.get("/")
+
+    assert response.status_code == 200
+    assert "Database Project" in response.get_data(as_text=True)
+    assert "Multi-Channel AI Messaging Platform" not in response.get_data(as_text=True)
+    assert templates[0][1]["content_source"] == "database"
+
+
+def test_curated_project_slug_route_and_shared_404(client):
+    response = client.get("/work/nepse-market-intelligence")
+
+    assert response.status_code == 200
+    assert "NEPSE Market Intelligence" in response.get_data(as_text=True)
+
+    missing_response = client.get("/work/not-real")
+    assert missing_response.status_code == 404
+    assert 'class="error-code"' in missing_response.get_data(as_text=True)
+
+
+def test_curated_media_urls_render_from_static_root(client):
+    asset_url = "/static/images/projects/secure-portfolio-platform.png"
+
+    assert f'src="{asset_url}"' in client.get("/").get_data(as_text=True)
+    assert f'src="{asset_url}"' in client.get(
+        "/work/secure-portfolio-platform"
+    ).get_data(as_text=True)
+
+
+def test_curated_project_detail_renders_evidence_regions(client):
+    html = client.get("/work/nepse-market-intelligence").get_data(as_text=True)
+
+    for label in (
+        "SYSTEM QUESTION",
+        "ROLE &amp; SCOPE",
+        "CONSTRAINTS",
+        "ARCHITECTURE",
+        "TRUST BOUNDARIES",
+        "SECURITY DECISIONS",
+        "IMPLEMENTATION EVIDENCE",
+        "VERIFIED OUTCOMES",
+        "OPEN HARDENING",
+    ):
+        assert label in html
+    assert "src/data_ingest.py" in html
+    assert 'class="architecture-flow"' in html
+
+
+def test_sparse_database_project_detail_omits_unsupported_evidence_regions(
+    client, monkeypatch
+):
+    project = {
+        "id": 7,
+        "title": "Signal Ledger",
+        "description": "A sparse database project.",
+        "technologies": ["Python"],
+        "project_type": "web",
+        "status": "in_progress",
+    }
+    monkeypatch.setattr(
+        portfolio_app.ProjectModel,
+        "get_project_by_id",
+        lambda self, project_id: project if project_id == 7 else None,
+    )
+    monkeypatch.setattr(
+        portfolio_app.ProjectModel,
+        "get_all_projects",
+        lambda self, featured_only=False: [project],
+    )
+
+    html = client.get("/portfolio/7").get_data(as_text=True)
+
+    for label in (
+        "SYSTEM QUESTION",
+        "ROLE &amp; SCOPE",
+        "TRUST BOUNDARIES",
+        "SECURITY DECISIONS",
+        "IMPLEMENTATION EVIDENCE",
+        "VERIFIED OUTCOMES",
+        "OPEN HARDENING",
+    ):
+        assert label not in html
+
+
 def test_contact_form_contract(client):
     response = client.get("/contact")
     html = response.get_data(as_text=True)
@@ -92,18 +197,67 @@ def test_contact_form_contract(client):
     assert 'id="formStatus"' in html
 
 
-def test_public_shell_uses_editorial_assets_without_legacy_3d(client):
+def test_public_shell_uses_evidence_spine_without_reference_controls(client):
     html = client.get("/").get_data(as_text=True)
+    javascript = client.get("/static/js/editorial-portfolio.js").get_data(as_text=True)
 
     assert 'class="site-header"' in html
-    assert 'class="status-rail"' in html
-    assert 'data-accent-toggle' in html
+    assert 'class="evidence-spine"' in html
+    assert "data-evidence-progress" in html
+    assert "data-evidence-section" in html
+    assert "FIELD LOG / 2026" in html
+    assert "status-rail" not in html
+    assert "data-local-time" not in html
+    assert "updateClock" not in javascript
+    assert 'data-accent-cycle' in html
+    assert 'data-theme-toggle' in html
+    assert "portfolio-accent" in javascript
+    assert "portfolio-theme" in javascript
     assert 'href="/#lab"' in html
     assert "editorial-portfolio.css" in html
     assert "editorial-portfolio.js" in html
     assert "three.min.js" not in html
     assert "homepage-3d.js" not in html
     assert 'id="bgVideo"' not in html
+
+
+def test_public_shell_uses_a_persistent_footer_hud_for_appearance_controls(client):
+    html = client.get("/").get_data(as_text=True)
+
+    assert 'class="footer-hud"' in html
+    assert 'data-scroll-readout' in html
+    assert 'data-hud-section' in html
+    assert 'data-accent-cycle' in html
+    assert 'data-theme-toggle' in html
+    assert 'class="shell-controls"' not in html
+    assert 'class="to-top"' not in html
+
+
+def test_public_shell_uses_current_contact_address(client):
+    html = client.get("/").get_data(as_text=True)
+
+    assert "thedhirendrayadav@gmail.com" in html
+    assert "THEDHIRENDRAYADAV@<br>GMAIL.COM" in html
+    assert "Dhirendrayadav4999@gmail.com" not in html
+    assert "DHIRENDRAYADAV4999@" not in html
+
+
+def test_public_shell_exposes_font_appearance_control(client):
+    html = client.get("/").get_data(as_text=True)
+
+    assert 'data-font-cycle' in html
+    assert 'data-font-value' in html
+    assert 'aria-label="Cycle the site font pairing"' in html
+    assert "Space+Grotesk" in html
+    assert "Archivo" in html
+    assert "Roboto+Mono" in html
+
+
+def test_public_shell_declares_the_branded_favicon(client):
+    html = client.get("/").get_data(as_text=True)
+
+    assert 'rel="icon" type="image/svg+xml" href="/static/svg/favicon.svg"' in html
+    assert 'rel="apple-touch-icon" href="/static/svg/favicon.svg"' in html
 
 
 def test_homepage_has_editorial_sections_and_accessible_portrait(client):
