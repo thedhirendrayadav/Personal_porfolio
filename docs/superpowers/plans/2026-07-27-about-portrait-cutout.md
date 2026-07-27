@@ -8,6 +8,14 @@
 
 **Tech Stack:** Flask/Jinja templates, layered CSS, PNG alpha asset, pytest, local browser verification.
 
+## Revision: New About Source and Hero Scale
+
+- Replace `static/images/profile-about-cutout.png` with an identity-preserving transparent cutout generated from `C:\Users\A C E R\Downloads\dhirendra.jpg`.
+- Preserve the source image's natural head-and-torso crop; do not invent missing lower-body content.
+- Keep the existing `about-portrait-cutout` markup and technical plate styling.
+- Change the desktop `.hero-portrait` width from `min(36vw, 32rem)` to `min(39vw, 34rem)` and verify the portrait remains horizontally separated from the 3D heading at 1186×742.
+- Leave the existing mobile portrait widths unchanged.
+
 ## Global Constraints
 
 - Keep the complete person visible from hair to shoes.
