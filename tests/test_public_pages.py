@@ -117,7 +117,7 @@ def test_curated_project_slug_route_and_shared_404(client):
 
 
 def test_curated_media_urls_render_from_static_root(client):
-    asset_url = "/static/images/projects/secure-portfolio-platform.png"
+    asset_url = "/static/images/projects/secure-portfolio-platform-field-journal.png"
 
     assert f'src="{asset_url}"' in client.get("/").get_data(as_text=True)
     assert f'src="{asset_url}"' in client.get(
@@ -285,6 +285,31 @@ def test_editorial_css_uses_variable_font_contract(client):
     assert '--display: "Rubik", Arial, sans-serif;' in css
     assert '--mono: "IBM Plex Mono", Consolas, monospace;' in css
     assert ".footer-hud-font" in css
+
+
+def test_project_artwork_uses_resilient_field_journal_frame(client):
+    homepage = client.get("/").get_data(as_text=True)
+    portfolio = client.get("/portfolio").get_data(as_text=True)
+    detail = client.get("/work/multi-channel-ai-messaging").get_data(as_text=True)
+
+    for html in (homepage, portfolio, detail):
+        assert "field-art" in html
+        assert "data-project-image" in html
+        assert "data-image-fallback" in html
+    assert 'aria-hidden="true"' in homepage
+    assert "SYSTEM MAP" in homepage
+
+
+def test_public_shell_loads_image_fallback_and_field_motifs(client):
+    javascript = client.get("/static/js/editorial-portfolio.js").get_data(as_text=True)
+    css = client.get("/static/css/editorial-portfolio.css").get_data(as_text=True)
+
+    assert 'document.querySelectorAll("[data-project-image]")' in javascript
+    assert 'image.addEventListener("error"' in javascript
+    assert ".field-art::before" in css
+    assert ".field-art::after" in css
+    assert ".section-head::after" in css
+    assert "@media (prefers-reduced-motion: reduce)" in css
 
 
 def test_public_shell_declares_the_branded_favicon(client):

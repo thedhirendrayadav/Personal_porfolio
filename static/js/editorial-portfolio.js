@@ -235,6 +235,14 @@
     updateWorkDeck();
   }
 
+  document.querySelectorAll("[data-project-image]").forEach((image) => {
+    image.addEventListener("error", () => {
+      image.hidden = true;
+      const fallback = image.parentElement?.querySelector("[data-image-fallback]");
+      if (fallback) fallback.hidden = false;
+    }, { once: true });
+  });
+
   const contactForm = document.querySelector("#contactFormEnhanced");
   const formStatus = document.querySelector("#formStatus");
   contactForm?.addEventListener("submit", async (event) => {

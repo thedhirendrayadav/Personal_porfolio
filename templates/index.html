@@ -26,14 +26,19 @@
     <div class="work-deck-cards">
     {% if featured_projects %}
       {% for project in featured_projects[:4] %}
-      <article class="case-study" data-work-card data-evidence="project" data-project-type="{{ project.project_type or 'web' }}">
-        <div class="case-media">{% if project.image_url %}<img src="{{ project.image_url }}" alt="Preview of {{ project.title }}" loading="lazy">{% else %}<div class="case-placeholder"><span>{{ '%02d'|format(loop.index) }}</span></div>{% endif %}</div>
-        <div class="case-copy"><div class="case-meta"><span class="meta">{{ '%02d'|format(loop.index) }} / {{ project.project_type or 'SYSTEM' }}</span><span class="meta">{{ (project.status or 'COMPLETED')|upper }}</span></div><h3>{{ project.title }}</h3><p>{{ project.description }}</p>{% if project.technologies %}<div class="button-row case-actions">{% for tech in project.technologies[:5] %}<span class="chip">{{ tech }}</span>{% endfor %}</div>{% endif %}<div class="button-row case-actions">{% if project.id %}<a class="button button-primary" href="{{ url_for('project_detail', project_id=project.id) }}">View case study ↗</a>{% endif %}{% if project.demo_url %}<a class="button" href="{{ project.demo_url }}" target="_blank" rel="noreferrer">Live system ↗</a>{% endif %}{% if project.github_url %}<a class="button" href="{{ project.github_url }}" target="_blank" rel="noreferrer">Source ↗</a>{% endif %}</div></div>
+      <article class="case-study" data-work-card data-reveal data-evidence="project" data-project-type="{{ project.project_type or 'web' }}">
+        <div class="case-media field-art">
+          <span class="field-art-label meta" data-field-mark aria-hidden="true">{{ '%02d'|format(loop.index) }} / SYSTEM MAP</span>
+          {% if project.image_url %}
+          <img data-project-image src="{% if project.image_url.startswith('static/') %}/{% endif %}{{ project.image_url }}" alt="Technical systems artwork for {{ project.title }}" width="{{ project.image_width or 1536 }}" height="{{ project.image_height or 1024 }}" loading="lazy">
+          <div class="case-placeholder" data-image-fallback hidden aria-hidden="true"><span>{{ '%02d'|format(loop.index) }}</span></div>
+          {% else %}
+          <div class="case-placeholder" data-image-fallback aria-hidden="true"><span>{{ '%02d'|format(loop.index) }}</span></div>
+          {% endif %}
+        </div>
+        <div class="case-copy"><div class="case-meta"><span class="meta">{{ '%02d'|format(loop.index) }} / {{ project.project_type or 'SYSTEM' }}</span><span class="meta">{{ (project.status or 'COMPLETED')|upper }}</span></div><h3>{{ project.title }}</h3><p>{{ project.description }}</p>{% if project.technologies %}<div class="button-row case-actions">{% for tech in project.technologies[:5] %}<span class="chip">{{ tech }}</span>{% endfor %}</div>{% endif %}<div class="button-row case-actions">{% if content_source == 'curated' %}<a class="button button-primary" href="{{ url_for('curated_project_detail', slug=project.slug) }}">View case study ↗</a>{% elif project.id %}<a class="button button-primary" href="{{ url_for('project_detail', project_id=project.id) }}">View case study ↗</a>{% endif %}{% if project.demo_url %}<a class="button" href="{{ project.demo_url }}" target="_blank" rel="noreferrer">Live system ↗</a>{% endif %}{% if project.github_url or project.repository_url %}<a class="button" href="{{ project.github_url or project.repository_url }}" target="_blank" rel="noreferrer">Source ↗</a>{% endif %}</div></div>
       </article>
       {% endfor %}
-    {% else %}
-      {% set fallbacks = [('Secure Operations Platform','Threat visibility, controlled access, and workflow automation for security teams.'),('AI Knowledge Assistant','Context-aware retrieval and automation designed for useful, accountable answers.'),('Enterprise Management Suite','A modular operations platform with reporting, roles, and reliable data flows.')] %}
-      {% for title, description in fallbacks %}<article class="case-study" data-work-card><div class="case-media"><div class="case-placeholder"><span>{{ '%02d'|format(loop.index) }}</span></div></div><div class="case-copy"><div class="case-meta"><span class="meta">{{ '%02d'|format(loop.index) }} / CONCEPT</span><span class="meta">CASE STUDY</span></div><h3>{{ title }}</h3><p>{{ description }}</p><div class="button-row case-actions"><a class="button" href="{{ url_for('portfolio') }}">View work ↗</a></div></div></article>{% endfor %}
     {% endif %}
     </div>
     <div class="work-deck-footer" data-work-progress><span class="meta"><b data-work-index>01</b> / <b data-work-total>{% if featured_projects %}{{ '%02d'|format(featured_projects[:4]|length) }}{% else %}03{% endif %}</b></span><span class="work-deck-ticks" aria-hidden="true">{% if featured_projects %}{% for project in featured_projects[:4] %}<i data-work-tick></i>{% endfor %}{% else %}{% for position in range(3) %}<i data-work-tick></i>{% endfor %}{% endif %}</span></div>

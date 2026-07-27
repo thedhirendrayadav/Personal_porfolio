@@ -3,19 +3,115 @@
 {% block description %}{{ project.description }}{% endblock %}
 {% block og_title %}{{ project.title }}{% endblock %}
 {% block og_description %}{{ project.description }}{% endblock %}
-{% block extra_head %}{% if project.image_url %}<meta property="og:image" content="{{ project.image_url }}">{% endif %}{% endblock %}
+{% block extra_head %}{% if project.image_url %}<meta property="og:image" content="{% if project.image_url.startswith('static/') %}/{% endif %}{{ project.image_url }}">{% endif %}{% endblock %}
 {% block content %}
 <article class="project-detail" data-section="00 — CASE STUDY">
   <header class="post-header editorial-grid">
     <nav class="post-breadcrumb meta" aria-label="Breadcrumb"><a href="{{ url_for('portfolio') }}">SELECTED WORK</a><span>/</span><span>{{ (project.project_type or 'SYSTEM')|upper }}</span></nav>
     <div class="post-heading"><p class="eyebrow accent">{{ (project.project_type or 'SYSTEM')|upper }} / {{ (project.status or 'COMPLETED')|upper }}</p><h1>{{ project.title }}</h1><p class="post-deck">{{ project.description }}</p></div>
     <div class="post-byline meta"><span>CASE STUDY</span>{% if project.technologies %}<span>{{ project.technologies|length }} TECHNOLOG{{ 'Y' if project.technologies|length == 1 else 'IES' }}</span>{% endif %}</div>
-    {% if project.image_url %}<figure class="post-image"><img src="{{ project.image_url }}" alt="Preview of {{ project.title }}"></figure>{% endif %}
+    {% if project.image_url %}<figure class="post-image field-art"><span class="field-art-label meta" data-field-mark aria-hidden="true">CASE FILE / SYSTEM MAP</span><img data-project-image src="{% if project.image_url.startswith('static/') %}/{% endif %}{{ project.image_url }}" alt="Technical systems artwork for {{ project.title }}" width="{{ project.image_width or 1536 }}" height="{{ project.image_height or 1024 }}"><div class="case-placeholder" data-image-fallback hidden aria-hidden="true"><span>00</span></div></figure>{% endif %}
   </header>
-  <section class="project-body editorial-grid" data-evidence="project">
-    <aside class="post-aside"><p class="meta">PROJECT PROFILE</p><p>{{ (project.project_type or 'System')|upper }}</p>{% if project.technologies %}<div class="tag-list">{% for technology in project.technologies %}<span class="chip">{{ technology }}</span>{% endfor %}</div>{% endif %}<div class="button-row case-actions">{% if project.demo_url %}<a class="button button-primary" href="{{ project.demo_url }}" target="_blank" rel="noreferrer">Live system ↗</a>{% endif %}{% if project.github_url %}<a class="button" href="{{ project.github_url }}" target="_blank" rel="noreferrer">Source ↗</a>{% endif %}<a class="button" href="{{ url_for('portfolio') }}">Back to work ←</a></div></aside>
-    <div class="project-summary">{% if project.long_description %}<p>{{ project.long_description }}</p>{% else %}<p>{{ project.description }}</p>{% endif %}</div>
+  <section class="project-body editorial-grid" data-evidence="project" data-reveal-root>
+    <aside class="post-aside">
+      <p class="meta">PROJECT PROFILE</p>
+      <p>{{ (project.project_type or 'System')|upper }}</p>
+      {% if project.technologies %}<div class="tag-list">{% for technology in project.technologies %}<span class="chip">{{ technology }}</span>{% endfor %}</div>{% endif %}
+      <div class="button-row case-actions">
+        {% if project.demo_url %}<a class="button button-primary" href="{{ project.demo_url }}" target="_blank" rel="noreferrer">Live system ↗</a>{% endif %}
+        {% if project.github_url or project.repository_url %}<a class="button" href="{{ project.github_url or project.repository_url }}" target="_blank" rel="noreferrer">Source ↗</a>{% endif %}
+        <a class="button" href="{{ url_for('portfolio') }}">Back to work ←</a>
+      </div>
+    </aside>
+    <div class="evidence-story">
+      {% if project.thesis or project.problem %}
+      <section class="evidence-section system-question" data-reveal aria-labelledby="system-question-title">
+        <p class="section-kicker accent">SYSTEM QUESTION</p>
+        {% if project.thesis %}<h2 id="system-question-title">{{ project.thesis }}</h2>{% endif %}
+        {% if project.problem %}<p>{{ project.problem }}</p>{% endif %}
+      </section>
+      {% endif %}
+
+      {% if project.role or project.scope %}
+      <section class="evidence-section" data-reveal aria-labelledby="role-scope-title">
+        <p class="section-kicker accent" id="role-scope-title">ROLE &amp; SCOPE</p>
+        <div class="evidence-pair">
+          {% if project.role %}<div><p class="meta">ROLE EVIDENCE</p><p>{{ project.role }}</p></div>{% endif %}
+          {% if project.scope %}<div><p class="meta">AUDITED SCOPE</p><p>{{ project.scope }}</p></div>{% endif %}
+        </div>
+      </section>
+      {% endif %}
+
+      {% if project.constraints %}
+      <section class="evidence-section constraint-note" data-reveal aria-labelledby="constraints-title">
+        <p class="section-kicker signal" id="constraints-title">CONSTRAINTS</p>
+        <p>{{ project.constraints }}</p>
+      </section>
+      {% endif %}
+
+      {% if project.architecture %}
+      <section class="evidence-section" data-reveal aria-labelledby="architecture-title">
+        <p class="section-kicker accent" id="architecture-title">ARCHITECTURE</p>
+        <ol class="architecture-flow">
+          {% for node in project.architecture %}
+          <li class="architecture-node" data-category="{{ node.category }}">
+            <span class="architecture-index meta">{{ '%02d'|format(loop.index) }}</span>
+            <div><p class="meta">{{ node.category }}</p><h3>{{ node.label }}</h3><p>{{ node.relationship }}</p><code>{{ node.source }}</code></div>
+          </li>
+          {% endfor %}
+        </ol>
+      </section>
+      {% endif %}
+
+      {% if project.trust_boundaries %}
+      <section class="evidence-section" data-reveal aria-labelledby="trust-title">
+        <p class="section-kicker signal" id="trust-title">TRUST BOUNDARIES</p>
+        <ol class="trust-boundary-list">
+          {% for boundary in project.trust_boundaries %}
+          <li class="trust-boundary"><span class="meta">BOUNDARY {{ '%02d'|format(loop.index) }}</span><h3>{{ boundary.name }}</h3><p>{{ boundary.crossing }}</p><code>{{ boundary.source }}</code></li>
+          {% endfor %}
+        </ol>
+      </section>
+      {% endif %}
+
+      {% if project.security_decisions %}
+      <section class="evidence-section" data-reveal aria-labelledby="security-title">
+        <p class="section-kicker accent" id="security-title">SECURITY DECISIONS</p>
+        <div class="security-matrix" role="table" aria-label="Security risks and controls">
+          <div class="security-matrix-head meta" role="row"><span role="columnheader">RISK</span><span role="columnheader">CONTROL</span><span role="columnheader">SOURCE</span></div>
+          {% for decision in project.security_decisions %}<div class="security-matrix-row" role="row"><p class="risk" role="cell">{{ decision.risk }}</p><p class="control" role="cell">{{ decision.control }}</p><code role="cell">{{ decision.source }}</code></div>{% endfor %}
+        </div>
+      </section>
+      {% endif %}
+
+      {% if project.evidence %}
+      <section class="evidence-section" data-reveal aria-labelledby="evidence-title">
+        <p class="section-kicker accent" id="evidence-title">IMPLEMENTATION EVIDENCE</p>
+        <ol class="evidence-ledger">
+          {% for item in project.evidence %}
+          <li><div class="evidence-stamp"><span class="meta accent">{{ item.type }}</span><code>{{ item.label }}</code></div><h3>{{ item.title }}</h3><p>{{ item.claim }}</p>{% if item.type == 'terminal' and item.excerpt %}<pre class="terminal-capture"><code>{{ item.excerpt }}</code></pre>{% endif %}{% if item.url %}<a class="button" href="{{ item.url }}" target="_blank" rel="noreferrer">Inspect evidence ↗</a>{% endif %}</li>
+          {% endfor %}
+        </ol>
+      </section>
+      {% endif %}
+
+      {% if project.outcomes %}
+      <section class="evidence-section" data-reveal aria-labelledby="outcomes-title">
+        <p class="section-kicker accent" id="outcomes-title">VERIFIED OUTCOMES</p>
+        <ol class="outcome-list">{% for outcome in project.outcomes %}<li><span aria-hidden="true">✓</span><p>{{ outcome.claim }}</p><code>{{ outcome.source }}</code></li>{% endfor %}</ol>
+      </section>
+      {% endif %}
+
+      {% if project.hardening %}
+      <section class="evidence-section" data-reveal aria-labelledby="hardening-title">
+        <p class="section-kicker signal" id="hardening-title">OPEN HARDENING</p>
+        <ol class="hardening-list">{% for item in project.hardening %}<li><span class="meta">{{ '%02d'|format(loop.index) }}</span><p>{{ item.item }}</p><code>{{ item.source }}</code></li>{% endfor %}</ol>
+      </section>
+      {% endif %}
+
+      {% if not project.thesis %}<div class="project-summary">{% if project.long_description %}<p>{{ project.long_description }}</p>{% else %}<p>{{ project.description }}</p>{% endif %}</div>{% endif %}
+    </div>
   </section>
 </article>
-{% if previous_project or next_project %}<nav class="project-navigation editorial-grid" aria-label="Project navigation">{% if previous_project %}<a class="button" href="{{ url_for('project_detail', project_id=previous_project.id) }}">Previous: {{ previous_project.title }} ←</a>{% else %}<span></span>{% endif %}{% if next_project %}<a class="button button-primary" href="{{ url_for('project_detail', project_id=next_project.id) }}">Next: {{ next_project.title }} ↗</a>{% endif %}</nav>{% endif %}
+{% if previous_project or next_project %}<nav class="project-navigation editorial-grid" aria-label="Project navigation">{% if previous_project %}<a class="button" href="{% if project_source == 'curated' %}{{ url_for('curated_project_detail', slug=previous_project.slug) }}{% else %}{{ url_for('project_detail', project_id=previous_project.id) }}{% endif %}">Previous: {{ previous_project.title }} ←</a>{% else %}<span></span>{% endif %}{% if next_project %}<a class="button button-primary" href="{% if project_source == 'curated' %}{{ url_for('curated_project_detail', slug=next_project.slug) }}{% else %}{{ url_for('project_detail', project_id=next_project.id) }}{% endif %}">Next: {{ next_project.title }} ↗</a>{% endif %}</nav>{% endif %}
 {% endblock %}
