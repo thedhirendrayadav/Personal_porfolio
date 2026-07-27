@@ -326,6 +326,17 @@ def test_homepage_hero_uses_depth_cutout_and_mission_brief_treatment(client):
     assert ".mission-brief" in css
 
 
+def test_homepage_hero_fits_window_and_separates_portrait_from_name(client):
+    html = client.get("/").get_data(as_text=True)
+    css = client.get("/static/css/editorial-portfolio.css").get_data(as_text=True)
+
+    assert 'class="hero-accent-depth"' in html
+    assert 'data-text="YADAV."' in html
+    assert ".hero-accent-depth::before" in css
+    assert ".home-hero { height: calc(100svh - var(--header-h) - 3rem);" in css
+    assert "max-width: 58%;" in css
+
+
 def test_title_derived_project_alias_redirects_to_stable_canonical_slug(client):
     response = client.get("/work/multi-channel-ai-messaging-platform")
 
