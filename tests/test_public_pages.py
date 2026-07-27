@@ -268,6 +268,12 @@ def test_public_shell_exposes_font_appearance_control(client):
     assert "Space+Grotesk" in html
     assert "Archivo" in html
     assert "Roboto+Mono" in html
+    assert "Barlow+Condensed" in html
+    assert "JetBrains+Mono" in html
+    assert "Space+Mono" in html
+    assert "Manrope" in html
+    assert "DM+Mono" in html
+    assert "Syne" in html
 
 
 def test_appearance_script_declares_curated_accent_and_font_allowlists(client):
@@ -291,9 +297,19 @@ def test_appearance_script_declares_curated_accent_and_font_allowlists(client):
         'id: "rubik"',
         'id: "space"',
         'id: "archivo"',
+        'id: "barlow"',
+        'id: "syne"',
+        'id: "manrope"',
         '"portfolio-font"',
     ):
         assert token in javascript
+
+
+def test_homepage_uses_the_dedicated_hero_portrait(client):
+    html = client.get("/").get_data(as_text=True)
+
+    assert 'src="/static/images/profile-hero.jpg' in html
+    assert 'src="/static/images/profile.png' in html
 
 
 def test_editorial_css_uses_variable_font_contract(client):

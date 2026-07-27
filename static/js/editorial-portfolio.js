@@ -115,6 +115,24 @@
       display: '"Archivo", Arial, sans-serif',
       mono: '"Roboto Mono", Consolas, monospace',
     },
+    {
+      id: "barlow",
+      label: "BARLOW",
+      display: '"Barlow Condensed", Arial, sans-serif',
+      mono: '"JetBrains Mono", Consolas, monospace',
+    },
+    {
+      id: "syne",
+      label: "SYNE",
+      display: '"Syne", Arial, sans-serif',
+      mono: '"Space Mono", Consolas, monospace',
+    },
+    {
+      id: "manrope",
+      label: "MANROPE",
+      display: '"Manrope", Arial, sans-serif',
+      mono: '"DM Mono", Consolas, monospace',
+    },
   ];
 
   const applyTheme = (theme) => {
