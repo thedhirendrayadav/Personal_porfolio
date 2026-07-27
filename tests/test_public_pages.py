@@ -235,11 +235,17 @@ def test_public_shell_uses_a_persistent_footer_hud_for_appearance_controls(clien
 
 def test_public_shell_uses_current_contact_address(client):
     html = client.get("/").get_data(as_text=True)
+    contact = client.get("/contact").get_data(as_text=True)
+    cv = client.get("/cv").get_data(as_text=True)
 
     assert "thedhirendrayadav@gmail.com" in html
     assert "THEDHIRENDRAYADAV@<br>GMAIL.COM" in html
     assert "Dhirendrayadav4999@gmail.com" not in html
     assert "DHIRENDRAYADAV4999@" not in html
+    assert "thedhirendrayadav@gmail.com" in contact
+    assert "Dhirendrayadav4999@gmail.com" not in contact
+    assert "thedhirendrayadav@gmail.com" in cv
+    assert "Dhirendrayadav4999@gmail.com" not in cv
 
 
 def test_public_shell_exposes_font_appearance_control(client):
