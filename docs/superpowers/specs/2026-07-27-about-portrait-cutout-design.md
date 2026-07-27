@@ -8,6 +8,12 @@ Replace the About portrait with the supplied full-body photograph while removing
 
 Use a transparent, identity-preserving full-body cutout. Place it in a dedicated About portrait component rather than reusing the generic tinted `portrait-treatment`.
 
+### Revision: supplied `dhirendra.jpg`
+
+Replace the About cutout source with `dhirendra.jpg`. Preserve its natural head-and-torso crop, face, glasses, hair, scarf, and checkered shirt while removing the outdoor background. Keep the existing technical plate and do not reuse this asset in the landing hero.
+
+Increase the landing hero portrait plate and cutout together by a small amount on desktop only, while retaining clear horizontal separation from the 3D name.
+
 ## Composition
 
 - Keep the complete person visible from hair to shoes.
