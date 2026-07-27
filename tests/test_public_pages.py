@@ -309,7 +309,22 @@ def test_homepage_uses_the_dedicated_hero_portrait(client):
     html = client.get("/").get_data(as_text=True)
 
     assert 'src="/static/images/profile-hero-cutout.png' in html
-    assert 'src="/static/images/profile.png' in html
+    assert 'src="/static/images/profile-about-cutout.png' in html
+
+
+def test_about_surfaces_use_the_separated_full_body_cutout(client):
+    homepage = client.get("/").get_data(as_text=True)
+    about_page = client.get("/about").get_data(as_text=True)
+    css = client.get("/static/css/editorial-portfolio.css").get_data(as_text=True)
+    asset = client.get("/static/images/profile-about-cutout.png")
+
+    assert asset.status_code == 200
+    for html in (homepage, about_page):
+        assert 'class="portrait-treatment about-portrait-cutout"' in html
+        assert 'src="/static/images/profile-about-cutout.png' in html
+        assert 'alt="Portrait of Dhirendra Yadav"' in html
+    assert ".about-portrait-cutout::before" in css
+    assert ".about-portrait-cutout::after" in css
 
 
 def test_homepage_hero_uses_depth_cutout_and_mission_brief_treatment(client):
@@ -451,7 +466,7 @@ def test_homepage_has_editorial_sections_and_accessible_portrait(client):
 
     for section_id in ("intro", "work", "expertise", "writing", "lab", "about", "contact"):
         assert f'id="{section_id}"' in html
-    assert 'src="/static/images/profile.png' in html
+    assert 'src="/static/images/profile-about-cutout.png' in html
     assert 'alt="Portrait of Dhirendra Yadav"' in html
 
 
