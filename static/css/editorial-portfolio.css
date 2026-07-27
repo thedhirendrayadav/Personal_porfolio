@@ -449,6 +449,7 @@
     *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
     [data-reveal] { opacity: 1; transform: none; }
     .hero-name-depth { transform: none; }
+    .hero-portrait-cutout img { transform: none; }
     .about-portrait-cutout img { filter: grayscale(.82) contrast(1.12); }
     .field-art img { transform: none !important; }
     .capability-row,
@@ -543,6 +544,8 @@
     position: relative; z-index: 2; object-fit: contain; object-position: center bottom;
     filter: grayscale(.82) contrast(1.1) drop-shadow(10px 8px 0 color-mix(in srgb, var(--accent) 52%, transparent));
     mix-blend-mode: normal;
+    transform: scale(1.16);
+    transform-origin: center bottom;
   }
   .hero-bottom { position: relative; z-index: 3; display: grid; grid-template-columns: minmax(18rem, 34rem) auto; align-items: end; justify-content: space-between; gap: 2rem; }
   .mission-brief {
@@ -724,6 +727,7 @@
     .hero-display { align-items: end; min-height: 37rem; }
     .hero-display h1 { max-width: 100%; font-size: clamp(4.4rem, 18vw, 8rem); }
     .hero-portrait { width: 65%; height: 72%; opacity: .82; }
+    .hero-portrait-cutout img { transform: none; }
     .hero-bottom, .about-split, .about-profile { grid-template-columns: 1fr; }
     .mission-brief { max-width: 100%; }
     .about-portrait-cutout::before { inset: 6% -3% 3% 5%; }

@@ -351,6 +351,7 @@ def test_homepage_hero_fits_window_and_separates_portrait_from_name(client):
     assert ".home-hero { height: calc(100svh - var(--header-h) - 3rem);" in css
     assert "max-width: 58%;" in css
     assert ".hero-portrait { position: absolute; inset: 0 0 0 auto; width: min(39vw, 34rem);" in css
+    assert "transform: scale(1.16);" in css
 
 
 def test_title_derived_project_alias_redirects_to_stable_canonical_slug(client):
