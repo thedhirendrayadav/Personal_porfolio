@@ -114,18 +114,18 @@ def test_curated_projects_have_exact_unique_valid_slugs_and_required_fields():
 
 def test_curated_projects_reference_field_journal_artwork():
     expected = {
-        "multi-channel-ai-messaging": "static/images/projects/multi-channel-ai-messaging-field-journal.png",
-        "nepse-market-intelligence": "static/images/projects/nepse-market-intelligence-field-journal.png",
-        "secure-portfolio-platform": "static/images/projects/secure-portfolio-platform-field-journal.png",
-        "runpod-media-orchestrator": "static/images/projects/runpod-media-orchestrator-field-journal.png",
-        "hotmail-automation": "static/images/projects/hotmail-automation-field-journal.png",
-        "erp-system": "static/images/projects/erp-system-field-journal.png",
-        "school-management": "static/images/projects/school-management-field-journal.png",
-        "restaurant-management": "static/images/projects/restaurant-management-field-journal.png",
-        "attendance-management": "static/images/projects/attendance-management-field-journal.png",
-        "accounting-software": "static/images/projects/accounting-software-field-journal.png",
-        "billing-software": "static/images/projects/billing-software-field-journal.png",
-        "staff-management-system": "static/images/projects/staff-management-system-field-journal.png",
+        "multi-channel-ai-messaging": "static/images/projects/multi-channel-ai-messaging-field-journal.webp",
+        "nepse-market-intelligence": "static/images/projects/nepse-market-intelligence-field-journal.webp",
+        "secure-portfolio-platform": "static/images/projects/secure-portfolio-platform-field-journal.webp",
+        "runpod-media-orchestrator": "static/images/projects/runpod-media-orchestrator-field-journal.webp",
+        "hotmail-automation": "static/images/projects/hotmail-automation-field-journal.webp",
+        "erp-system": "static/images/projects/erp-system-field-journal.webp",
+        "school-management": "static/images/projects/school-management-field-journal.webp",
+        "restaurant-management": "static/images/projects/restaurant-management-field-journal.webp",
+        "attendance-management": "static/images/projects/attendance-management-field-journal.webp",
+        "accounting-software": "static/images/projects/accounting-software-field-journal.webp",
+        "billing-software": "static/images/projects/billing-software-field-journal.webp",
+        "staff-management-system": "static/images/projects/staff-management-system-field-journal.webp",
     }
 
     projects = load_curated_projects()

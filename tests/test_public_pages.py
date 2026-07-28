@@ -128,7 +128,7 @@ def test_curated_project_slug_route_and_shared_404(client):
 
 
 def test_curated_media_urls_render_from_static_root(client):
-    asset_url = "/static/images/projects/secure-portfolio-platform-field-journal.png"
+    asset_url = "/static/images/projects/secure-portfolio-platform-field-journal.webp"
 
     assert f'src="{asset_url}"' in client.get("/").get_data(as_text=True)
     assert f'src="{asset_url}"' in client.get(
@@ -265,15 +265,10 @@ def test_public_shell_exposes_font_appearance_control(client):
     assert 'data-font-cycle' in html
     assert 'data-font-value' in html
     assert 'aria-label="Cycle the site font pairing"' in html
-    assert "Space+Grotesk" in html
-    assert "Archivo" in html
-    assert "Roboto+Mono" in html
-    assert "Barlow+Condensed" in html
-    assert "JetBrains+Mono" in html
-    assert "Space+Mono" in html
-    assert "Manrope" in html
-    assert "DM+Mono" in html
-    assert "Syne" in html
+    assert "family=IBM+Plex+Mono" in html
+    assert "family=Rubik" in html
+    assert "Space+Grotesk" not in html
+    assert "Barlow+Condensed" not in html
 
 
 def test_appearance_script_declares_curated_accent_and_font_allowlists(client):
@@ -308,23 +303,23 @@ def test_appearance_script_declares_curated_accent_and_font_allowlists(client):
 def test_homepage_uses_the_dedicated_hero_portrait(client):
     html = client.get("/").get_data(as_text=True)
 
-    assert 'src="/static/images/profile-hero-cutout.png' in html
-    assert 'src="/static/images/profile-about-cutout.png' in html
+    assert 'src="/static/images/profile-hero-cutout.webp' in html
+    assert 'src="/static/images/profile-about-cutout.webp' in html
 
 
 def test_about_surfaces_use_the_separated_full_body_cutout(client):
     homepage = client.get("/").get_data(as_text=True)
     about_page = client.get("/about").get_data(as_text=True)
     css = client.get("/static/css/editorial-portfolio.css").get_data(as_text=True)
-    asset = client.get("/static/images/profile-about-cutout.png")
-    full_asset = client.get("/static/images/profile-about-full.png")
+    asset = client.get("/static/images/profile-about-cutout.webp")
+    full_asset = client.get("/static/images/profile-about-full.webp")
 
     assert asset.status_code == 200
     assert full_asset.status_code == 200
     assert 'class="portrait-treatment about-portrait-cutout"' in homepage
-    assert 'src="/static/images/profile-about-cutout.png' in homepage
+    assert 'src="/static/images/profile-about-cutout.webp' in homepage
     assert 'class="portrait-treatment about-portrait-cutout"' in about_page
-    assert 'src="/static/images/profile-about-full.png' in about_page
+    assert 'src="/static/images/profile-about-full.webp' in about_page
     for html in (homepage, about_page):
         assert 'alt="Portrait of Dhirendra Yadav"' in html
     assert ".about-portrait-cutout::before" in css
@@ -467,12 +462,48 @@ def test_public_shell_declares_the_branded_favicon(client):
     assert 'rel="apple-touch-icon" href="/static/svg/favicon.svg"' in html
 
 
+def test_indexable_pages_have_unique_search_intent_metadata(client):
+    expected = {
+        "/": ("Cybersecurity & AI Engineer in Nepal", "cybersecurity engineer Nepal"),
+        "/about": ("About Dhirendra Yadav", "cybersecurity engineer Bhaktapur"),
+        "/portfolio": ("Cybersecurity, AI & Python Projects", "Python automation projects"),
+        "/skills": ("Cybersecurity, AI/ML & Python Skills", "Python Flask developer"),
+        "/contact": ("Contact a Cybersecurity & AI Engineer", "hire cybersecurity engineer Nepal"),
+        "/faq": ("Cybersecurity & AI Engineering FAQ", "cybersecurity engineer FAQ"),
+        "/blog": ("Cybersecurity, AI & Systems Engineering Blog", "cybersecurity blog Nepal"),
+    }
+
+    titles = set()
+    descriptions = set()
+    for path, (title_fragment, keyword_fragment) in expected.items():
+        response = client.get(path)
+        assert response.status_code == 200
+        html = response.get_data(as_text=True)
+        assert title_fragment in html
+        assert keyword_fragment in html
+        assert '<link rel="canonical" href="https://www.dhirendrayadav.site' in html
+        title = html.split("<title>", 1)[1].split("</title>", 1)[0]
+        description = html.split('<meta name="description" content="', 1)[1].split('">', 1)[0]
+        assert title not in titles
+        assert description not in descriptions
+        titles.add(title)
+        descriptions.add(description)
+
+
+def test_non_content_pages_are_not_indexable(client):
+    not_found = client.get("/definitely-missing").get_data(as_text=True)
+    search = client.get("/blog/search?q=security").get_data(as_text=True)
+
+    assert '<meta name="robots" content="noindex, follow, noarchive">' in not_found
+    assert '<meta name="robots" content="noindex, follow, noarchive">' in search
+
+
 def test_homepage_has_editorial_sections_and_accessible_portrait(client):
     html = client.get("/").get_data(as_text=True)
 
     for section_id in ("intro", "work", "expertise", "writing", "lab", "about", "contact"):
         assert f'id="{section_id}"' in html
-    assert 'src="/static/images/profile-about-cutout.png' in html
+    assert 'src="/static/images/profile-about-cutout.webp' in html
     assert 'alt="Portrait of Dhirendra Yadav"' in html
 
 

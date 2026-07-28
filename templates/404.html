@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 {% block title %}Page Not Found — Dhirendra Yadav{% endblock %}
-{% block description %}The requested page could not be found.{% endblock %}
+{% block description %}The requested page could not be found on Dhirendra Yadav's portfolio.{% endblock %}
+{% block robots %}noindex, follow, noarchive{% endblock %}
 {% block content %}
 <section class="error-page editorial-grid" data-section="404 — NOT FOUND"><p class="eyebrow signal">NAVIGATION ERROR / 404</p><div class="error-code" aria-hidden="true"><span class="outline-text">4</span><span>0</span><span class="outline-text">4</span></div><div class="error-copy"><h1>Page not found.</h1><p>The address may be outdated, or the page may have moved. The main routes are still within reach.</p><div class="button-row"><a class="button button-primary" href="{{ url_for('index') }}">Return home ←</a><a class="button" href="{{ url_for('portfolio') }}">View selected work ↗</a><a class="button" href="{{ url_for('contact') }}">Report the issue ↗</a></div></div></section>
 {% endblock %}

@@ -1,6 +1,7 @@
 {% extends "base.html" %}
-{% block title %}Dhirendra Yadav — Cybersecurity · AI/ML · Systems{% endblock %}
-{% block description %}Portfolio of Dhirendra Yadav: secure automation, AI/ML systems, and practical digital products.{% endblock %}
+{% block title %}Cybersecurity & AI Engineer in Nepal | Dhirendra Yadav{% endblock %}
+{% block description %}Dhirendra Yadav is a cybersecurity and AI engineer in Bhaktapur, Nepal, building secure automation, Python applications, AI/ML workflows, and practical digital systems.{% endblock %}
+{% block keywords %}cybersecurity engineer Nepal, AI engineer Nepal, Python developer Nepal, secure automation, machine learning engineer, Dhirendra Yadav{% endblock %}
 {% block og_title %}Dhirendra Yadav — Cybersecurity, AI/ML & Secure Automation{% endblock %}
 {% block og_description %}Security-first platforms, intelligent automation, and practical systems engineering from Bhaktapur, Nepal.{% endblock %}
 {% block content %}
@@ -12,7 +13,7 @@
   <div class="hero-display" data-reveal>
     <h1><span class="outline-text hero-name-depth" data-text="DHIRENDRA">DHIRENDRA</span><strong class="hero-accent-depth" data-text="YADAV.">YADAV.</strong></h1>
     <figure class="hero-portrait hero-portrait-cutout portrait-treatment">
-      <img src="{{ url_for('static', filename='images/profile-hero-cutout.png', v=asset_version) }}" alt="Portrait of Dhirendra Yadav">
+      <img src="{{ url_for('static', filename='images/profile-hero-cutout.webp', v=asset_version) }}" alt="Portrait of Dhirendra Yadav" width="1086" height="1448" fetchpriority="high" decoding="async">
     </figure>
   </div>
   <div class="hero-bottom" data-reveal>
@@ -32,7 +33,7 @@
         <div class="case-media field-art">
           <span class="field-art-label meta" data-field-mark aria-hidden="true">{{ '%02d'|format(loop.index) }} / SYSTEM MAP</span>
           {% if project.image_url %}
-          <img data-project-image src="{% if project.image_url.startswith('static/') %}/{% endif %}{{ project.image_url }}" alt="Technical systems artwork for {{ project.title }}" width="{{ project.image_width or 1536 }}" height="{{ project.image_height or 1024 }}" loading="lazy">
+          <img data-project-image src="{% if project.image_url.startswith('static/') %}/{% endif %}{{ project.image_url }}" alt="Technical systems artwork for {{ project.title }}" width="{{ project.image_width or 1536 }}" height="{{ project.image_height or 1024 }}" loading="lazy" decoding="async">
           <div class="case-placeholder" data-image-fallback hidden aria-hidden="true"><span>{{ '%02d'|format(loop.index) }}</span></div>
           {% else %}
           <div class="case-placeholder" data-image-fallback aria-hidden="true"><span>{{ '%02d'|format(loop.index) }}</span></div>
@@ -92,7 +93,7 @@
 
 <section class="editorial-section editorial-grid about-preview" id="about" data-section="05 — ABOUT">
   <div class="section-head"><p class="section-kicker accent">05 / ABOUT</p><h2>Curiosity turned into systems.</h2><p>A BSc IT graduate focused on cybersecurity and intelligent software, based in Nepal and building for real operational needs.</p></div>
-  <div class="about-split"><div class="portrait-treatment about-portrait-cutout"><img src="{{ url_for('static', filename='images/profile-about-cutout.png', v=asset_version) }}" alt="Portrait of Dhirendra Yadav" loading="lazy"></div><div><p class="about-lead">I approach technology as both an engineering discipline and a way to make complex work clearer, safer, and more effective.</p><div class="button-row"><a class="button" href="{{ url_for('about') }}">Read my story ↗</a><a class="button" href="{{ url_for('download_cv') }}">Download CV ↓</a></div></div></div>
+  <div class="about-split"><div class="portrait-treatment about-portrait-cutout"><img src="{{ url_for('static', filename='images/profile-about-cutout.webp', v=asset_version) }}" alt="Portrait of Dhirendra Yadav" width="1200" height="1200" loading="lazy" decoding="async"></div><div><p class="about-lead">I approach technology as both an engineering discipline and a way to make complex work clearer, safer, and more effective.</p><div class="button-row"><a class="button" href="{{ url_for('about') }}">Read my story ↗</a><a class="button" href="{{ url_for('download_cv') }}">Download CV ↓</a></div></div></div>
 </section>
 
 <section class="landmark" id="contact" data-section="06 — CONTACT"><h2><span class="outline-text">LET'S BUILD</span> <span class="accent">BETTER.</span></h2></section>

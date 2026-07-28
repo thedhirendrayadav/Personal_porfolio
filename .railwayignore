@@ -1,0 +1,15 @@
+.env*
+.venv/
+venv/
+__pycache__/
+.git/
+.worktrees/
+.tmp*/
+htmlcov/
+.pytest_cache/
+.pytest-*/
+.superpowers/
+apex_redirect/
+design-reference/
+docs/
+reports/

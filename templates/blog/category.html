@@ -1,6 +1,7 @@
 {% extends "base.html" %}
-{% block title %}{{ category_name }} — Field Notes{% endblock %}
-{% block description %}Articles filed under {{ category_name }} by Dhirendra Yadav.{% endblock %}
+{% block title %}{{ category_name }} Articles & Field Notes | Dhirendra Yadav{% endblock %}
+{% block description %}Read practical {{ category_name }} articles, research, and engineering field notes by Dhirendra Yadav, a cybersecurity and AI engineer in Nepal.{% endblock %}
+{% block keywords %}{{ category_name }} articles, {{ category_name }} engineering, {{ category_name }} Nepal, Dhirendra Yadav field notes{% endblock %}
 {% block content %}
 <header class="page-hero editorial-grid category-hero" data-section="00 — CATEGORY"><p class="eyebrow accent">FIELD NOTES / CATEGORY</p><h1>{{ category_name }}.</h1><p>A focused archive of articles, research, and practical notes filed under {{ category_name.lower() }}.</p></header>
 <section class="editorial-section editorial-grid" data-section="01 — RESULTS"><div class="archive-heading"><a class="button" href="{{ url_for('blog') }}">All writing ←</a><p class="meta">{{ posts|length }} NOTE{{ '' if posts|length == 1 else 'S' }}</p></div>{% if posts %}{% for post in posts %}<a class="article-row" href="{{ url_for('blog_post', slug=post.slug) }}" data-reveal><span class="meta">{{ post.created_at.strftime('%d.%m.%Y') if post.created_at else 'UNDATED' }}</span><span><span class="meta accent">{{ post.category or category_name }} · {{ post.reading_time or 5 }} MIN</span><h3>{{ post.title }}</h3></span><span aria-hidden="true">↗</span></a>{% endfor %}{% else %}<div class="empty-state"><h2>No notes filed here yet.</h2><p>Return to the full archive to explore other topics.</p></div>{% endif %}</section>

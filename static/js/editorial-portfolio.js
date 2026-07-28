@@ -102,36 +102,42 @@
       label: "RUBIK",
       display: '"Rubik", Arial, sans-serif',
       mono: '"IBM Plex Mono", Consolas, monospace',
+      googleFamilies: [],
     },
     {
       id: "space",
       label: "SPACE",
       display: '"Space Grotesk", Arial, sans-serif',
       mono: '"IBM Plex Mono", Consolas, monospace',
+      googleFamilies: ["Space+Grotesk:wght@300..700"],
     },
     {
       id: "archivo",
       label: "ARCHIVO",
       display: '"Archivo", Arial, sans-serif',
       mono: '"Roboto Mono", Consolas, monospace',
+      googleFamilies: ["Archivo:wdth,wght@75..125,300..900", "Roboto+Mono:wght@400;500"],
     },
     {
       id: "barlow",
       label: "BARLOW",
       display: '"Barlow Condensed", Arial, sans-serif',
       mono: '"JetBrains Mono", Consolas, monospace',
+      googleFamilies: ["Barlow+Condensed:wght@300;400;500;600;700;800", "JetBrains+Mono:wght@400;500"],
     },
     {
       id: "syne",
       label: "SYNE",
       display: '"Syne", Arial, sans-serif',
       mono: '"Space Mono", Consolas, monospace',
+      googleFamilies: ["Syne:wght@400..800", "Space+Mono:wght@400;700"],
     },
     {
       id: "manrope",
       label: "MANROPE",
       display: '"Manrope", Arial, sans-serif',
       mono: '"DM Mono", Consolas, monospace',
+      googleFamilies: ["Manrope:wght@300..800", "DM+Mono:wght@400;500"],
     },
   ];
 
@@ -161,8 +167,18 @@
     store("portfolio-accent", activeAccent);
   });
 
+  const ensureFontLoaded = (preset) => {
+    if (!preset.googleFamilies.length || document.getElementById(`font-preset-${preset.id}`)) return;
+    const stylesheet = document.createElement("link");
+    stylesheet.id = `font-preset-${preset.id}`;
+    stylesheet.rel = "stylesheet";
+    stylesheet.href = `https://fonts.googleapis.com/css2?${preset.googleFamilies.map((family) => `family=${family}`).join("&")}&display=swap`;
+    document.head.append(stylesheet);
+  };
+
   const applyFont = (candidate) => {
     const preset = fontPresets.find(({ id }) => id === candidate) || fontPresets[0];
+    ensureFontLoaded(preset);
     document.documentElement.style.setProperty("--display", preset.display);
     document.documentElement.style.setProperty("--mono", preset.mono);
     document.documentElement.dataset.font = preset.id;

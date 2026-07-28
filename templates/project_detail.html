@@ -1,9 +1,10 @@
 {% extends "base.html" %}
 {% block title %}{{ project.title }} — Dhirendra Yadav{% endblock %}
 {% block description %}{{ project.description }}{% endblock %}
+{% block keywords %}{{ ((project.technologies | join(', ')) ~ ', ' if project.technologies else '') ~ (project.project_type or 'systems engineering') ~ ', project case study, Dhirendra Yadav' }}{% endblock %}
 {% block og_title %}{{ project.title }}{% endblock %}
 {% block og_description %}{{ project.description }}{% endblock %}
-{% block extra_head %}{% if project.image_url %}<meta property="og:image" content="{% if project.image_url.startswith('static/') %}/{% endif %}{{ project.image_url }}">{% endif %}{% endblock %}
+{% block extra_head %}{% if project.get('image_url') %}<meta property="og:image" content="{% if project.get('image_url').startswith('static/') %}{{ site_url }}/{% endif %}{{ project.get('image_url') }}">{% endif %}<script type="application/ld+json">{{ {'@context':'https://schema.org','@type':'CreativeWork','name':project.get('title',''),'description':project.get('description',''),'url':canonical_url,'author':{'@type':'Person','name':'Dhirendra Yadav','url':site_url ~ '/about'},'image':(site_url ~ '/' ~ project.get('image_url') if project.get('image_url') and project.get('image_url').startswith('static/') else project.get('image_url')),'keywords':(project.get('technologies') | join(', ') if project.get('technologies') else none),'genre':project.get('project_type') or 'Systems Engineering'} | tojson | safe }}</script>{% endblock %}
 {% block content %}
 <article class="project-detail" data-section="00 — CASE STUDY">
   <header class="post-header editorial-grid">

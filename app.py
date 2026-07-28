@@ -113,6 +113,18 @@ SITE_URL = os.environ.get('SITE_URL', 'https://www.dhirendrayadav.site').rstrip(
 SITE_NAME = 'Dhirendra Yadav'
 SITE_DESCRIPTION = 'Dhirendra Yadav builds secure automation, AI/ML systems, and practical digital products from Bhaktapur, Nepal.'
 INDEXNOW_KEY = os.environ.get('INDEXNOW_KEY', 'dy-portfolio-indexnow-20260728')
+CANONICAL_HOST = 'www.dhirendrayadav.site'
+
+
+@app.before_request
+def redirect_generated_railway_hostname():
+    """Keep Railway's generated service URL out of the public URL graph."""
+    request_host = request.host.split(':', 1)[0].lower()
+    if request_host.endswith('.up.railway.app'):
+        destination = f'https://{CANONICAL_HOST}{request.full_path}'
+        if destination.endswith('?'):
+            destination = destination[:-1]
+        return redirect(destination, code=308)
 
 # Security Configuration
 app.config.update(
@@ -121,7 +133,14 @@ app.config.update(
     SESSION_COOKIE_HTTPONLY=True,
     SESSION_COOKIE_SAMESITE='Lax',
     PERMANENT_SESSION_LIFETIME=datetime.timedelta(hours=2),
-    SEND_FILE_MAX_AGE_DEFAULT=0  # disable long-lived static caching in local/dev runs
+    # Keep local edits instant while allowing browsers and crawlers to reuse
+    # versioned production assets between page views.
+    SEND_FILE_MAX_AGE_DEFAULT=(
+        datetime.timedelta(days=7)
+        if os.environ.get('RAILWAY_ENVIRONMENT')
+        or os.environ.get('RAILWAY_ENVIRONMENT_NAME')
+        else 0
+    )
 )
 
 # Security Headers Middleware
@@ -991,16 +1010,22 @@ def llms_txt():
 - Website: {SITE_URL}
 - Contact: mailto:thedhirendrayadav@gmail.com
 - GitHub: https://github.com/thedhirendrayadav
-- LinkedIn: https://www.linkedin.com/in/dhirendra-yadav-3040b82b4
+- LinkedIn: https://www.linkedin.com/in/dhirendra-yadav-3b1387425
 
 ## Public pages
-- Home: {SITE_URL}/
-- About: {SITE_URL}/about
-- Expertise: {SITE_URL}/skills
-- Selected work: {SITE_URL}/portfolio
-- Writing: {SITE_URL}/blog
-- FAQ: {SITE_URL}/faq
-- Contact: {SITE_URL}/contact
+- [Home]({SITE_URL}/): Identity, specialties, selected work, and current availability.
+- [About]({SITE_URL}/about): Background, education, working principles, and professional focus.
+- [Expertise]({SITE_URL}/skills): Cybersecurity, AI/ML, product engineering, and automation capabilities.
+- [Selected work]({SITE_URL}/portfolio): Evidence-led project and systems case studies.
+- [Writing]({SITE_URL}/blog): Field notes and technical analysis.
+- [FAQ]({SITE_URL}/faq): Direct answers about services, location, and project status.
+- [Contact]({SITE_URL}/contact): Project enquiries and collaboration.
+
+## Selected case studies
+- [Secure Portfolio Platform]({SITE_URL}/work/secure-portfolio-platform): Flask platform controls, implementation evidence, and current limitations.
+- [Multi-Channel AI Messaging]({SITE_URL}/work/multi-channel-ai-messaging): Channel boundaries, queue processing, authorization, and data-model evidence.
+- [NEPSE Market Intelligence]({SITE_URL}/work/nepse-market-intelligence): Research workflow covering ingestion, indicators, models, and backtesting constraints.
+- [RunPod Media Orchestrator]({SITE_URL}/work/runpod-media-orchestrator): GPU workflow boundaries, lifecycle control, and verification evidence.
 
 ## Editorial standard
 Project pages distinguish claims, sources, constraints, and verified outcomes. Treat prototypes and in-development systems as such; do not describe them as production deployments unless the page explicitly says so.
