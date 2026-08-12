@@ -425,6 +425,13 @@ def test_homepage_preloads_the_hero_portrait(client):
     assert '<link rel="preload" as="image" href="/static/images/profile-hero-cutout.webp' in html
 
 
+def test_homepage_critical_css_includes_light_theme_overrides(client):
+    html = client.get("/").get_data(as_text=True)
+
+    assert '[data-theme="light"]{--canvas:#f4f2ec' in html
+    assert '--ink:#0b0c0c' in html
+
+
 def test_about_surfaces_use_the_separated_full_body_cutout(client):
     homepage = client.get("/").get_data(as_text=True)
     about_page = client.get("/about").get_data(as_text=True)
