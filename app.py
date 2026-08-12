@@ -18,6 +18,8 @@ import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 from functools import wraps
+from werkzeug.exceptions import NotFound
+from werkzeug.routing import RequestRedirect
 from config import APP_CONFIG, ADMIN_CONFIG, EMAIL_CONFIG
 from unified_models import ProjectModel, CategoryModel, BlogModel, ContactModel
 from database import db
@@ -26,6 +28,7 @@ from project_content import (
     get_curated_project,
     load_curated_projects,
 )
+from field_notes import get_curated_field_notes
 from slug_utils import slugify_text
 
 
@@ -125,6 +128,25 @@ def redirect_generated_railway_hostname():
         if destination.endswith('?'):
             destination = destination[:-1]
         return redirect(destination, code=308)
+
+
+@app.before_request
+def redirect_noncanonical_trailing_slash():
+    """Redirect valid inner routes to their slashless canonical paths."""
+    path = request.path or "/"
+    if path == "/" or not path.endswith("/"):
+        return None
+
+    canonical_path = path.rstrip("/")
+    adapter = app.url_map.bind_to_environ(request.environ)
+    try:
+        adapter.match(canonical_path, method=request.method)
+    except (NotFound, RequestRedirect):
+        return None
+
+    query = request.query_string.decode("utf-8")
+    location = canonical_path if not query else f"{canonical_path}?{query}"
+    return redirect(location, code=308)
 
 # Security Configuration
 app.config.update(
@@ -646,18 +668,55 @@ def faq():
 # BLOG ROUTES
 # ===================================
 
+def get_public_field_notes(limit=None, offset=0):
+    """Return database posts, falling back to the curated evidence-led notes."""
+    try:
+        posts = BlogModel().get_all_posts(status='published', limit=limit, offset=offset)
+    except Exception:
+        posts = []
+    return posts or get_curated_field_notes()[offset:offset + limit if limit else None]
+
+
+def get_public_recent_field_notes(limit=5):
+    try:
+        posts = BlogModel().get_recent_posts(limit=limit)
+    except Exception:
+        posts = []
+    return posts or get_curated_field_notes()[:limit]
+
+
+def get_public_featured_field_notes(limit=3):
+    """Return featured database posts without making the public archive DB-dependent."""
+    try:
+        posts = BlogModel().get_featured_posts(limit=limit)
+    except Exception:
+        posts = []
+    return posts or [post for post in get_curated_field_notes() if post['featured']][:limit]
+
+
+def get_public_categories():
+    try:
+        categories = BlogModel().get_categories()
+    except Exception:
+        categories = []
+    if categories:
+        return categories
+    return [
+        {'name': category, 'slug': category.lower().replace(' ', '-')}
+        for category in sorted({post['category'] for post in get_curated_field_notes()})
+    ]
+
 @app.route("/blog")
 def blog():
     """Blog listing page"""
-    blog_model = BlogModel()
     page = request.args.get('page', 1, type=int)
     per_page = 6
     offset = (page - 1) * per_page
     
-    posts = blog_model.get_all_posts(limit=per_page, offset=offset)
-    featured_posts = blog_model.get_featured_posts(limit=3)
-    categories = blog_model.get_categories()
-    recent_posts = blog_model.get_recent_posts(limit=5)
+    posts = get_public_field_notes(limit=per_page, offset=offset)
+    featured_posts = get_public_featured_field_notes(limit=3)
+    categories = get_public_categories()
+    recent_posts = get_public_recent_field_notes(limit=5)
     
     return render_template("blog/index.html", 
                          app_name=APP_CONFIG["name"],
@@ -671,18 +730,33 @@ def blog():
 def blog_post(slug):
     """Individual blog post page"""
     blog_model = BlogModel()
-    post = blog_model.get_post_by_slug(slug)
+    try:
+        post = blog_model.get_post_by_slug(slug)
+    except Exception:
+        post = None
+    if not post:
+        post = next((candidate for candidate in get_curated_field_notes() if candidate['slug'] == slug), None)
     
     if not post:
         return render_template('404.html', app_name=APP_CONFIG["name"]), 404
     
     # Increment views
-    blog_model.increment_views(post['id'])
+    if post.get('source') != 'curated':
+        try:
+            blog_model.increment_views(post['id'])
+        except Exception:
+            pass
     
     # Get related posts
-    related_posts = blog_model.get_posts_by_category(post['category'], limit=3)
-    recent_posts = blog_model.get_recent_posts(limit=5)
-    categories = blog_model.get_categories()
+    if post.get('source') == 'curated':
+        related_posts = [candidate for candidate in get_curated_field_notes() if candidate['category'] == post['category']]
+    else:
+        try:
+            related_posts = blog_model.get_posts_by_category(post['category'], limit=3)
+        except Exception:
+            related_posts = []
+    recent_posts = get_public_recent_field_notes(limit=5)
+    categories = get_public_categories()
     
     return render_template("blog/post.html",
                          app_name=APP_CONFIG["name"],
@@ -695,9 +769,14 @@ def blog_post(slug):
 def blog_category(category_slug):
     """Blog posts by category"""
     blog_model = BlogModel()
-    posts = blog_model.get_posts_by_category(category_slug)
-    categories = blog_model.get_categories()
-    recent_posts = blog_model.get_recent_posts(limit=5)
+    try:
+        posts = blog_model.get_posts_by_category(category_slug)
+    except Exception:
+        posts = []
+    if not posts:
+        posts = [post for post in get_curated_field_notes() if post['category'].lower().replace(' ', '-') == category_slug]
+    categories = get_public_categories()
+    recent_posts = get_public_recent_field_notes(limit=5)
     
     # Find category name
     category_name = category_slug.replace('-', ' ').title()
@@ -717,12 +796,20 @@ def blog_search():
     blog_model = BlogModel()
     
     if query:
-        posts = blog_model.search_posts(query)
+        try:
+            posts = blog_model.search_posts(query)
+        except Exception:
+            posts = []
+        if not posts:
+            posts = [
+                post for post in get_curated_field_notes()
+                if query.lower() in f"{post['title']} {post['excerpt']} {post['content']}".lower()
+            ]
     else:
         posts = []
     
-    categories = blog_model.get_categories()
-    recent_posts = blog_model.get_recent_posts(limit=5)
+    categories = get_public_categories()
+    recent_posts = get_public_recent_field_notes(limit=5)
     
     return render_template("blog/search.html",
                          app_name=APP_CONFIG["name"],
@@ -966,31 +1053,77 @@ Sitemap: {SITE_URL}/sitemap.xml
     return Response(body, mimetype='text/plain')
 
 
+def normalize_sitemap_date(value, fallback):
+    """Return an ISO calendar date without using the request date."""
+    if value is None:
+        return fallback
+    if hasattr(value, 'date') and not isinstance(value, str):
+        value = value.date()
+    candidate = str(value)[:10]
+    try:
+        return datetime.date.fromisoformat(candidate).isoformat()
+    except ValueError:
+        return fallback
+
+
 @app.route('/sitemap.xml')
 def sitemap_xml():
     """Generate a discoverable sitemap from public routes and content."""
+    release_date = '2026-07-28'
+    route_dates = {
+        '/': release_date,
+        '/about': release_date,
+        '/skills': release_date,
+        '/portfolio': release_date,
+        '/contact': release_date,
+        '/blog': release_date,
+        '/faq': release_date,
+    }
     urls = [
-        ('/', '1.0'), ('/about', '0.8'), ('/skills', '0.8'),
-        ('/portfolio', '0.9'), ('/contact', '0.7'), ('/blog', '0.8'),
-        ('/faq', '0.6'),
+        ('/', '1.0', route_dates['/']),
+        ('/about', '0.8', route_dates['/about']),
+        ('/skills', '0.8', route_dates['/skills']),
+        ('/portfolio', '0.9', route_dates['/portfolio']),
+        ('/contact', '0.7', route_dates['/contact']),
+        ('/blog', '0.8', route_dates['/blog']),
+        ('/faq', '0.6', route_dates['/faq']),
     ]
     try:
-        urls.extend((f"/work/{project['slug']}", '0.7') for project in load_curated_projects())
+        urls.extend(
+            (
+                f"/work/{project['slug']}",
+                '0.7',
+                normalize_sitemap_date(project.get('updated_at'), release_date),
+            )
+            for project in load_curated_projects()
+        )
     except Exception:
         pass
     try:
-        posts = BlogModel().get_all_posts(status='published', limit=200, offset=0)
-        urls.extend((f"/blog/{post['slug']}", '0.7') for post in posts if post.get('slug'))
+        posts = get_public_field_notes(limit=200, offset=0)
+        urls.extend(
+            (
+                f"/blog/{post['slug']}",
+                '0.7',
+                normalize_sitemap_date(
+                    post.get('updated_at') or post.get('created_at'),
+                    release_date,
+                ),
+            )
+            for post in posts
+            if post.get('slug')
+        )
     except Exception:
         pass
     # Deduplicate routes so crawlers receive one canonical URL per resource.
     unique_urls = {}
-    for path, priority in urls:
-        unique_urls[path] = max(priority, unique_urls.get(path, '0.0'))
-    lastmod = datetime.date.today().isoformat()
+    for path, priority, lastmod in urls:
+        previous = unique_urls.get(path)
+        if previous is None or priority > previous[0]:
+            unique_urls[path] = (priority, lastmod)
     entries = ''.join(
         f'<url><loc>{SITE_URL}{path}</loc><lastmod>{lastmod}</lastmod><changefreq>monthly</changefreq><priority>{priority}</priority></url>'
-        for path, priority in unique_urls.items()
+        for path, (priority, lastmod) in unique_urls.items()
     )
     xml = f'<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">{entries}</urlset>'
     return Response(xml, mimetype='application/xml')
@@ -1073,10 +1206,7 @@ def indexnow_key_file():
 @app.route('/feed.xml')
 def feed_xml():
     """RSS feed for published field notes."""
-    try:
-        posts = BlogModel().get_all_posts(status='published', limit=20, offset=0)
-    except Exception:
-        posts = []
+    posts = get_public_field_notes(limit=20, offset=0)
     items = []
     for post in posts:
         slug = post.get('slug')

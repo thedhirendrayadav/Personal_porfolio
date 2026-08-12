@@ -417,7 +417,7 @@
     "slug": "runpod-media-orchestrator",
     "title": "RunPod Media Orchestrator",
     "short_title": "Media Orchestrator",
-    "description": "A prototype command-line workflow that provisions a RunPod GPU, transfers generated prompts, executes a remote media pipeline, retrieves an output, and terminates the pod.",
+    "description": "Prototype RunPod workflow for provisioning GPU compute, transferring prompts, running media jobs, retrieving outputs, and tearing down resources.",
     "project_type": "Automation Prototype",
     "status": "Prototype",
     "featured": true,

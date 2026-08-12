@@ -33,6 +33,12 @@
       </section>
       {% endif %}
 
+      <section class="evidence-section direct-answer" data-reveal aria-labelledby="direct-answer-title">
+        <p class="section-kicker accent">DIRECT ANSWER</p>
+        <h2 id="direct-answer-title">What does {{ project.title }} do?</h2>
+        <p>{{ project.description }}{% if project.problem %} It addresses {{ project.problem|lower }}{% endif %}</p>
+      </section>
+
       {% if project.role or project.scope %}
       <section class="evidence-section" data-reveal aria-labelledby="role-scope-title">
         <p class="section-kicker accent" id="role-scope-title">ROLE &amp; SCOPE</p>

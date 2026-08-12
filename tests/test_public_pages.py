@@ -1,5 +1,5 @@
 from contextlib import contextmanager
-from datetime import datetime
+from datetime import date, datetime
 
 import pytest
 from flask import template_rendered
@@ -40,6 +40,69 @@ def test_public_pages_render(client):
         assert response.status_code == 200, path
 
 
+@pytest.mark.parametrize(
+    ("source", "target"),
+    [
+        ("/about/", "/about"),
+        ("/skills/", "/skills"),
+        ("/portfolio/", "/portfolio"),
+        ("/faq/", "/faq"),
+        ("/work/secure-portfolio-platform/", "/work/secure-portfolio-platform"),
+    ],
+)
+def test_public_trailing_slash_redirects_to_canonical_path(client, source, target):
+    response = client.get(source, follow_redirects=False)
+
+    assert response.status_code == 308
+    assert response.headers["Location"].endswith(target)
+
+
+def test_homepage_does_not_redirect_as_a_trailing_slash_variant(client):
+    response = client.get("/", follow_redirects=False)
+
+    assert response.status_code == 200
+
+
+def test_sitemap_dates_are_stable_across_requests(client):
+    first = client.get("/sitemap.xml").get_data(as_text=True)
+    second = client.get("/sitemap.xml").get_data(as_text=True)
+
+    assert first == second
+    assert "<lastmod>" in first
+
+
+def test_sitemap_uses_blog_update_date(client, monkeypatch):
+    monkeypatch.setattr(
+        portfolio_app.BlogModel,
+        "get_all_posts",
+        lambda self, status="published", limit=200, offset=0: [
+            {
+                "slug": "secure-flask-response-headers",
+                "created_at": "2026-07-20T10:00:00+00:00",
+                "updated_at": "2026-07-27T12:30:00+00:00",
+            }
+        ],
+    )
+
+    xml = client.get("/sitemap.xml").get_data(as_text=True)
+
+    assert "<loc>https://www.dhirendrayadav.site/blog/secure-flask-response-headers</loc>" in xml
+    assert "<lastmod>2026-07-27</lastmod>" in xml
+
+
+def test_sitemap_does_not_assign_request_date_to_every_url(client, monkeypatch):
+    class FrozenDateReturning2026July29(date):
+        @classmethod
+        def today(cls):
+            return cls(2026, 7, 29)
+
+    monkeypatch.setattr(portfolio_app.datetime, "date", FrozenDateReturning2026July29)
+
+    xml = client.get("/sitemap.xml").get_data(as_text=True)
+
+    assert xml.count("<lastmod>2026-07-29</lastmod>") == 0
+
+
 def test_homepage_context_includes_featured_projects_and_recent_posts(client, monkeypatch):
     projects = [
         {
@@ -73,6 +136,55 @@ def test_homepage_context_includes_featured_projects_and_recent_posts(client, mo
     assert response.status_code == 200
     assert templates[0][1]["featured_projects"] == projects
     assert templates[0][1]["recent_posts"] == posts
+
+
+def test_blog_exposes_curated_field_notes_when_database_is_empty(client):
+    html = client.get("/blog").get_data(as_text=True)
+
+    assert "How a Flask portfolio platform separates public content from administration" in html
+    assert "What makes a prototype project page trustworthy?" in html
+
+
+def test_blog_falls_back_when_featured_database_query_fails(client, monkeypatch):
+    monkeypatch.setattr(
+        portfolio_app.BlogModel,
+        "get_featured_posts",
+        lambda self, limit=3: (_ for _ in ()).throw(RuntimeError("database unavailable")),
+    )
+
+    response = client.get("/blog")
+
+    assert response.status_code == 200
+    assert "How a Flask portfolio platform separates public content from administration" in response.get_data(as_text=True)
+
+
+def test_curated_blog_post_survives_database_lookup_failure(client, monkeypatch):
+    monkeypatch.setattr(
+        portfolio_app.BlogModel,
+        "get_post_by_slug",
+        lambda self, slug: (_ for _ in ()).throw(RuntimeError("database unavailable")),
+    )
+
+    response = client.get("/blog/flask-public-content-and-administration")
+
+    assert response.status_code == 200
+    assert "BlogPosting" in response.get_data(as_text=True)
+
+
+def test_curated_field_note_renders_as_a_blog_post(client):
+    response = client.get("/blog/flask-public-content-and-administration")
+
+    assert response.status_code == 200
+    html = response.get_data(as_text=True)
+    assert "How a Flask portfolio platform separates public content from administration" in html
+    assert "BlogPosting" in html
+
+
+def test_curated_field_notes_are_included_in_sitemap(client):
+    xml = client.get("/sitemap.xml").get_data(as_text=True)
+
+    assert "/blog/flask-public-content-and-administration" in xml
+    assert "/blog/trustworthy-prototype-project-pages" in xml
 
 
 def test_homepage_uses_curated_projects_when_database_is_empty(client):
@@ -307,6 +419,12 @@ def test_homepage_uses_the_dedicated_hero_portrait(client):
     assert 'src="/static/images/profile-about-cutout.webp' in html
 
 
+def test_homepage_preloads_the_hero_portrait(client):
+    html = client.get("/").get_data(as_text=True)
+
+    assert '<link rel="preload" as="image" href="/static/images/profile-hero-cutout.webp' in html
+
+
 def test_about_surfaces_use_the_separated_full_body_cutout(client):
     homepage = client.get("/").get_data(as_text=True)
     about_page = client.get("/about").get_data(as_text=True)
@@ -488,6 +606,21 @@ def test_indexable_pages_have_unique_search_intent_metadata(client):
         assert description not in descriptions
         titles.add(title)
         descriptions.add(description)
+
+
+def test_runpod_project_description_fits_search_snippet_length(client):
+    html = client.get("/work/runpod-media-orchestrator").get_data(as_text=True)
+    description = html.split('<meta name="description" content="', 1)[1].split('">', 1)[0]
+
+    assert len(description) <= 160
+
+
+def test_curated_project_pages_expose_question_led_direct_answers(client):
+    for project in portfolio_app.load_curated_projects():
+        html = client.get(f"/work/{project['slug']}").get_data(as_text=True)
+
+        assert f"What does {project['title']} do?" in html
+        assert project["description"] in html
 
 
 def test_non_content_pages_are_not_indexable(client):
