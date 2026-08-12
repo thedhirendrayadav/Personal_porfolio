@@ -40,6 +40,34 @@ def test_public_pages_render(client):
         assert response.status_code == 200, path
 
 
+def test_public_shell_exposes_cv_download_action(client):
+    for path in ("/", "/about", "/skills", "/contact"):
+        html = client.get(path).get_data(as_text=True)
+
+        assert 'href="/download-cv"' in html, path
+        assert "DOWNLOAD CV" in html, path
+
+
+def test_download_cv_returns_a_pdf_attachment(client):
+    response = client.get("/download-cv")
+
+    assert response.status_code == 200
+    assert response.mimetype == "application/pdf"
+    assert response.data.startswith(b"%PDF")
+    assert response.headers["Content-Disposition"] == 'attachment; filename="Dhirendra_Yadav_CV.pdf"'
+
+
+def test_cv_preview_uses_verified_profile_content(client):
+    html = client.get("/cv").get_data(as_text=True)
+
+    assert "AashaTech Pvt. Ltd." in html
+    assert "Secure Portfolio Platform" in html
+    assert "NEPSE Market Intelligence" in html
+    assert "linkedin.com/in/dhirendra-yadav-3b1387425" in html
+    assert "30+ Projects Delivered" not in html
+    assert "98% accuracy" not in html
+
+
 @pytest.mark.parametrize(
     ("source", "target"),
     [
@@ -342,6 +370,30 @@ def test_public_shell_uses_evidence_spine_without_reference_controls(client):
     assert "three.min.js" not in html
     assert "homepage-3d.js" not in html
     assert 'id="bgVideo"' not in html
+
+
+def test_public_shell_exposes_cv_download_action_on_desktop_and_mobile(client):
+    html = client.get("/").get_data(as_text=True)
+
+    assert 'class="nav-cv-link"' in html
+    assert 'href="/download-cv"' in html
+    assert 'aria-label="Download CV as PDF"' in html
+    assert 'class="mobile-menu-cv"' in html
+    assert 'class="mobile-menu-label"' in html
+    assert 'DOWNLOAD CV' in html
+
+
+def test_cv_navigation_action_has_editorial_focus_and_theme_states(client):
+    css = client.get("/static/css/editorial-portfolio.css").get_data(as_text=True)
+
+    for token in (
+        ".nav-cv-link",
+        ".nav-cv-link:hover",
+        ".nav-cv-link:focus-visible",
+        ".mobile-menu-cv",
+        ".mobile-menu-cv:focus-visible",
+    ):
+        assert token in css
 
 
 def test_public_shell_uses_a_persistent_footer_hud_for_appearance_controls(client):

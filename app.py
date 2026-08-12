@@ -959,32 +959,27 @@ def admin_mark_message_read(message_id):
 
 @app.route("/download-cv")
 def download_cv():
-    """Generate and download professional CV as PDF"""
-    from flask import make_response
+    """Generate and download the verified professional CV as a PDF."""
     from io import BytesIO
     from xhtml2pdf import pisa
 
-    # Render the print-optimized CV template
     html_content = render_template('cv_print_optimized.html')
-
-    # Convert HTML to PDF
     pdf_buffer = BytesIO()
-    pisa_status = pisa.CreatePDF(html_content, dest=pdf_buffer)
+    pisa_status = pisa.CreatePDF(
+        src=html_content,
+        dest=pdf_buffer,
+        encoding='UTF-8',
+    )
+    pdf_bytes = pdf_buffer.getvalue()
 
-    if pisa_status.err:
-        # Fallback: serve HTML if PDF generation fails
-        response = make_response(html_content)
-        response.headers['Content-Type'] = 'text/html; charset=utf-8'
-        response.headers['Content-Disposition'] = 'attachment; filename="Dhirendra_Yadav_CV.html"'
-        return response
+    if pisa_status.err or not pdf_bytes.startswith(b'%PDF'):
+        app.logger.error('CV PDF generation failed: %s', getattr(pisa_status, 'log', 'invalid PDF output'))
+        return Response('CV PDF generation failed.', status=500, mimetype='text/plain')
 
-    pdf_buffer.seek(0)
-    response = make_response(pdf_buffer.read())
+    response = Response(pdf_bytes, mimetype='application/pdf')
     response.headers['Content-Type'] = 'application/pdf'
     response.headers['Content-Disposition'] = 'attachment; filename="Dhirendra_Yadav_CV.pdf"'
-    response.headers['Cache-Control'] = 'no-cache, no-store, must-revalidate'
-    response.headers['Pragma'] = 'no-cache'
-    response.headers['Expires'] = '0'
+    response.headers['Cache-Control'] = 'public, max-age=300'
 
     return response
 

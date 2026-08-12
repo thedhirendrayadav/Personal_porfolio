@@ -1,490 +1,186 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dhirendra Yadav - CV</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
-        @page {
-            size: A4;
-            margin: 1.5cm;
-        }
-        
-        body {
-            font-family: Arial, Helvetica, sans-serif;
-            font-size: 10pt;
-            line-height: 1.4;
-            color: #000;
-            background: #f5f5f5;
-        }
-        
-        .container {
-            max-width: 21cm;
-            margin: 20px auto;
-            background: white;
-            padding: 1.5cm;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
-        }
-        
-        /* Header */
-        .header {
-            text-align: center;
-            border-bottom: 2px solid #000;
-            padding-bottom: 10px;
-            margin-bottom: 15px;
-        }
-        
-        .header h1 {
-            font-size: 24pt;
-            margin-bottom: 5px;
-            font-weight: bold;
-        }
-        
-        .header .title {
-            font-size: 11pt;
-            margin-bottom: 8px;
-            color: #333;
-        }
-        
-        .header .contact {
-            font-size: 9pt;
-            color: #555;
-        }
-        
-        /* Section */
-        .section {
-            margin-bottom: 15px;
-        }
-        
-        .section-title {
-            font-size: 12pt;
-            font-weight: bold;
-            text-transform: uppercase;
-            border-bottom: 1px solid #000;
-            margin-bottom: 8px;
-            padding-bottom: 3px;
-        }
-        
-        /* Two Column Layout */
-        .two-col {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
-        }
-        
-        /* Experience/Education Item */
-        .item {
-            margin-bottom: 10px;
-            page-break-inside: avoid;
-        }
-        
-        .item-header {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 3px;
-        }
-        
-        .item-title {
-            font-weight: bold;
-            font-size: 10.5pt;
-        }
-        
-        .item-date {
-            font-size: 9pt;
-            color: #666;
-            white-space: nowrap;
-        }
-        
-        .item-company {
-            font-style: italic;
-            color: #333;
-            margin-bottom: 3px;
-        }
-        
-        .item-desc {
-            font-size: 9.5pt;
-            color: #444;
-            line-height: 1.4;
-        }
-        
-        .item-desc ul {
-            margin-left: 15px;
-            margin-top: 3px;
-        }
-        
-        .item-desc li {
-            margin-bottom: 2px;
-        }
-        
-        /* Skills */
-        .skill-row {
-            margin-bottom: 6px;
-        }
-        
-        .skill-label {
-            font-weight: bold;
-            display: inline-block;
-            width: 140px;
-        }
-        
-        .skill-value {
-            display: inline;
-            color: #444;
-        }
-        
-        /* Projects */
-        .project {
-            margin-bottom: 8px;
-            page-break-inside: avoid;
-        }
-        
-        .project-title {
-            font-weight: bold;
-            font-size: 10pt;
-        }
-        
-        .project-badge {
-            font-size: 7pt;
-            background: #000;
-            color: white;
-            padding: 2px 6px;
-            border-radius: 2px;
-            margin-left: 5px;
-        }
-        
-        .project-desc {
-            font-size: 9pt;
-            color: #444;
-            margin: 2px 0;
-        }
-        
-        .project-tech {
-            font-size: 8.5pt;
-            color: #666;
-            font-style: italic;
-        }
-        
-        /* Print Styles */
-        @media print {
-            body {
-                background: white;
-                margin: 0;
-                padding: 0;
-            }
-            
-            .container {
-                max-width: 100%;
-                margin: 0;
-                padding: 0;
-                box-shadow: none;
-            }
-            
-            .no-print {
-                display: none !important;
-            }
-            
-            .section {
-                page-break-inside: avoid;
-            }
-            
-            .item, .project {
-                page-break-inside: avoid;
-            }
-            
-            .project-badge {
-                background: #000 !important;
-                color: white !important;
-                -webkit-print-color-adjust: exact;
-                print-color-adjust: exact;
-            }
-        }
-        
-        @media screen {
-            .print-btn {
-                position: fixed;
-                top: 20px;
-                right: 20px;
-                background: #000;
-                color: white;
-                border: none;
-                padding: 10px 20px;
-                cursor: pointer;
-                border-radius: 5px;
-                font-size: 14px;
-                z-index: 1000;
-            }
-            
-            .print-btn:hover {
-                background: #333;
-            }
-        }
-    </style>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Dhirendra Yadav - Cybersecurity and AI/ML Engineer</title>
+  <style>
+    @page { size: A4; margin: 0; }
+    * { box-sizing: border-box; }
+    body { margin: 0; background: #dfe5e8; color: #17252b; font-family: Helvetica, Arial, sans-serif; font-size: 9.2pt; line-height: 1.42; }
+    a { color: inherit; text-decoration: none; }
+    .screen-toolbar { width: 210mm; margin: 18px auto 0; display: flex; justify-content: flex-end; gap: 8px; }
+    .screen-toolbar a { display: inline-block; padding: 10px 14px; background: #8ff3eb; color: #092126; font: bold 8pt Helvetica, Arial, sans-serif; letter-spacing: .7pt; text-transform: uppercase; }
+    .screen-toolbar a.secondary { background: #17252b; color: #fff; }
+    .page { width: 210mm; min-height: 297mm; margin: 18px auto; background: #fff; box-shadow: 0 18px 50px rgba(23,37,43,.18); page-break-after: always; overflow: hidden; }
+    .page:last-child { page-break-after: auto; }
+    .page-grid { width: 100%; height: 297mm; border-collapse: collapse; table-layout: fixed; }
+    .sidebar, .main { vertical-align: top; }
+    .sidebar { width: 33%; background: #10282f; color: #e9f3f2; padding: 28px 22px; }
+    .main { width: 67%; padding: 30px 30px 28px 28px; }
+    .sidebar h2, .section-title { margin: 0 0 9px; font-size: 8pt; line-height: 1.2; letter-spacing: 1.2pt; text-transform: uppercase; }
+    .sidebar h2 { color: #8ff3eb; }
+    .sidebar-section { margin-bottom: 23px; }
+    .sidebar p { margin: 0 0 8px; color: #bfd1d1; font-size: 8.4pt; }
+    .contact-line { margin-bottom: 8px; color: #e9f3f2; font-size: 8.3pt; word-wrap: break-word; }
+    .contact-line strong { display: block; color: #8ff3eb; font: bold 7pt Helvetica, Arial, sans-serif; letter-spacing: .8pt; text-transform: uppercase; }
+    .skill-group { margin-bottom: 12px; }
+    .skill-group strong { display: block; margin-bottom: 3px; color: #fff; font-size: 8pt; }
+    .skill-group span { color: #bfd1d1; font-size: 8pt; line-height: 1.38; }
+    .tag { display: inline-block; margin: 0 3px 4px 0; padding: 3px 5px; border: 1px solid #39616a; color: #d5e5e4; font-size: 7.2pt; }
+    .masthead { padding-bottom: 18px; border-bottom: 2px solid #8ff3eb; }
+    .kicker { margin: 0 0 9px; color: #3e7c83; font: bold 7.5pt Helvetica, Arial, sans-serif; letter-spacing: 1.2pt; text-transform: uppercase; }
+    h1 { margin: 0; color: #10282f; font-size: 28pt; line-height: .98; letter-spacing: -.3pt; }
+    .role { margin: 10px 0 0; color: #3e7c83; font-size: 11pt; line-height: 1.3; }
+    .header-links { margin-top: 13px; color: #53656b; font-size: 8.2pt; }
+    .header-links span { color: #8aa0a3; padding: 0 5px; }
+    .section { margin-top: 20px; page-break-inside: avoid; }
+    .section-title { padding-bottom: 6px; border-bottom: 1px solid #b8c8c9; color: #3e7c83; }
+    .summary { margin: 0; color: #34484e; font-size: 9.7pt; line-height: 1.55; }
+    .entry { margin: 0 0 16px; page-break-inside: avoid; }
+    .entry:last-child { margin-bottom: 0; }
+    .entry-head { display: table; width: 100%; table-layout: fixed; }
+    .entry-title, .entry-date { display: table-cell; vertical-align: top; }
+    .entry-title { width: 72%; color: #172f35; font-weight: bold; font-size: 10pt; }
+    .entry-date { width: 28%; color: #638087; font-size: 8pt; text-align: right; white-space: nowrap; }
+    .entry-org { margin-top: 2px; color: #3e7c83; font-size: 8.6pt; }
+    ul { margin: 5px 0 0 15px; padding: 0; }
+    li { margin-bottom: 3px; color: #41545a; }
+    .project { margin-bottom: 15px; padding-left: 10px; border-left: 3px solid #8ff3eb; page-break-inside: avoid; }
+    .project-title { color: #172f35; font-weight: bold; font-size: 9.6pt; }
+    .project-status { margin-left: 5px; color: #3e7c83; font-size: 7pt; letter-spacing: .8pt; text-transform: uppercase; }
+    .project p { margin: 3px 0 0; color: #52666b; font-size: 8.4pt; }
+    .project-tech { margin-top: 3px; color: #3e7c83; font-size: 7.8pt; }
+    .note { margin-top: 19px; padding: 10px 12px; background: #eef7f6; border-left: 3px solid #8ff3eb; color: #3b555b; font-size: 8.2pt; }
+    .footer-note { margin-top: 20px; padding-top: 8px; border-top: 1px solid #d0dada; color: #74868a; font-size: 7.5pt; }
+    .page-label { margin-bottom: 22px; color: #638087; font: bold 7pt Helvetica, Arial, sans-serif; letter-spacing: 1.1pt; text-transform: uppercase; }
+    @media print {
+      body { background: #fff; }
+      .screen-toolbar { display: none; }
+      .page { width: 210mm; min-height: 297mm; margin: 0; box-shadow: none; }
+    }
+  </style>
 </head>
 <body>
-    <button class="print-btn no-print" onclick="window.print()">🖨️ Print / Save PDF</button>
-    
-    <div class="container">
-        <!-- HEADER -->
-        <div class="header">
-            <h1>DHIRENDRA YADAV</h1>
-            <div class="title">Full-Stack Developer | AI/ML Specialist | Cybersecurity Expert</div>
-            <div class="contact">
-                📧 thedhirendrayadav@gmail.com | 📱 +977 9845080167 | 📍 Bhaktapur, Nepal<br>
-                💼 LinkedIn: dhirendra-yadav-3040b82b4 | 💻 GitHub: Dhirendra07000
-            </div>
+  <div class="screen-toolbar screen-only">
+    <a class="secondary" href="{{ url_for('index') }}">Back to portfolio</a>
+    <a href="{{ url_for('download_cv') }}" download>Download PDF</a>
+  </div>
+
+  <section class="page">
+    <table class="page-grid"><tr>
+      <td class="sidebar">
+        <div class="sidebar-section">
+          <h2>Contact</h2>
+          <div class="contact-line"><strong>Email</strong><a href="mailto:thedhirendrayadav@gmail.com">thedhirendrayadav@gmail.com</a></div>
+          <div class="contact-line"><strong>Phone</strong>+977 9845080167</div>
+          <div class="contact-line"><strong>Location</strong>Bhaktapur, Nepal</div>
+          <div class="contact-line"><strong>Portfolio</strong><a href="https://www.dhirendrayadav.site">dhirendrayadav.site</a></div>
+          <div class="contact-line"><strong>LinkedIn</strong><a href="https://www.linkedin.com/in/dhirendra-yadav-3b1387425">linkedin.com/in/dhirendra-yadav-3b1387425</a></div>
+          <div class="contact-line"><strong>GitHub</strong><a href="https://github.com/thedhirendrayadav">github.com/thedhirendrayadav</a></div>
         </div>
-        
-        <!-- PROFESSIONAL SUMMARY -->
-        <div class="section">
-            <div class="section-title">Professional Summary</div>
-            <p style="text-align: justify;">
-                Experienced full-stack developer and AI/ML specialist with 2+ years of professional experience in software development, cybersecurity, and machine learning. Currently working as a Python Developer specializing in AI/ML at Asha Tech Kathmandu. BSc IT graduate with first-class honors, delivering 30+ projects including ERP systems, automated attendance platforms, AI chatbots, and e-commerce solutions. Proven track record in frontend management, freelance development, and building enterprise-grade solutions.
-            </p>
+        <div class="sidebar-section">
+          <h2>Core practice</h2>
+          <div class="skill-group"><strong>Security</strong><span>Threat analysis, vulnerability assessment, network visibility, incident response, security automation</span></div>
+          <div class="skill-group"><strong>AI / ML</strong><span>Python, data preparation, applied machine learning, RAG, model integration</span></div>
+          <div class="skill-group"><strong>Engineering</strong><span>Flask, Django, REST APIs, JavaScript, HTML/CSS, SQL</span></div>
+          <div class="skill-group"><strong>Infrastructure</strong><span>Railway, Vercel, MySQL, Supabase, GitHub, environment configuration</span></div>
+          <div class="skill-group"><strong>Tools</strong><span>Nmap, Wireshark, Metasploit, Burp Suite, Git, Linux</span></div>
         </div>
-        
-        <!-- PROFESSIONAL EXPERIENCE -->
-        <div class="section">
-            <div class="section-title">Professional Experience</div>
-            
-            <div class="item">
-                <div class="item-header">
-                    <div class="item-title">Software Developer (AI/ML & Python Specialist)</div>
-                    <div class="item-date">Jan 2025 – Present</div>
-                </div>
-                <div class="item-company">Asha Tech, Kathmandu, Nepal</div>
-                <div class="item-desc">
-                    <ul>
-                        <li>Developing AI/ML-powered solutions using Python, TensorFlow, and deep learning frameworks</li>
-                        <li>Building scalable machine learning models for computer vision, NLP, and predictive analytics</li>
-                        <li>Implementing automated testing and deployment pipelines for ML models in production</li>
-                    </ul>
-                </div>
-            </div>
-            
-            <div class="item">
-                <div class="item-header">
-                    <div class="item-title">Frontend Manager & Administrator</div>
-                    <div class="item-date">Jan 2025 – May 2025</div>
-                </div>
-                <div class="item-company">ISMT College, Kathmandu, Nepal</div>
-                <div class="item-desc">
-                    <ul>
-                        <li>Managed frontend development team and coordinated web application projects</li>
-                        <li>Administered college management systems and maintained digital infrastructure</li>
-                        <li>Implemented responsive UI/UX improvements and optimized website performance</li>
-                    </ul>
-                </div>
-            </div>
-            
-            <div class="item">
-                <div class="item-header">
-                    <div class="item-title">Freelance Full-Stack Developer</div>
-                    <div class="item-date">Mar 2024 – Sep 2025</div>
-                </div>
-                <div class="item-company">Self-Employed</div>
-                <div class="item-desc">
-                    <ul>
-                        <li>Delivered 20+ custom web applications, ERP systems, and AI-powered solutions for diverse clients</li>
-                        <li>Specialized in Django, Flask, React, and Next.js development with focus on scalability</li>
-                        <li>Built e-commerce platforms, school management systems, and automated business solutions</li>
-                    </ul>
-                </div>
-            </div>
-            
-            <div class="item">
-                <div class="item-header">
-                    <div class="item-title">Front Desk Officer</div>
-                    <div class="item-date">2021 – 2022 (8 months)</div>
-                </div>
-                <div class="item-company">NepX Creation and Management Services, Kathmandu, Nepal</div>
-                <div class="item-desc">
-                    Managed front desk operations, student inquiries, administrative tasks, and coordinated with various departments for smooth institutional operations.
-                </div>
-            </div>
+        <div class="sidebar-section">
+          <h2>Working principles</h2>
+          <p><strong>Understand the threat.</strong><br>Start with assets, users, incentives, and failure modes.</p>
+          <p><strong>Make the system legible.</strong><br>Clear boundaries and documentation reduce risk.</p>
+          <p><strong>Prove the outcome.</strong><br>Verify behavior with tests, evidence, and operating signals.</p>
         </div>
-        
-        <!-- EDUCATION -->
-        <div class="section">
-            <div class="section-title">Education</div>
-            
-            <div class="item">
-                <div class="item-header">
-                    <div class="item-title">Bachelor of Science in Information Technology</div>
-                    <div class="item-date">2022 – 2025</div>
-                </div>
-                <div class="item-company">University of Sunderland (via ISMT College)</div>
-                <div class="item-desc">
-                    <strong>First Class Honors</strong> – Specialization in cybersecurity, machine learning, and full-stack development. Advanced coursework in AI/ML, network security, ethical hacking, and enterprise software engineering.
-                </div>
-            </div>
-            
-            <div class="item">
-                <div class="item-header">
-                    <div class="item-title">Higher Secondary Education (HSEB +2)</div>
-                    <div class="item-date">2019 – 2021</div>
-                </div>
-                <div class="item-company">KMC Kathmandu</div>
-                <div class="item-desc">
-                    <strong>GPA: 3.22</strong> – Computer science and mathematics focus with strong foundation in programming.
-                </div>
-            </div>
-            
-            <div class="item">
-                <div class="item-header">
-                    <div class="item-title">Secondary Education Examination (SEE)</div>
-                    <div class="item-date">2019</div>
-                </div>
-                <div class="item-company">Gyandeep Sikshya Sadan, Hetauda</div>
-                <div class="item-desc">
-                    Completed secondary education with strong academic performance in science and mathematics.
-                </div>
-            </div>
+      </td>
+      <td class="main">
+        <header class="masthead">
+          <p class="kicker">Security fieldwork / Curriculum vitae</p>
+          <h1>Dhirendra<br>Yadav</h1>
+          <p class="role">Software Developer | Cybersecurity | AI/ML Systems | Secure Automation</p>
+          <p class="header-links">Open to collaboration and opportunities in cybersecurity engineering, AI/ML systems, and product engineering.</p>
+        </header>
+
+        <section class="section">
+          <h2 class="section-title">Professional profile</h2>
+          <p class="summary">Software Developer at Asha Tech (AashaTech Pvt. Ltd.) and BSc IT graduate based in Nepal. I build security-first platforms, intelligent automation, and practical AI systems across Python, web applications, APIs, data workflows, and deployment infrastructure. My approach connects threat awareness, useful product behavior, and evidence-led verification.</p>
+        </section>
+
+        <section class="section">
+          <h2 class="section-title">Experience</h2>
+          <article class="entry">
+            <div class="entry-head"><div class="entry-title">Software Developer (AI/ML &amp; Python Specialist)</div><div class="entry-date">Jan 2025 - Present</div></div>
+            <div class="entry-org">Asha Tech / AashaTech Pvt. Ltd. - Kathmandu, Nepal</div>
+            <ul><li>Develop AI/ML-powered systems using Python, TensorFlow, and production web technologies.</li><li>Build practical workflows across computer vision, natural-language processing, predictive analysis, and secure automation.</li><li>Contribute to API, data, testing, and deployment practices that make delivery reliable and maintainable.</li></ul>
+          </article>
+          <article class="entry">
+            <div class="entry-head"><div class="entry-title">Frontend Manager &amp; Administrator</div><div class="entry-date">Jan 2025 - May 2025</div></div>
+            <div class="entry-org">ISMT College - Kathmandu, Nepal</div>
+            <ul><li>Managed frontend delivery and coordinated web-application work.</li><li>Supported college management systems and digital infrastructure.</li><li>Improved responsive interfaces, usability, and website performance.</li></ul>
+          </article>
+          <article class="entry">
+            <div class="entry-head"><div class="entry-title">Freelance Full-Stack Developer</div><div class="entry-date">Mar 2024 - Sep 2025</div></div>
+            <div class="entry-org">Self-employed</div>
+            <ul><li>Delivered custom web applications, ERP systems, and AI-enabled operational tools.</li><li>Worked across Django, Flask, React, Next.js, databases, and deployment workflows.</li><li>Built practical systems for education, business operations, automation, and e-commerce.</li></ul>
+          </article>
+          <article class="entry">
+            <div class="entry-head"><div class="entry-title">Front Desk Officer</div><div class="entry-date">2021 - 2022</div></div>
+            <div class="entry-org">NepX Creation and Management Services - Kathmandu, Nepal</div>
+            <ul><li>Managed front-desk operations, student enquiries, and administrative coordination.</li><li>Supported day-to-day communication across departments.</li></ul>
+          </article>
+        </section>
+      </td>
+    </tr></table>
+  </section>
+
+  <section class="page">
+    <table class="page-grid"><tr>
+      <td class="sidebar">
+        <div class="sidebar-section">
+          <h2>Education</h2>
+          <div class="contact-line"><strong>BSc IT</strong>University of Sunderland<br>2022 - Present</div>
+          <p>Foundations across programming, databases, networks, web systems, software delivery, cybersecurity, and intelligent systems.</p>
         </div>
-        
-        <!-- TECHNICAL SKILLS -->
-        <div class="section">
-            <div class="section-title">Technical Skills</div>
-            <div class="skill-row">
-                <span class="skill-label">Cybersecurity:</span>
-                <span class="skill-value">Threat Analysis, Penetration Testing, Vulnerability Assessment, Incident Response, Security Auditing</span>
-            </div>
-            <div class="skill-row">
-                <span class="skill-label">AI & Machine Learning:</span>
-                <span class="skill-value">TensorFlow, Deep Learning, NLP, Computer Vision, OpenCV, Anomaly Detection</span>
-            </div>
-            <div class="skill-row">
-                <span class="skill-label">Programming:</span>
-                <span class="skill-value">Python, JavaScript</span>
-            </div>
-            <div class="skill-row">
-                <span class="skill-label">Web Frameworks:</span>
-                <span class="skill-value">Django, Flask, React, Next.js, Node.js, FastAPI, Tailwind CSS</span>
-            </div>
-            <div class="skill-row">
-                <span class="skill-label">Databases:</span>
-                <span class="skill-value">PostgreSQL, MySQL, MongoDB, Redis, Supabase</span>
-            </div>
-            <div class="skill-row">
-                <span class="skill-label">Tools & Platforms:</span>
-                <span class="skill-value">Docker, Git, AWS, Wireshark, Nmap, Metasploit, Kali Linux, Vercel</span>
-            </div>
+        <div class="sidebar-section">
+          <h2>Delivery loop</h2>
+          <div class="tag">01 Map</div><div class="tag">02 Model</div><div class="tag">03 Build</div><div class="tag">04 Verify</div>
         </div>
-        
-        <!-- KEY PROJECTS -->
-        <div class="section">
-            <div class="section-title">Key Projects</div>
-            <div class="two-col">
-                <div>
-                    <div class="project">
-                        <div class="project-title">ERP Management System<span class="project-badge">ENTERPRISE</span></div>
-                        <div class="project-desc">Multi-tenant ERP with HR, finance, inventory, procurement & analytics. Handles 50k+ records.</div>
-                        <div class="project-tech">Python, Django, PostgreSQL, REST API, Docker</div>
-                    </div>
-                    
-                    <div class="project">
-                        <div class="project-title">Automated Attendance System<span class="project-badge">AI/ML</span></div>
-                        <div class="project-desc">Deep-learning facial recognition with liveness detection, 98% accuracy in real-time.</div>
-                        <div class="project-tech">Python, OpenCV, TensorFlow, dlib, Flask</div>
-                    </div>
-                    
-                    <div class="project">
-                        <div class="project-title">AI Threat Detection Scanner<span class="project-badge">SECURITY</span></div>
-                        <div class="project-desc">ML-powered vulnerability scanner with automated pentesting, 95% threat classification accuracy.</div>
-                        <div class="project-tech">Python, TensorFlow, Nmap, Wireshark, Docker</div>
-                    </div>
-                    
-                    <div class="project">
-                        <div class="project-title">AI-Powered Chatbot<span class="project-badge">AI/ML</span></div>
-                        <div class="project-desc">Conversational AI with NLP, intent classification, context memory & multi-platform integration.</div>
-                        <div class="project-tech">Python, LangChain, OpenAI API, FastAPI, WebSocket</div>
-                    </div>
-                    
-                    <div class="project">
-                        <div class="project-title">Hospital Management System<span class="project-badge">ENTERPRISE</span></div>
-                        <div class="project-desc">Complete healthcare solution with patient records, appointments, billing, pharmacy & lab management.</div>
-                        <div class="project-tech">Django, PostgreSQL, React, Redux, Chart.js</div>
-                    </div>
-                    
-                    <div class="project">
-                        <div class="project-title">Personal Portfolio Website<span class="project-badge">WEB</span></div>
-                        <div class="project-desc">Modern portfolio with blog, project showcase, contact forms, admin dashboard & dynamic CMS.</div>
-                        <div class="project-tech">Flask, Supabase, JavaScript, Tailwind CSS</div>
-                    </div>
-                </div>
-                
-                <div>
-                    <div class="project">
-                        <div class="project-title">School Management System<span class="project-badge">ENTERPRISE</span></div>
-                        <div class="project-desc">End-to-end school platform with enrollment, grading, timetables, fee management & portals.</div>
-                        <div class="project-tech">Flask, MySQL, JavaScript, Chart.js, RBAC</div>
-                    </div>
-                    
-                    <div class="project">
-                        <div class="project-title">E-Commerce Platform<span class="project-badge">WEB</span></div>
-                        <div class="project-desc">Multi-vendor marketplace with payment gateway, order tracking & vendor dashboard.</div>
-                        <div class="project-tech">Next.js, Stripe, PostgreSQL, Tailwind CSS, Prisma</div>
-                    </div>
-                    
-                    <div class="project">
-                        <div class="project-title">Restaurant Management System<span class="project-badge">ENTERPRISE</span></div>
-                        <div class="project-desc">Full restaurant ops with real-time kitchen display, table booking, POS & inventory.</div>
-                        <div class="project-tech">React, Node.js, MongoDB, Socket.io, Stripe</div>
-                    </div>
-                    
-                    <div class="project">
-                        <div class="project-title">Automated Messaging System<span class="project-badge">AUTOMATION</span></div>
-                        <div class="project-desc">Bulk notification engine processing 100k+ messages/day across SMS, Email & WhatsApp.</div>
-                        <div class="project-tech">Python, Celery, RabbitMQ, Twilio, SendGrid</div>
-                    </div>
-                    
-                    <div class="project">
-                        <div class="project-title">Inventory Management System<span class="project-badge">ENTERPRISE</span></div>
-                        <div class="project-desc">Real-time inventory tracking with barcode scanning, stock alerts, supplier management & analytics.</div>
-                        <div class="project-tech">Flask, MySQL, JavaScript, Bootstrap, Chart.js</div>
-                    </div>
-                    
-                    <div class="project">
-                        <div class="project-title">Task Management Application<span class="project-badge">WEB</span></div>
-                        <div class="project-desc">Collaborative task manager with real-time updates, team collaboration & progress analytics.</div>
-                        <div class="project-tech">React, Node.js, MongoDB, Socket.io, Redux</div>
-                    </div>
-                </div>
-            </div>
+        <div class="sidebar-section">
+          <h2>Online</h2>
+          <p>Portfolio case studies and field notes:</p>
+          <p><a href="https://www.dhirendrayadav.site">www.dhirendrayadav.site</a></p>
         </div>
-        
-        <!-- CERTIFICATIONS -->
-        <div class="section">
-            <div class="section-title">Certifications & Achievements</div>
-            <div class="item-desc">
-                <ul>
-                    <li><strong>First Class Honors – BSc IT</strong> – University of Sunderland (2025)</li>
-                    <li><strong>Machine Learning Specialization</strong> – Advanced ML algorithms, deep learning & neural networks (2024)</li>
-                    <li><strong>ISMT Certificate of Appreciation</strong> – Outstanding academic performance & project excellence (2023)</li>
-                    <li><strong>Cybersecurity Fundamentals</strong> – Practical threat analysis, pentesting & security auditing (2024)</li>
-                    <li><strong>30+ Projects Delivered</strong> – Enterprise systems, AI solutions, web platforms & security tools</li>
-                </ul>
-            </div>
-        </div>
-        
-        <!-- LANGUAGES -->
-        <div class="section">
-            <div class="section-title">Languages</div>
-            <div style="display: flex; gap: 30px;">
-                <span><strong>English:</strong> Fluent</span>
-                <span><strong>Nepali:</strong> Native</span>
-                <span><strong>Hindi:</strong> Conversational</span>
-            </div>
-        </div>
-        
-        <div style="text-align: center; margin-top: 20px; font-size: 9pt; color: #666; border-top: 1px solid #ccc; padding-top: 10px;">
-            References available upon request
-        </div>
-    </div>
+      </td>
+      <td class="main">
+        <p class="page-label">Selected work / Evidence-led case studies</p>
+        <section class="section" style="margin-top:0">
+          <h2 class="section-title">Selected projects</h2>
+          <article class="project"><div class="project-title">Secure Portfolio Platform <span class="project-status">In development</span></div><p>Flask portfolio and content-management application with database fallbacks, contact protections, response headers, and public-page contract tests.</p><div class="project-tech">Python / Flask / Jinja / MySQL / Supabase / Pytest</div></article>
+          <article class="project"><div class="project-title">Multi-Channel AI Messaging Platform <span class="project-status">Prototype</span></div><p>Messaging backend that separates channel adapters, authorization, conversation state, and asynchronous processing behind Redis-backed queues.</p><div class="project-tech">TypeScript / Fastify / PostgreSQL / Prisma / Redis / BullMQ</div></article>
+          <article class="project"><div class="project-title">NEPSE Market Intelligence <span class="project-status">Research system</span></div><p>Research workflow connecting price ingestion, technical indicators, news sentiment, ensemble prediction, backtesting, an API, and a dashboard.</p><div class="project-tech">Python / Pandas / XGBoost / TensorFlow / FastAPI / Streamlit</div></article>
+          <article class="project"><div class="project-title">RunPod Media Orchestrator <span class="project-status">Prototype</span></div><p>GPU workflow for operator-confirmed provisioning, prompt transfer, remote execution, output retrieval, and resource teardown.</p><div class="project-tech">Python / RunPod GraphQL / Paramiko / SFTP / SCP</div></article>
+          <article class="project"><div class="project-title">ERP and Staff Operations Concepts <span class="project-status">Prototype</span></div><p>Role-aware operational concepts covering inventory, purchasing, reporting, staff profiles, leave, attendance context, and manager workflows.</p><div class="project-tech">Flask / PostgreSQL / RBAC / Audit logging / Workflow design</div></article>
+        </section>
+
+        <section class="section">
+          <h2 class="section-title">Technical toolkit</h2>
+          <p class="summary"><strong>Languages:</strong> Python, JavaScript, TypeScript, SQL, HTML/CSS</p>
+          <p class="summary"><strong>Application:</strong> Flask, Django, FastAPI, REST APIs, Jinja, React, Next.js</p>
+          <p class="summary"><strong>Data and infrastructure:</strong> MySQL, PostgreSQL, Supabase, Redis, Railway, Vercel, GitHub</p>
+          <p class="summary"><strong>Security and verification:</strong> Threat modeling, vulnerability assessment, Nmap, Wireshark, Burp Suite, Metasploit, pytest, accessibility checks</p>
+        </section>
+
+        <div class="note"><strong>Evidence standard.</strong> Portfolio projects are intentionally labeled as prototype, research system, or in development. The case studies separate implementation evidence from individual-role evidence and do not claim unsupported production metrics.</div>
+
+        <section class="section">
+          <h2 class="section-title">Additional information</h2>
+          <p class="summary">Based in Bhaktapur, Nepal. Available for thoughtful collaboration and opportunities involving cybersecurity engineering, AI/ML systems, secure automation, and full-stack product engineering.</p>
+        </section>
+
+        <p class="footer-note">This CV is maintained from the public portfolio and current professional profile. Last updated August 2026.</p>
+      </td>
+    </tr></table>
+  </section>
 </body>
 </html>
