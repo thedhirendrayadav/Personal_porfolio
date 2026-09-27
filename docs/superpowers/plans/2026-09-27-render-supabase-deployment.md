@@ -49,5 +49,6 @@
 **Files:** `.env.example`, `Procfile`, `README.md`, `api/health.py`, `api/index.py`, `api/requirements.txt`, `api/test.py`, `app.py`, `config.py`, `content/projects.json`, `database.py`, `database_manager.py`, `docs/superpowers/plans/2026-09-27-render-supabase-deployment.md`, `docs/superpowers/specs/2026-09-27-render-supabase-deployment-design.md`, `models/blog_model.py`, `models/contact_model.py`, `models/project_model.py`, `render.yaml`, `requirements.txt`, `rest_database_manager.py`, `supabase/schema.sql`, `vercel_database_manager.py`
 
 - [x] Review the staged diff, ensuring `.env`, `design-reference/`, `output/`, and unrelated workspace deletions stay out.
-- [ ] Commit and push the deployment changes to the feature branch.
-- [ ] Do not merge into `main` or deploy production until the user reviews the resulting change.
+- [x] Commit and push the deployment changes to the feature branch.
+
+The pull request is open for review. Merging into `main` could start a Render deployment, so production remains untouched pending the user's go-ahead.
