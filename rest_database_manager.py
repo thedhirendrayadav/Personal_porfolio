@@ -3,22 +3,15 @@ REST Database Manager - Works with both MySQL and Supabase via REST API
 This version avoids Python client dependency issues by using direct HTTP requests
 """
 
-import os
 import requests
 import json
 from datetime import datetime
 from config import DATABASE_TYPE, SUPABASE_CONFIG
 
-# Only import MySQL if not in Vercel environment
-is_vercel = os.environ.get('VERCEL') == '1' or os.environ.get('VERCEL_ENV') is not None
-if not is_vercel:
-    try:
-        import mysql.connector
-        from config import MYSQL_CONFIG
-    except ImportError:
-        mysql = None
-        MYSQL_CONFIG = None
-else:
+try:
+    import mysql.connector
+    from config import MYSQL_CONFIG
+except ImportError:
     mysql = None
     MYSQL_CONFIG = None
 

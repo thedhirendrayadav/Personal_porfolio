@@ -18,81 +18,42 @@ A modern, responsive personal portfolio website built with Flask and Supabase, f
 - **Backend**: Flask (Python)
 - **Database**: Supabase (PostgreSQL) / MySQL
 - **Frontend**: HTML5, CSS3, JavaScript
-- **Deployment**: Vercel, Railway, Render (multiple options)
+- **Deployment**: Render (Flask web service) with Supabase Postgres
 - **Security**: CSRF tokens, rate limiting, input validation
 
-## 🚀 Quick Deploy
+## 🚀 Deploy to Render
 
-### Option 1: Deploy to Vercel (Recommended)
+The repository includes a `render.yaml` Blueprint for one Flask web service. Render builds the app from GitHub, runs it with Gunicorn, checks `/healthz`, and redeploys when the linked branch receives a commit.
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/yourusername/personal_portfolio)
+### 1. Prepare Supabase
 
-1. Click the deploy button above
-2. Connect your GitHub account
-3. Set environment variables (see below)
-4. Deploy!
+1. Create a Supabase project in Singapore so the database is near the Render service region.
+2. Open its SQL Editor and run [`supabase/schema.sql`](supabase/schema.sql).
+3. Copy the project URL and a server-side secret key from **Project Settings → API Keys**. A legacy `service_role` key is also supported.
 
-### Option 2: Deploy to Railway
+### 2. Connect Render to GitHub
 
-[![Deploy on Railway](https://railway.app/button.svg)](https://railway.app/new/template)
+1. In Render, choose **New → Blueprint** and connect `thedhirendrayadav/Personal_porfolio`.
+2. Select the repository's `main` branch and deploy the Blueprint.
+3. When prompted, enter `SUPABASE_URL`, `SUPABASE_SECRET_KEY`, `ADMIN_USERNAME`, and `ADMIN_PASSWORD`. Render generates `SECRET_KEY` for the service.
+4. After the first deploy, add `MAIL_USERNAME`, `MAIL_PASSWORD`, and `RECEIVER_EMAIL` in Render if contact form email notifications are needed.
 
-1. Click the deploy button
-2. Connect your GitHub repository
-3. Set environment variables
-4. Deploy automatically
+Keep the Supabase secret key and admin credentials in Render's environment settings. Do not put them in GitHub or frontend code. The database tables use RLS and grant access to the service role used by the Flask backend.
 
-### Option 3: Deploy to Render
+### Required Render settings
 
-1. Fork this repository
-2. Connect to Render
-3. Set environment variables
-4. Deploy
-
-## ⚙️ Environment Variables
-
-Set these in your deployment platform:
-
-```bash
-# Database Configuration
-DATABASE_TYPE=supabase
-
-# Supabase Configuration (get from supabase.com)
-SUPABASE_URL=https://your-project-id.supabase.co
-SUPABASE_KEY=your_supabase_anon_key
-SUPABASE_SERVICE_KEY=your_supabase_service_key
-
-# Security (generate secure values)
-SECRET_KEY=your_64_character_secret_key
-ADMIN_USERNAME=your_admin_username
-ADMIN_PASSWORD=your_secure_password
-
-# App Settings
-FLASK_ENV=production
-FLASK_DEBUG=False
-```
+`render.yaml` sets `DATABASE_TYPE=supabase`, uses `gunicorn --bind 0.0.0.0:$PORT app:app`, and configures `/healthz` as the health check. If the app uses a custom domain, set `SITE_URL` in Render to that canonical URL.
 
 ## 🗄️ Database Setup
 
-### Supabase Setup (Recommended)
-
-1. Create account at [supabase.com](https://supabase.com)
-2. Create new project
-3. Go to SQL Editor
-4. Copy and run the contents of `supabase_schema.sql`
-5. Get your credentials from Settings → API
-
-### Local Development with MySQL
-
-1. Install MySQL
-2. Update `.env` with your MySQL credentials
-3. Set `DATABASE_TYPE=mysql`
+For local MySQL development, set `DATABASE_TYPE=mysql` and provide `MYSQLHOST`, `MYSQLPORT`, `MYSQLUSER`, `MYSQLPASSWORD`, and `MYSQLDATABASE` in `.env`. Render production uses Supabase.
 
 ## 🏃‍♂️ Local Development
 
 1. **Clone the repository**:
    ```bash
-   git clone https://github.com/yourusername/personal_portfolio.git
-   cd personal_portfolio
+   git clone https://github.com/thedhirendrayadav/Personal_porfolio.git
+   cd Personal_porfolio
    ```
 
 2. **Install dependencies**:
@@ -101,8 +62,8 @@ FLASK_DEBUG=False
    ```
 
 3. **Set up environment**:
-   ```bash
-   cp .env.example .env
+   ```powershell
+   Copy-Item .env.example .env
    # Edit .env with your credentials
    ```
 
@@ -128,14 +89,15 @@ personal_portfolio/
 ├── config.py             # Configuration settings
 ├── database.py           # Database connection handler
 ├── requirements.txt      # Python dependencies
-├── vercel.json          # Vercel deployment config
+├── render.yaml          # Render Blueprint
 ├── models/              # Database models
 │   ├── project_model.py
 │   ├── blog_model.py
 │   └── contact_model.py
 ├── templates/           # HTML templates
 ├── static/             # CSS, JS, images
-├── supabase_schema.sql # Database schema
+├── supabase/
+│   └── schema.sql      # Supabase database schema
 └── docs/               # Documentation
 ```
 
@@ -143,11 +105,7 @@ personal_portfolio/
 
 ### Database Managers
 
-The application includes multiple database managers for maximum compatibility:
-
-- **`database_manager.py`**: Full-featured with Supabase Python client
-- **`simple_database_manager.py`**: Simplified version with fallbacks
-- **`rest_database_manager.py`**: REST API only (most compatible)
+The app uses `database_manager.py` for local MySQL and server-side Supabase REST calls. Supabase table setup is kept in `supabase/schema.sql` and is run once from the Supabase SQL Editor.
 
 ### Security Features
 
@@ -178,26 +136,6 @@ Access at `/admin/login` with your admin credentials:
 - Add your projects via the admin panel
 - Write blog posts through the admin interface
 - Update personal information in templates
-
-## 🚀 Deployment Platforms
-
-### Vercel (Recommended)
-- Zero configuration
-- Automatic deployments
-- Global CDN
-- Free tier available
-
-### Railway
-- Simple GitHub integration
-- Automatic deployments
-- Built-in database options
-- Easy environment management
-
-### Render
-- Free tier available
-- Automatic SSL
-- Custom domains
-- Easy database integration
 
 ## 🔍 Testing
 
@@ -264,4 +202,4 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 **Built with ❤️ using Flask and Supabase**
 
-Ready to deploy? Click one of the deploy buttons above! 🚀
+Ready to deploy? Connect this GitHub repository to Render and follow the setup steps above. 🚀

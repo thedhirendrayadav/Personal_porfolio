@@ -19,8 +19,26 @@ from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 from functools import wraps
 from werkzeug.exceptions import NotFound
+from werkzeug.middleware.proxy_fix import ProxyFix
 from werkzeug.routing import RequestRedirect
-from config import APP_CONFIG, ADMIN_CONFIG, EMAIL_CONFIG
+from config import APP_CONFIG, ADMIN_CONFIG, DATABASE_TYPE, EMAIL_CONFIG, SUPABASE_CONFIG
+
+IS_RENDER = os.environ.get("RENDER", "").strip().lower() in {"1", "true", "yes"}
+if IS_RENDER:
+    required_render_settings = {
+        "DATABASE_TYPE": DATABASE_TYPE if DATABASE_TYPE == "supabase" else "",
+        "SUPABASE_URL": SUPABASE_CONFIG["url"],
+        "SUPABASE_SECRET_KEY": SUPABASE_CONFIG["key"],
+        "SECRET_KEY": ADMIN_CONFIG["secret_key"],
+        "ADMIN_USERNAME": ADMIN_CONFIG["username"],
+        "ADMIN_PASSWORD": ADMIN_CONFIG["password"],
+    }
+    missing_render_settings = [name for name, value in required_render_settings.items() if not value]
+    if missing_render_settings:
+        raise RuntimeError(
+            "Missing Render environment variables: " + ", ".join(missing_render_settings)
+        )
+
 from unified_models import ProjectModel, CategoryModel, BlogModel, ContactModel
 from database import db
 from project_content import (
@@ -111,6 +129,16 @@ def send_email_notification(name, email, subject, message):
 
 
 app = Flask(__name__)
+if IS_RENDER:
+    # Render terminates TLS before forwarding requests to the Gunicorn process.
+    app.wsgi_app = ProxyFix(app.wsgi_app, x_for=1, x_proto=1, x_host=1)
+
+
+@app.get("/healthz")
+def health_check():
+    return {"status": "ok"}, 200
+
+
 ASSET_VERSION = os.environ.get('ASSET_VERSION', str(int(datetime.datetime.now().timestamp())))
 SITE_URL = os.environ.get('SITE_URL', 'https://www.dhirendrayadav.site').rstrip('/')
 SITE_NAME = 'Dhirendra Yadav'
@@ -151,7 +179,7 @@ def redirect_noncanonical_trailing_slash():
 # Security Configuration
 app.config.update(
     SECRET_KEY=os.environ.get('SECRET_KEY', ADMIN_CONFIG["secret_key"]),
-    SESSION_COOKIE_SECURE=False,  # Set to True in production with HTTPS
+    SESSION_COOKIE_SECURE=IS_RENDER,
     SESSION_COOKIE_HTTPONLY=True,
     SESSION_COOKIE_SAMESITE='Lax',
     PERMANENT_SESSION_LIFETIME=datetime.timedelta(hours=2),
@@ -159,7 +187,8 @@ app.config.update(
     # versioned production assets between page views.
     SEND_FILE_MAX_AGE_DEFAULT=(
         datetime.timedelta(days=7)
-        if os.environ.get('RAILWAY_ENVIRONMENT')
+        if IS_RENDER
+        or os.environ.get('RAILWAY_ENVIRONMENT')
         or os.environ.get('RAILWAY_ENVIRONMENT_NAME')
         else 0
     )

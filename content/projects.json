@@ -302,7 +302,7 @@
     "problem": "A public site combines untrusted form input, authenticated administration, mutable content, database variability, and multiple runtime entry points.",
     "role": "The inspected repository establishes implementation and test artifacts but does not establish an individual contributor role.",
     "scope": "The audited slice covers Flask routes, contact CSRF and throttling, response headers, project persistence, database-manager selection, runtime entry points, and public-page tests.",
-    "constraints": "The contact limiter is process-local, the session cookie secure flag is disabled in current configuration, and runtime entry points do not prove a live deployment.",
+    "constraints": "The contact limiter is process-local, and deployment configuration does not by itself prove a live production deployment.",
     "claim_sources": {
       "title": ["app.py"],
       "short_title": ["app.py"],
@@ -310,11 +310,11 @@
       "project_type": ["app.py"],
       "status": ["app.py"],
       "technologies": ["app.py", "models/project_model.py", "tests/test_public_pages.py"],
-      "thesis": ["app.py", "models/project_model.py", "api/index.py"],
+      "thesis": ["app.py", "models/project_model.py", "render.yaml"],
       "problem": ["app.py", "models/project_model.py"],
       "role": ["tests/test_public_pages.py"],
-      "scope": ["app.py", "models/project_model.py", "api/index.py", "Procfile", "tests/test_public_pages.py"],
-      "constraints": ["app.py", "api/index.py"]
+      "scope": ["app.py", "models/project_model.py", "Procfile", "render.yaml", "tests/test_public_pages.py"],
+      "constraints": ["app.py", "render.yaml"]
     },
     "architecture": [
       {
@@ -338,8 +338,8 @@
       {
         "label": "Runtime entry points",
         "category": "external",
-        "relationship": "expose the Flask application to process and serverless runtimes",
-        "source": "api/index.py"
+        "relationship": "run the Flask application as a Gunicorn web service on Render",
+        "source": "render.yaml"
       }
     ],
     "trust_boundaries": [
@@ -387,9 +387,9 @@
       },
       {
         "type": "source",
-        "label": "api/index.py",
-        "title": "Serverless entry point",
-        "claim": "A Vercel-facing module imports and exports the Flask application with fallback handling."
+        "label": "render.yaml",
+        "title": "Render deployment definition",
+        "claim": "The Render Blueprint runs the Flask app with Gunicorn, selects Supabase, and configures the health check."
       }
     ],
     "outcomes": [
@@ -405,10 +405,6 @@
     "hardening": [
       {
         "item": "Move contact throttling to shared storage before relying on it across multiple processes.",
-        "source": "app.py"
-      },
-      {
-        "item": "Require secure session cookies in HTTPS deployments and remove permissive inline content policy directives where feasible.",
         "source": "app.py"
       }
     ]

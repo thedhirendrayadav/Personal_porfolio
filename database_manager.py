@@ -14,7 +14,7 @@ try:
     from supabase import create_client, Client
     SUPABASE_AVAILABLE = True
 except ImportError as e:
-    print(f"Supabase import not available (expected in Vercel): {e}")
+    print(f"Supabase Python client not installed; using REST API: {e}")
     SUPABASE_AVAILABLE = False
 
 
@@ -81,6 +81,16 @@ class DatabaseManager:
         if self.db_type == "mysql":
             self._ensure_mysql_database()
         # Supabase tables should be created via SQL editor or migrations
+
+    def _supabase_headers(self, **extra_headers):
+        """Build headers compatible with current and legacy Supabase API keys."""
+        headers = {"apikey": self.supabase_key}
+        # Legacy anon/service_role values are JWTs and are accepted as bearer
+        # tokens. Current sb_publishable/sb_secret keys belong in apikey only.
+        if self.supabase_key.startswith("eyJ"):
+            headers["Authorization"] = f"Bearer {self.supabase_key}"
+        headers.update(extra_headers)
+        return headers
     
     def _ensure_mysql_database(self):
         """Ensure MySQL database exists"""
@@ -168,12 +178,12 @@ class DatabaseManager:
         """Fallback REST API insert for Supabase"""
         import requests
         url = f"{self.supabase_url}/rest/v1/{table}"
-        headers = {
-            'apikey': self.supabase_key,
-            'Authorization': f'Bearer {self.supabase_key}',
-            'Content-Type': 'application/json',
-            'Prefer': 'return=representation'
-        }
+        headers = self._supabase_headers(
+            **{
+                "Content-Type": "application/json",
+                "Prefer": "return=representation",
+            }
+        )
         
         try:
             response = requests.post(url, json=data, headers=headers, timeout=10)
@@ -253,10 +263,7 @@ class DatabaseManager:
         """Fallback REST API select for Supabase"""
         import requests
         url = f"{self.supabase_url}/rest/v1/{table}"
-        headers = {
-            'apikey': self.supabase_key,
-            'Authorization': f'Bearer {self.supabase_key}',
-        }
+        headers = self._supabase_headers()
         
         params = {}
         if conditions:
@@ -332,11 +339,7 @@ class DatabaseManager:
         """Fallback REST API update for Supabase"""
         import requests
         url = f"{self.supabase_url}/rest/v1/{table}"
-        headers = {
-            'apikey': self.supabase_key,
-            'Authorization': f'Bearer {self.supabase_key}',
-            'Content-Type': 'application/json',
-        }
+        headers = self._supabase_headers(**{"Content-Type": "application/json"})
         
         params = {}
         for key, value in conditions.items():
@@ -374,13 +377,37 @@ class DatabaseManager:
     
     def _supabase_delete(self, table, conditions):
         """Supabase delete"""
-        query = self.supabase_client.table(table)
-        
-        for key, value in conditions.items():
-            query = query.delete().eq(key, value)
-        
-        result = query.execute()
-        return result.data
+        if self.supabase_client:
+            try:
+                query = self.supabase_client.table(table).delete()
+                for key, value in conditions.items():
+                    query = query.eq(key, value)
+                result = query.execute()
+                return result.data
+            except Exception as e:
+                print(f"Supabase client delete failed: {e}")
+
+        return self._supabase_rest_delete(table, conditions)
+
+    def _supabase_rest_delete(self, table, conditions):
+        """Delete rows through Supabase REST, including when no SDK is installed."""
+        import requests
+
+        url = f"{self.supabase_url}/rest/v1/{table}"
+        params = {key: f"eq.{value}" for key, value in conditions.items()}
+        try:
+            response = requests.delete(
+                url,
+                headers=self._supabase_headers(),
+                params=params,
+                timeout=10,
+            )
+            if response.status_code in (200, 204):
+                return True
+            print(f"Supabase REST delete failed: {response.status_code} - {response.text}")
+        except Exception as e:
+            print(f"Supabase REST delete error: {e}")
+        return False
     
     def increment_counter(self, table, counter_field, conditions=None):
         """Increment a counter field"""
