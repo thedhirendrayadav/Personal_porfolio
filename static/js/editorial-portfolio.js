@@ -300,4 +300,229 @@
       submit?.removeAttribute("disabled");
     }
   });
+
+  /* ============ HUD enhancements: truthful clock, audio, scramble ========= */
+  const hudClocks = [...document.querySelectorAll("[data-hud-clock]")];
+  if (hudClocks.length) {
+    let nptFormatter = null;
+    try {
+      nptFormatter = new Intl.DateTimeFormat("en-GB", {
+        hour: "2-digit", minute: "2-digit", second: "2-digit",
+        hour12: false, timeZone: "Asia/Kathmandu",
+      });
+    } catch { nptFormatter = null; }
+    const tickClock = () => {
+      const now = new Date();
+      const value = nptFormatter ? nptFormatter.format(now) : now.toTimeString().slice(0, 8);
+      hudClocks.forEach((el) => { el.textContent = value; });
+    };
+    tickClock();
+    setInterval(tickClock, 1000);
+  }
+
+  const keyHint = document.querySelector("[data-hud-key]");
+  if (keyHint && /Mac|iPhone|iPad|iPod/.test(navigator.platform || navigator.userAgent)) {
+    keyHint.textContent = "⌘ K";
+  }
+
+  /* --- Opt-in interface audio: synthesized with Web Audio (no assets). --- */
+  const SFX_STORAGE = "portfolio-sfx";
+  let audioContext = null;
+  let sfxEnabled = false;
+  try { sfxEnabled = localStorage.getItem(SFX_STORAGE) === "true"; } catch { sfxEnabled = false; }
+  const audioContextFor = () => {
+    if (!audioContext && ("AudioContext" in window || "webkitAudioContext" in window)) {
+      const Ctor = window.AudioContext || window.webkitAudioContext;
+      try { audioContext = new Ctor(); } catch { audioContext = null; }
+    }
+    if (audioContext && audioContext.state === "suspended") audioContext.resume();
+    return audioContext;
+  };
+  const blip = (freq = 520, duration = 0.05, type = "square", peak = 0.03) => {
+    if (!sfxEnabled) return;
+    const ctx = audioContextFor();
+    if (!ctx) return;
+    const osc = ctx.createOscillator();
+    const amp = ctx.createGain();
+    osc.type = type;
+    osc.frequency.value = freq;
+    const t0 = ctx.currentTime;
+    amp.gain.setValueAtTime(peak, t0);
+    amp.gain.exponentialRampToValueAtTime(0.0001, t0 + duration);
+    osc.connect(amp);
+    amp.connect(ctx.destination);
+    osc.start(t0);
+    osc.stop(t0 + duration + 0.02);
+  };
+  const sfxToggle = document.querySelector("[data-sfx-toggle]");
+  const sfxValue = document.querySelector("[data-sfx-value]");
+  const paintSfx = () => {
+    sfxToggle?.setAttribute("aria-pressed", String(sfxEnabled));
+    if (sfxValue) sfxValue.textContent = sfxEnabled ? "ON" : "OFF";
+  };
+  sfxToggle?.addEventListener("click", () => {
+    sfxEnabled = !sfxEnabled;
+    try { localStorage.setItem(SFX_STORAGE, String(sfxEnabled)); } catch { /* storage unavailable */ }
+    paintSfx();
+    if (sfxEnabled) { audioContextFor(); blip(680, 0.09, "square", 0.05); }
+  });
+  paintSfx();
+  document.addEventListener("click", (event) => {
+    if (!sfxEnabled) return;
+    if (event.target.closest("a, button, .chip, .cmdk__item")) {
+      blip(430 + ((event.clientX || 0) % 5) * 40, 0.04, "square", 0.02);
+    }
+  }, { passive: true });
+
+  /* --- Text scrambler: decoder effect on nav / marked headings. ---------- */
+  const scrambleGlyphs = "ABCDEFGHJKLMNPQRSTUVWXYZ0123456789/\\<>#*+=—·";
+  const scrambleEl = (el) => {
+    if (reduceMotion || el.dataset.scrambleBusy === "true") return;
+    const final = el.dataset.scrambleFinal || el.textContent.trim();
+    el.dataset.scrambleFinal = final;
+    const glyphs = [...final];
+    const frames = 15;
+    let frame = 0;
+    el.dataset.scrambleBusy = "true";
+    const step = () => {
+      frame += 1;
+      const locked = Math.floor((frame / frames) * glyphs.length);
+      el.textContent = glyphs.map((ch, i) => (
+        ch === " " || i < locked ? ch : scrambleGlyphs[(Math.random() * scrambleGlyphs.length) | 0]
+      )).join("");
+      if (frame < frames) requestAnimationFrame(step);
+      else { el.textContent = final; el.dataset.scrambleBusy = "false"; }
+    };
+    step();
+  };
+  [...document.querySelectorAll("[data-scramble], .editorial-nav a, .section-kicker")]
+    .filter((el) => el.children.length === 0 && el.textContent.trim())
+    .forEach((el) => {
+      el.dataset.scrambleFinal = el.textContent.trim();
+      const trigger = () => { scrambleEl(el); if (sfxEnabled) blip(900, 0.02, "triangle", 0.012); };
+      el.addEventListener("pointerenter", trigger);
+      el.addEventListener("focus", trigger);
+    });
+
+  /* --- Command console: Ctrl/⌘+K drawer (also "/" to open). -------------- */
+  const escapeCommandText = (value) => value.replace(/[&<>"]/g, (m) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[m]);
+  const collectCommands = () => {
+    const list = [];
+    const seen = new Set();
+    document.querySelectorAll(".editorial-nav a[href], .mobile-menu a[href]").forEach((anchor) => {
+      const href = anchor.getAttribute("href");
+      const label = anchor.textContent.replace(/\s+/g, " ").trim();
+      if (!href || !label || seen.has(href)) return;
+      seen.add(href);
+      list.push({ label: label.replace(/^0\d[\s/]+/, "").trim() || label, href, group: "GO" });
+    });
+    list.push({ label: "Toggle dark / light mode", run: () => document.querySelector("[data-theme-toggle]")?.click(), group: "RUN" });
+    list.push({ label: "Cycle accent colour", run: () => document.querySelector("[data-accent-cycle]")?.click(), group: "RUN" });
+    list.push({ label: "Cycle font pairing", run: () => document.querySelector("[data-font-cycle]")?.click(), group: "RUN" });
+    list.push({ label: sfxEnabled ? "Disable interface sound" : "Enable interface sound", run: () => sfxToggle?.click(), group: "RUN" });
+    return list;
+  };
+  const commandScore = (text, query) => {
+    const haystack = text.toLowerCase();
+    const needle = query.toLowerCase().trim();
+    if (!needle) return 1;
+    if (haystack.includes(needle)) return 3;
+    let cursor = 0;
+    for (const ch of needle) { cursor = haystack.indexOf(ch, cursor); if (cursor < 0) return 0; cursor += 1; }
+    return 1;
+  };
+  let palette = null, paletteInput = null, paletteList = null;
+  let paletteOpen = false, paletteRestore = null, paletteIndex = 0, paletteMatches = [], allCommands = [];
+  const paintCommands = () => {
+    if (!paletteList) return;
+    if (!paletteMatches.length) {
+      paletteList.innerHTML = '<li class="cmdk__empty">No matching command</li>';
+      return;
+    }
+    paletteList.innerHTML = paletteMatches.map((cmd, i) => (
+      `<li class="cmdk__item" role="option" data-index="${i}" aria-selected="${i === paletteIndex}">` +
+      `<span class="cmdk__item-cmd" aria-hidden="true">\u203A</span>` +
+      `<span class="cmdk__item-label">${escapeCommandText(cmd.label)}</span>` +
+      `<span class="cmdk__item-group">${cmd.group}</span></li>`
+    )).join("");
+  };
+  const filterCommands = () => {
+    const query = paletteInput ? paletteInput.value : "";
+    paletteMatches = allCommands
+      .map((cmd) => ({ cmd, score: commandScore(`${cmd.label} ${cmd.group}`, query) }))
+      .filter((entry) => entry.score > 0)
+      .sort((a, b) => b.score - a.score)
+      .map((entry) => entry.cmd);
+    paletteIndex = 0;
+    paintCommands();
+  };
+  const moveCommand = (delta) => {
+    if (!paletteMatches.length) return;
+    paletteIndex = (paletteIndex + delta + paletteMatches.length) % paletteMatches.length;
+    paintCommands();
+    paletteList?.querySelector('[aria-selected="true"]')?.scrollIntoView({ block: "nearest" });
+  };
+  const runCommand = (cmd) => {
+    if (!cmd) return;
+    closePalette();
+    if (cmd.href) window.location.href = cmd.href;
+    else if (typeof cmd.run === "function") cmd.run();
+  };
+  const buildPalette = () => {
+    if (palette) return;
+    palette = document.createElement("div");
+    palette.className = "cmdk";
+    palette.innerHTML = (
+      '<div class="cmdk__dialog" role="dialog" aria-modal="true" aria-label="Command console">' +
+      '<div class="cmdk__field"><span class="cmdk__prompt" aria-hidden="true">&gt;</span>' +
+      '<input class="cmdk__input" type="text" placeholder="type a command or page" aria-label="Search commands" aria-controls="cmdk-results" autocomplete="off" spellcheck="false">' +
+      '<button type="button" class="cmdk__close" data-cmdk-close aria-label="Close command console">\u00D7</button></div>' +
+      '<ul class="cmdk__results" id="cmdk-results" role="listbox" aria-label="Commands"></ul>' +
+      '<div class="cmdk__hint"><b>↑↓</b> navigate <b>↵</b> select <b>esc</b> close</div></div>'
+    );
+    document.body.appendChild(palette);
+    paletteInput = palette.querySelector(".cmdk__input");
+    paletteList = palette.querySelector(".cmdk__results");
+    palette.addEventListener("click", (event) => {
+      if (event.target === palette || event.target.closest("[data-cmdk-close]")) closePalette();
+    });
+    paletteList.addEventListener("click", (event) => {
+      const item = event.target.closest(".cmdk__item");
+      if (item) runCommand(paletteMatches[Number(item.dataset.index)]);
+    });
+    paletteInput.addEventListener("input", filterCommands);
+    paletteInput.addEventListener("keydown", (event) => {
+      if (event.key === "ArrowDown") { event.preventDefault(); moveCommand(1); }
+      else if (event.key === "ArrowUp") { event.preventDefault(); moveCommand(-1); }
+      else if (event.key === "Enter") { event.preventDefault(); runCommand(paletteMatches[paletteIndex]); }
+      else if (event.key === "Escape") { event.preventDefault(); closePalette(); }
+    });
+  };
+  function openPalette() {
+    if (paletteOpen) return;
+    buildPalette();
+    paletteRestore = document.activeElement;
+    allCommands = collectCommands();
+    if (paletteInput) paletteInput.value = "";
+    filterCommands();
+    palette.setAttribute("data-open", "");
+    body.classList.add("hud-locked");
+    paletteOpen = true;
+    requestAnimationFrame(() => paletteInput?.focus());
+  }
+  function closePalette() {
+    if (!palette || !paletteOpen) return;
+    palette.removeAttribute("data-open");
+    body.classList.remove("hud-locked");
+    paletteOpen = false;
+    if (paletteRestore && typeof paletteRestore.focus === "function") paletteRestore.focus();
+  }
+  document.querySelector("[data-command-open]")?.addEventListener("click", () => (paletteOpen ? closePalette() : openPalette()));
+  document.addEventListener("keydown", (event) => {
+    const key = event.key.toLowerCase();
+    const tag = document.activeElement?.tagName || "";
+    const typing = /^(INPUT|TEXTAREA|SELECT)$/.test(tag);
+    if ((event.ctrlKey || event.metaKey) && key === "k") { event.preventDefault(); if (paletteOpen) closePalette(); else openPalette(); }
+    else if (key === "/" && !typing && !paletteOpen) { event.preventDefault(); openPalette(); }
+  });
 })();

@@ -13,12 +13,13 @@ DATABASE_TYPE = os.getenv("DATABASE_TYPE", "mysql").strip().lower()
 
 # MySQL Configuration
 # Local MySQL development settings. Production Render deployments use Supabase.
+# Render injects the unspaced names; the .env files use the spaced ones.
 MYSQL_CONFIG = {
-    "host": os.getenv("MYSQLHOST", "127.0.0.1"),
-    "port": int(os.getenv("MYSQLPORT", "3306")),
-    "user": os.getenv("MYSQLUSER", "root"),
-    "password": os.getenv("MYSQLPASSWORD", ""),
-    "database": os.getenv("MYSQLDATABASE", "personal_portfolio"),
+    "host": os.getenv("MYSQLHOST") or os.getenv("MYSQL_HOST", "127.0.0.1"),
+    "port": int(os.getenv("MYSQLPORT") or os.getenv("MYSQL_PORT", "3306")),
+    "user": os.getenv("MYSQLUSER") or os.getenv("MYSQL_USER", "root"),
+    "password": os.getenv("MYSQLPASSWORD") or os.getenv("MYSQL_PASSWORD", ""),
+    "database": os.getenv("MYSQLDATABASE") or os.getenv("MYSQL_DATABASE", "personal_portfolio"),
 }
 
 # Supabase Configuration

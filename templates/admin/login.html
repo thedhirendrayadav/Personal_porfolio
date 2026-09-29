@@ -4,8 +4,24 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Login - {{ app_name }}</title>
-    
+
+    <script>
+      // Same storage key the public site writes, so the accent choice carries over.
+      const ADMIN_ACCENTS = ["#9df9f3","#79c7ff","#b8a1ff","#ff8fc8","#ff7f73","#f4bf4f","#d7f171","#75e6a4","#64d8cb","#a8c7fa","#f7a76c","#c4f0c5"];
+      try {
+        const saved = (localStorage.getItem('portfolio-accent') || '').toLowerCase();
+        if (ADMIN_ACCENTS.includes(saved)) document.documentElement.style.setProperty('--accent', saved);
+      } catch {}
+    </script>
+
     <style>
+        :root {
+            --accent: #9df9f3;
+            --accent-deep: color-mix(in srgb, var(--accent) 35%, #0f172a);
+            --accent-deep-hover: color-mix(in srgb, var(--accent-deep) 70%, #0f172a);
+            --accent-soft: color-mix(in srgb, var(--accent) 22%, transparent);
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -40,7 +56,7 @@
             left: 0;
             right: 0;
             height: 4px;
-            background: linear-gradient(90deg, #6366f1, #8b5cf6, #ec4899);
+            background: linear-gradient(90deg, var(--accent), #8b5cf6, #ec4899);
         }
         
         .login-header {
@@ -63,7 +79,7 @@
         .login-icon {
             width: 60px;
             height: 60px;
-            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            background: linear-gradient(135deg, var(--accent-deep), #8b5cf6);
             border-radius: 50%;
             display: flex;
             align-items: center;
@@ -97,15 +113,15 @@
         
         .form-input:focus {
             outline: none;
-            border-color: #6366f1;
+            border-color: var(--accent-deep);
             background: white;
-            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+            box-shadow: 0 0 0 3px var(--accent-soft);
         }
         
         .login-btn {
             width: 100%;
             padding: 0.875rem;
-            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            background: linear-gradient(135deg, var(--accent-deep), #8b5cf6);
             color: white;
             border: none;
             border-radius: 12px;
@@ -152,7 +168,7 @@
         }
         
         .back-link a {
-            color: #6366f1;
+            color: var(--accent-deep);
             text-decoration: none;
             font-size: 0.875rem;
             font-weight: 500;
@@ -160,7 +176,7 @@
         }
         
         .back-link a:hover {
-            color: #4f46e5;
+            color: var(--accent-deep-hover);
         }
         
         .security-note {

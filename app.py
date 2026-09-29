@@ -282,12 +282,17 @@ def admin_required(f):
         
         # Check session timeout
         if 'last_activity' in session:
-            if datetime.datetime.now() - session['last_activity'] > datetime.timedelta(hours=2):
+            last_activity = session['last_activity']
+            # Werkzeug tags session datetimes as UTC on load, but a value set in the
+            # same request is still naive, so normalise before subtracting.
+            if last_activity.tzinfo is None:
+                last_activity = last_activity.replace(tzinfo=datetime.timezone.utc)
+            if datetime.datetime.now(datetime.timezone.utc) - last_activity > datetime.timedelta(hours=2):
                 session.clear()
                 flash('Session expired. Please log in again.', 'warning')
                 return redirect(url_for('admin_login'))
         
-        session['last_activity'] = datetime.datetime.now()
+        session['last_activity'] = datetime.datetime.now(datetime.timezone.utc)
         return f(*args, **kwargs)
     return decorated_function
 
@@ -324,7 +329,7 @@ def admin_login():
             session.permanent = True
             session['admin_logged_in'] = True
             session['admin_username'] = username
-            session['last_activity'] = datetime.datetime.now()
+            session['last_activity'] = datetime.datetime.now(datetime.timezone.utc)
             flash('Successfully logged in!', 'success')
             
             # Redirect to intended page or dashboard

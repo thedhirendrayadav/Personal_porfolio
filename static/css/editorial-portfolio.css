@@ -1,4 +1,4 @@
-@layer reset, tokens, base, shell, components, pages, responsive;
+@layer reset, tokens, base, shell, components, pages, responsive, hud;
 
 @layer reset {
   *, *::before, *::after { box-sizing: border-box; }
@@ -239,10 +239,10 @@
     box-shadow: 0 .45rem 0 color-mix(in srgb, var(--accent) 32%, transparent);
     pointer-events: none;
   }
-  [data-reveal] { opacity: 0; transform: translateY(28px); transition: opacity .7s ease, transform .7s cubic-bezier(.2, .75, .2, 1); }
-  [data-reveal].is-visible { opacity: 1; transform: none; }
+  .js [data-reveal] { opacity: 0; transform: translateY(28px); transition: opacity .7s ease, transform .7s cubic-bezier(.2, .75, .2, 1); }
+  .js [data-reveal].is-visible { opacity: 1; transform: none; }
   @media (prefers-reduced-motion: reduce) {
-    [data-reveal] { opacity: 1 !important; transform: none !important; transition: none; }
+    .js [data-reveal] { opacity: 1 !important; transform: none !important; transition: none; }
   }
 }
 
@@ -458,7 +458,7 @@
     [data-reveal] { opacity: 1; transform: none; }
     .hero-name-depth { transform: none; }
     .hero-portrait-cutout img { transform: none; }
-    .about-portrait-cutout img { filter: grayscale(.82) contrast(1.12); }
+    .about-portrait-cutout img { filter: grayscale(1) contrast(1.14); }
     .field-art img { transform: none !important; }
     .capability-row,
     .lab-note,
@@ -506,30 +506,18 @@
   .hero-display h1 strong {
     position: relative; isolation: isolate;
     color: var(--accent);
-    text-shadow:
-      3px 3px 0 color-mix(in srgb, var(--ink) 26%, transparent),
-      7px 7px 0 color-mix(in srgb, var(--accent) 24%, transparent);
+    text-shadow: 4px 4px 0 color-mix(in srgb, var(--accent) 20%, transparent);
   }
   .hero-accent-depth::before,
-  .hero-accent-depth::after {
-    content: attr(data-text); position: absolute; inset: 0; z-index: -1; color: transparent;
-    pointer-events: none; -webkit-text-stroke: 1px var(--ink);
-  }
-  .hero-accent-depth::before { transform: translate(5px, 5px); opacity: .7; }
-  .hero-accent-depth::after { transform: translate(10px, 10px); opacity: .28; -webkit-text-stroke-color: var(--signal); }
-  .hero-name-depth {
-    position: relative; isolation: isolate; transform-origin: left center;
-    transform: perspective(700px) rotateY(-2deg) rotateX(1deg);
-    text-shadow: 1px 1px 0 var(--ink);
-  }
-  .hero-name-depth::before,
-  .hero-name-depth::after {
+  .hero-accent-depth::after { content: none; }
+  .hero-name-depth { position: relative; isolation: isolate; }
+  .hero-name-depth::before {
     content: attr(data-text); position: absolute; inset: 0; z-index: -1; color: transparent;
     pointer-events: none; -webkit-text-stroke: 1px var(--accent);
+    transform: translate(4px, 4px); opacity: .3;
   }
-  .hero-name-depth::before { transform: translate(5px, 5px); opacity: .78; }
-  .hero-name-depth::after { transform: translate(10px, 10px); opacity: .24; -webkit-text-stroke-color: var(--signal); }
-  .hero-portrait { position: absolute; inset: 0 0 0 auto; width: min(39vw, 34rem); height: 100%; }
+  .hero-name-depth::after { content: none; }
+  .hero-portrait { position: absolute; inset: 0 0 0 auto; width: auto; max-width: min(39vw, 34rem); height: 100%; aspect-ratio: 6 / 5; }
   .hero-portrait-cutout { isolation: isolate; overflow: visible; background: transparent; }
   .hero-portrait-cutout::before {
     content: ""; position: absolute; z-index: 0; inset: 9% 0 3% 9%;
@@ -544,13 +532,15 @@
   }
   .hero-portrait-cutout::after {
     content: ""; position: absolute; z-index: 3; inset: 9% 0 3% 9%; pointer-events: none;
-    background: repeating-linear-gradient(0deg, transparent 0 6px, color-mix(in srgb, var(--accent) 12%, transparent) 6px 7px);
+    background:
+      linear-gradient(color-mix(in srgb, var(--accent) 7%, transparent), color-mix(in srgb, var(--accent) 7%, transparent)),
+      repeating-linear-gradient(0deg, transparent 0 3px, color-mix(in srgb, var(--accent) 8%, transparent) 3px 4px);
     clip-path: polygon(8% 0, 100% 0, 100% 84%, 84% 100%, 0 100%, 0 10%);
     mix-blend-mode: screen;
   }
   .hero-portrait-cutout img {
     position: relative; z-index: 2; object-fit: contain; object-position: center bottom;
-    filter: grayscale(.82) contrast(1.1) drop-shadow(10px 8px 0 color-mix(in srgb, var(--accent) 52%, transparent));
+    filter: grayscale(1) contrast(1.14) brightness(.96) drop-shadow(12px 12px 0 color-mix(in srgb, var(--accent) 24%, transparent));
     mix-blend-mode: normal;
     transform: scale(1.16);
     transform-origin: center bottom;
@@ -606,7 +596,7 @@
     height: 100%;
     object-fit: contain;
     object-position: center bottom;
-    filter: grayscale(.82) contrast(1.12) drop-shadow(.55rem .65rem 0 color-mix(in srgb, var(--accent) 28%, transparent));
+    filter: grayscale(1) contrast(1.14) brightness(.96) drop-shadow(.55rem .55rem 0 color-mix(in srgb, var(--accent) 24%, transparent));
     mix-blend-mode: normal;
   }
   .about-lead, .about-copy h2 { font-size: clamp(2rem, 4vw, 4.8rem); line-height: 1; letter-spacing: -.045em; margin-bottom: 2rem; }
@@ -734,7 +724,7 @@
     .home-hero { height: auto; min-height: calc(100svh - var(--header-h)); }
     .hero-display { align-items: end; min-height: 37rem; }
     .hero-display h1 { max-width: 100%; font-size: clamp(4.4rem, 18vw, 8rem); }
-    .hero-portrait { width: 65%; height: 72%; opacity: .82; }
+    .hero-portrait { width: 65%; max-width: none; height: 72%; opacity: .82; }
     .hero-portrait-cutout img { transform: none; }
     .hero-bottom, .about-split, .about-profile { grid-template-columns: 1fr; }
     .mission-brief { max-width: 100%; }
@@ -771,7 +761,7 @@
     .hero-meta .meta { text-align: left; }
     .hero-display { min-height: 31rem; }
     .hero-display h1 { max-width: 100%; font-size: 3.75rem; }
-    .hero-portrait { width: 80%; height: 70%; }
+    .hero-portrait { width: 80%; max-width: none; height: 70%; }
     .landmark h1, .landmark h2 { font-size: 3.25rem; }
     .page-hero h1 { max-width: 100%; font-size: 3.5rem; }
     .evidence-grid { grid-template-columns: 1fr; }
@@ -784,4 +774,176 @@
     .contact-ledger div { grid-template-columns: 1fr; gap: .35rem; }
     .error-code { font-size: clamp(8rem, 32vw, 11rem); }
   }
+}
+
+
+
+/* ------------------------------------------------------------------ */
+/* Modern tactical-HUD enhancements: decoder detail, diegetic marks,   */
+/* chamfered geometry, scanlines, chromatic aberration, command console, */
+/* opt-in audio feedback. All decorative, motion-gated, zero new assets. */
+/* ------------------------------------------------------------------ */
+@layer hud {
+  :root {
+    --chamfer: clamp(6px, 1vw, 11px);
+    --scan-opacity: .065;
+  }
+
+  /* Freeze the page behind the command console. */
+  body.hud-locked { overflow: hidden; }
+
+  /* 4a. Restrained optical scanline / CRT texture (fixed, non-blocking). */
+  .crt-scan {
+    position: fixed;
+    inset: 0;
+    z-index: 40;
+    pointer-events: none;
+    background-image: repeating-linear-gradient(0deg, #000 0 1px, transparent 1px 4px);
+    opacity: var(--scan-opacity);
+  }
+
+  /* 2b. Pulsing status blip (diegetic radar dot) — decorative. */
+  .status-blip {
+    display: inline-block;
+    flex: 0 0 auto;
+    width: .4rem;
+    height: .4rem;
+    margin-right: .55rem;
+    border-radius: 50%;
+    background: var(--accent);
+    vertical-align: middle;
+    box-shadow: 0 0 0 0 color-mix(in srgb, var(--accent) 70%, transparent);
+    animation: status-blip 2.4s ease-out infinite;
+  }
+  .status-live { display: inline-flex; align-items: center; }
+  @keyframes status-blip {
+    0% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--accent) 60%, transparent); }
+    70% { box-shadow: 0 0 0 .5rem transparent; }
+    100% { box-shadow: 0 0 0 0 transparent; }
+  }
+
+  /* 2a. Diegetic geospatial / status watermark on the hero (decorative). */
+  .home-hero .hero-meta .meta::after {
+    content: "27.6710°N 85.4298°E // FIELD LOG // 2026";
+    display: block;
+    margin-top: .75rem;
+    color: var(--muted);
+    font-family: var(--mono);
+    font-size: .58rem;
+    letter-spacing: .16em;
+    opacity: .7;
+  }
+
+  /* 3. Chamfered / angled geometry (45° corner cuts, avionics feel). */
+  .button, .button-primary {
+    clip-path: polygon(0 0, calc(100% - var(--chamfer)) 0, 100% var(--chamfer), 100% 100%, var(--chamfer) 100%, 0 calc(100% - var(--chamfer)));
+    transition: background .35s ease, color .35s ease, border-color .35s ease, box-shadow .35s ease;
+  }
+  .chip, .nav-cv-link {
+    clip-path: polygon(0 0, calc(100% - .5rem) 0, 100% .5rem, 100% 100%, .5rem 100%, 0 calc(100% - .5rem));
+  }
+
+  /* clip-path also clips outlines, so keep a visible focus ring inside the cut. */
+  .button:focus-visible, .button-primary:focus-visible, .nav-cv-link:focus-visible, .chip:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: -3px;
+    box-shadow: inset 0 0 0 2px var(--accent);
+  }
+
+  /* 4b. Chromatic aberration (RGB split) on interaction — subtle lens artifact. */
+  .editorial-nav a, .section-kicker, .button, .nav-cv-link, .case-study .case-copy h3 {
+    transition: text-shadow .25s ease, color .35s ease;
+  }
+  .editorial-nav a:hover, .editorial-nav a:focus-visible,
+  .section-kicker:hover,
+  .button:hover, .button:focus-visible,
+  .nav-cv-link:hover, .nav-cv-link:focus-visible,
+  .case-study .case-copy h3:hover {
+    text-shadow: -.05rem 0 color-mix(in srgb, var(--signal) 55%, transparent), .05rem 0 color-mix(in srgb, var(--accent) 60%, transparent);
+  }
+
+
+  /* 2c. HUD footer readouts (truthful live telemetry) + new controls. */
+  .footer-hud-readout { display: inline-flex; align-items: center; gap: 1.1rem; min-width: 0; }
+  .footer-hud-clock, .footer-hud-geo { white-space: nowrap; }
+  .footer-hud-geo { color: var(--muted); }
+  [data-hud-clock] { color: var(--accent); }
+  .footer-hud-sfx, .footer-hud-cli {
+    display: inline-flex; align-items: center; gap: .5rem;
+    min-height: 44px; padding: 0; border: 0; background: transparent;
+    color: var(--muted); font: inherit; letter-spacing: inherit; cursor: pointer;
+  }
+  .footer-hud-sfx > span:last-child, .footer-hud-cli > span:last-child { color: var(--accent); }
+  .footer-hud-sfx[aria-pressed="true"] > span:first-child::before {
+    content: ""; display: inline-block; width: .4rem; height: .4rem; margin-right: .4rem;
+    border-radius: 50%; background: var(--accent); vertical-align: middle;
+    box-shadow: 0 0 0 0 color-mix(in srgb, var(--accent) 70%, transparent);
+    animation: status-blip 1.8s ease-out infinite;
+  }
+  .footer-hud-sfx:focus-visible, .footer-hud-cli:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+
+  /* 5. Command console (Ctrl/⌘ + K). */
+  .cmdk {
+    position: fixed; inset: 0; z-index: 200;
+    display: grid; place-items: start center;
+    padding: clamp(3rem, 12vh, 8rem) 1rem 1rem;
+    background: color-mix(in srgb, var(--canvas) 78%, transparent);
+    backdrop-filter: blur(6px);
+    opacity: 0; visibility: hidden;
+    transition: opacity .2s ease, visibility .2s ease;
+  }
+  .cmdk[data-open] { opacity: 1; visibility: visible; }
+  .cmdk__dialog {
+    width: min(38rem, 100%);
+    border: 1px solid var(--line-strong);
+    background: var(--surface); color: var(--ink);
+    box-shadow: 0 1.5rem 4rem color-mix(in srgb, #000 55%, transparent);
+    clip-path: polygon(0 0, calc(100% - 1rem) 0, 100% 1rem, 100% 100%, 1rem 100%, 0 calc(100% - 1rem));
+    transform: translateY(-.5rem);
+    transition: transform .2s ease;
+  }
+  .cmdk[data-open] .cmdk__dialog { transform: none; }
+  .cmdk__field { display: flex; align-items: center; gap: .6rem; padding: .9rem 1.1rem; border-bottom: 1px solid var(--line); }
+  .cmdk__prompt { color: var(--accent); font-family: var(--mono); font-size: 1rem; }
+  .cmdk__input { flex: 1; min-width: 0; background: transparent; border: 0; outline: 0; color: var(--ink); font-family: var(--mono); font-size: .95rem; letter-spacing: .04em; }
+  .cmdk__close { flex: 0 0 auto; min-width: 2rem; min-height: 2rem; border: 1px solid var(--line); background: transparent; color: var(--muted); cursor: pointer; font: inherit; }
+  .cmdk__close:hover { color: var(--ink); border-color: var(--accent); }
+
+
+  .cmdk__results { max-height: min(52vh, 22rem); overflow-y: auto; margin: 0; padding: .35rem 0; list-style: none; }
+  .cmdk__item { display: grid; grid-template-columns: auto 1fr auto; align-items: baseline; gap: .75rem; padding: .6rem 1.1rem; cursor: pointer; }
+  .cmdk__item-cmd { color: var(--accent); font-family: var(--mono); font-size: .72rem; letter-spacing: .08em; }
+  .cmdk__item-label { color: var(--ink); font-size: .9rem; }
+  .cmdk__item-group { color: var(--muted); font-family: var(--mono); font-size: .58rem; letter-spacing: .14em; }
+  .cmdk__item[aria-selected="true"] { background: color-mix(in srgb, var(--accent) 12%, transparent); }
+  .cmdk__item[aria-selected="true"] .cmdk__item-cmd::before { content: "▸ "; }
+  .cmdk__empty { padding: 1rem 1.1rem; color: var(--muted); font-family: var(--mono); font-size: .72rem; letter-spacing: .06em; }
+  .cmdk__hint { padding: .6rem 1.1rem; border-top: 1px solid var(--line); color: var(--muted); font-family: var(--mono); font-size: .58rem; letter-spacing: .12em; }
+  .cmdk__hint b { color: var(--accent); font-weight: 400; }
+
+  /* Responsive integrity for the HUD enhancements. */
+  @media (max-width: 1080px) { .footer-hud-geo { display: none; } }
+  @media (max-width: 680px) {
+    .footer-hud-clock { display: none; }
+    .home-hero .hero-meta .meta::after { letter-spacing: .1em; font-size: .54rem; }
+    /* Keep the actions bar as tidy as MODE/THEME/FONT: value-only SFX, and
+       the console is a keyboard power feature (Ctrl/⌘+K, "/") so hide its
+       trigger on touch layouts — the mobile menu already covers navigation. */
+    .footer-hud-sfx > span:first-child { display: none; }
+    .footer-hud-cli { display: none; }
+  }
+  @media (max-width: 520px) {
+    .cmdk { padding: 0; place-items: stretch; }
+    .cmdk__dialog { width: 100%; height: 100dvh; max-width: none; border: 0; box-shadow: none; clip-path: none; }
+    .cmdk__input { font-size: 1rem; }
+    .cmdk__results { max-height: none; }
+  }
+
+  /* Reduced-motion: keep content, remove looping / animated decoration. */
+  @media (prefers-reduced-motion: reduce) {
+    .status-blip, .footer-hud-sfx[aria-pressed="true"] > span:first-child::before { animation: none; box-shadow: none; }
+    .crt-scan { display: none; }
+    .cmdk, .cmdk__dialog { transition: none; }
+  }
+
 }
