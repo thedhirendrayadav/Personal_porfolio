@@ -11,6 +11,7 @@ if sys.stdout.encoding and sys.stdout.encoding.lower() != "utf-8":
 
 from flask import Flask, render_template, request, jsonify, session, redirect, url_for, flash, Response
 import datetime
+from xml.sax.saxutils import escape
 import json
 import os
 import secrets
@@ -1123,7 +1124,7 @@ Sitemap: {SITE_URL}/sitemap.xml
     return Response(body, mimetype='text/plain')
 
 
-def normalize_sitemap_date(value, fallback):
+def normalize_sitemap_date(value, fallback=None):
     """Return an ISO calendar date without using the request date."""
     if value is None:
         return fallback
@@ -1139,35 +1140,23 @@ def normalize_sitemap_date(value, fallback):
 @app.route('/sitemap.xml')
 def sitemap_xml():
     """Generate a discoverable sitemap from public routes and content."""
-    release_date = '2026-07-28'
-    route_dates = {
-        '/': release_date,
-        '/about': release_date,
-        '/skills': release_date,
-        '/work': release_date,
-        '/lab': release_date,
-        '/contact': release_date,
-        '/blog': release_date,
-        '/faq': release_date,
-        '/cv': release_date,
-    }
     urls = [
-        ('/', '1.0', route_dates['/']),
-        ('/about', '0.8', route_dates['/about']),
-        ('/skills', '0.8', route_dates['/skills']),
-        ('/work', '0.9', route_dates['/work']),
-        ('/lab', '0.7', route_dates['/lab']),
-        ('/contact', '0.7', route_dates['/contact']),
-        ('/blog', '0.8', route_dates['/blog']),
-        ('/faq', '0.6', route_dates['/faq']),
-        ('/cv', '0.6', route_dates['/cv']),
+        ('/', '1.0', None),
+        ('/about', '0.8', None),
+        ('/skills', '0.8', None),
+        ('/work', '0.9', None),
+        ('/lab', '0.7', None),
+        ('/contact', '0.7', None),
+        ('/blog', '0.8', None),
+        ('/faq', '0.6', None),
+        ('/cv', '0.6', None),
     ]
     try:
         urls.extend(
             (
                 f"/work/{project['slug']}",
                 '0.7',
-                normalize_sitemap_date(project.get('updated_at'), release_date),
+                normalize_sitemap_date(project.get('updated_at')),
             )
             for project in load_curated_projects()
         )
@@ -1179,10 +1168,7 @@ def sitemap_xml():
             (
                 f"/blog/{post['slug']}",
                 '0.7',
-                normalize_sitemap_date(
-                    post.get('updated_at') or post.get('created_at'),
-                    release_date,
-                ),
+                normalize_sitemap_date(post.get('updated_at') or post.get('created_at')),
             )
             for post in posts
             if post.get('slug')
@@ -1196,7 +1182,7 @@ def sitemap_xml():
         if previous is None or priority > previous[0]:
             unique_urls[path] = (priority, lastmod)
     entries = ''.join(
-        f'<url><loc>{SITE_URL}{path}</loc><lastmod>{lastmod}</lastmod><changefreq>monthly</changefreq><priority>{priority}</priority></url>'
+        f'<url><loc>{escape(SITE_URL + path)}</loc>{f"<lastmod>{lastmod}</lastmod>" if lastmod else ""}<changefreq>monthly</changefreq><priority>{priority}</priority></url>'
         for path, (priority, lastmod) in unique_urls.items()
     )
     xml = f'<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">{entries}</urlset>'
