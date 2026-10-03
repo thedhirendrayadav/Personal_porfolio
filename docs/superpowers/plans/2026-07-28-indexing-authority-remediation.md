@@ -1,5 +1,7 @@
 # Indexing and Authority Remediation Implementation Plan
 
+> **Superseded:** This historical plan assumes Railway and `www` are canonical. The active deployment uses Render and `https://dhirendrayadav.site`; use `docs/superpowers/specs/2026-10-03-full-seo-geo-aeo-design.md` and `docs/superpowers/plans/2026-10-03-full-seo-geo-aeo.md` instead.
+
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
 **Goal:** Deploy a truthfully expanded, canonically routed portfolio and connect it to Google Search Console so crawling and indexing decisions can be measured and acted on.

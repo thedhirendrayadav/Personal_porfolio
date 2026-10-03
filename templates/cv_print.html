@@ -1,0 +1,198 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Dhirendra Yadav — Curriculum Vitae</title>
+  <style>
+    /* Modern brand CV for xhtml2pdf. Flat block flow (pisa paginates it
+       reliably) organized with SHORT two-column tables — one row each —
+       for the header, entry titles/dates, and label/content rows. */
+    @page { size: a4 portrait; margin: 13mm 15mm 11mm; }
+    * { box-sizing: border-box; }
+    body { margin: 0; color: #101312; font-family: Helvetica, Arial, sans-serif; font-size: 9.2pt; line-height: 1.42; }
+    a { color: inherit; text-decoration: none; }
+
+    .kicker { margin: 0 0 6pt; color: #3d6570; font-size: 7.4pt; letter-spacing: 1.6pt; text-transform: uppercase; }
+    .name { margin: 0; font-size: 26pt; font-weight: bold; line-height: 1.0; color: #101312; }
+    .role { margin: 6pt 0 0; color: #3d6570; font-size: 10.5pt; }
+    .mast-rule { margin: 10pt 0 0; border-bottom: 2.5pt solid #9df9f3; }
+
+    .head-grid { width: 100%; border-collapse: collapse; table-layout: fixed; }
+    .head-grid td { vertical-align: top; }
+
+    .contact-grid { margin-top: 2pt; width: 100%; border-collapse: collapse; table-layout: fixed; }
+    .contact-cell { color: #55584f; font-size: 8pt; padding: 1.5pt 6pt 1.5pt 0; border-bottom: 0.5pt solid #e4e1d6; }
+    .contact-cell small { display: block; color: #9aa093; font-size: 6.6pt; letter-spacing: 0.8pt; text-transform: uppercase; }
+    .contact-cell a { color: #3d6570; }
+
+    .section { margin-top: 12pt; }
+    .section-title { margin: 0 0 6pt; font-size: 8pt; letter-spacing: 1.5pt; text-transform: uppercase; color: #3d6570; border-bottom: 0.8pt solid #c9c6ba; padding-bottom: 3.5pt; }
+    .summary { margin: 0; color: #34372f; font-size: 9.4pt; line-height: 1.52; }
+
+    .entry { margin-bottom: 8pt; }
+    .entry-title { color: #101312; font-weight: bold; font-size: 10pt; }
+    .entry-date { color: #55584f; font-size: 7.8pt; text-align: right; white-space: nowrap; }
+    .entry-org { margin-top: 1pt; color: #3d6570; font-size: 8.4pt; }
+    .entry ul { margin: 3pt 0 0; padding-left: 10pt; }
+    .entry li { margin-bottom: 1.8pt; color: #44473f; font-size: 8.7pt; }
+
+    .project { margin-bottom: 7pt; padding: 4pt 0 4pt 9pt; border-left: 2.5pt solid #9df9f3; }
+    .project-title { font-weight: bold; color: #101312; font-size: 9.6pt; }
+    .project-status { margin-left: 5pt; color: #3d6570; font-size: 6.8pt; letter-spacing: 1pt; text-transform: uppercase; }
+    .project p { margin: 2pt 0 0; color: #44473f; font-size: 8.6pt; }
+    .project .tech { margin-top: 2pt; color: #3d6570; font-size: 7.6pt; }
+
+    .info-grid { width: 100%; border-collapse: collapse; table-layout: fixed; }
+    .info-label { width: 27%; color: #101312; font-weight: bold; font-size: 8.5pt; padding: 3.5pt 8pt 3.5pt 0; border-bottom: 0.5pt solid #e4e1d6; vertical-align: top; }
+    .info-items { color: #55584f; font-size: 8.5pt; padding: 3.5pt 0; border-bottom: 0.5pt solid #e4e1d6; vertical-align: top; }
+
+    .edu-detail { margin: 2pt 0 0; color: #55584f; font-size: 8.6pt; }
+
+    .note { margin-top: 2pt; padding: 7pt 9pt; background: #f4f3ee; border-left: 2.5pt solid #9df9f3; color: #44473f; font-size: 8.2pt; }
+    .note b { color: #101312; }
+
+    .footer-line { margin-top: 13pt; padding-top: 4pt; border-top: 0.6pt solid #d9d6cb; color: #8a8d82; font-size: 7pt; }
+  </style>
+</head>
+<body>
+  {# ---------- Masthead: identity left, direct lines right ---------- #}
+  <table class="head-grid">
+    <tr>
+      <td style="width: 62%;">
+        <p class="kicker">{{ cv.basics.kicker }}</p>
+        <h1 class="name">{{ cv.basics.name }}</h1>
+        <p class="role">{{ cv.basics.role }}</p>
+      </td>
+      <td>
+        <table class="contact-grid">
+          <tr><td class="contact-cell"><small>Email</small>{{ cv.basics.email }}</td></tr>
+          <tr><td class="contact-cell"><small>Phone / Base</small>{{ cv.basics.phone }} — {{ cv.basics.location }}</td></tr>
+          <tr><td class="contact-cell"><small>Portfolio</small>{{ cv.basics.site_label }}</td></tr>
+          <tr><td class="contact-cell"><small>GitHub</small>{{ cv.basics.github_label }}</td></tr>
+        </table>
+      </td>
+    </tr>
+  </table>
+  <div class="mast-rule"></div>
+
+  <div class="section">
+    <h2 class="section-title">Professional profile</h2>
+    <p class="summary">{{ cv.basics.summary }}</p>
+  </div>
+
+  <div class="section">
+    <h2 class="section-title">Experience</h2>
+    {% for item in cv.experience %}
+    <div class="entry">
+      <table class="head-grid"><tr>
+        <td class="entry-title">{{ item.title }}</td>
+        <td class="entry-date">{{ item.period }}</td>
+      </tr></table>
+      <div class="entry-org">{{ item.org }}</div>
+      <ul>
+        {% for line in item.bullets %}<li>{{ line }}</li>{% endfor %}
+      </ul>
+    </div>
+    {% endfor %}
+  </div>
+
+  <div class="section">
+    <h2 class="section-title">Education</h2>
+    {% for item in cv.education %}
+    <div class="entry">
+      <table class="head-grid"><tr>
+        <td class="entry-title">{{ item.degree }}</td>
+        <td class="entry-date">{{ item.period }}</td>
+      </tr></table>
+      <div class="entry-org">{{ item.org }}</div>
+      <p class="edu-detail">{{ item.detail }}</p>
+    </div>
+    {% endfor %}
+  </div>
+
+  {# ---------- Page 2: projects, toolkit, education, principles ---------- #}
+  <div style="page-break-before: always;"></div>
+
+  <table class="head-grid">
+    <tr>
+      <td style="width: 58%;">
+        <p class="kicker">Curriculum vitae / {{ cv.basics.updated_label }}</p>
+        <h1 class="name" style="font-size: 14pt;">{{ cv.basics.name }}</h1>
+      </td>
+      <td style="width: 42%; text-align: right; vertical-align: bottom;">
+        <p class="kicker" style="margin: 0;">Case studies over claims</p>
+      </td>
+    </tr>
+  </table>
+  <div class="mast-rule"></div>
+
+  <div class="section">
+    <h2 class="section-title">Selected projects</h2>
+    {% for project in cv.projects %}
+    <div class="project">
+      <span class="project-title">{{ project.title }}</span>
+      <span class="project-status">{{ project.status }}</span>
+      <p>{{ project.description }}</p>
+      <div class="tech">{{ project.tech }}</div>
+    </div>
+    {% endfor %}
+  </div>
+
+  <div class="section">
+    <h2 class="section-title">Core practice</h2>
+    <table class="info-grid">
+      {% for group in cv.skill_groups %}
+      <tr>
+        <td class="info-label">{{ group.name }}</td>
+        <td class="info-items">{{ group.entries }}</td>
+      </tr>
+      {% endfor %}
+    </table>
+  </div>
+
+  {# ---------- Page 3: toolkit, principles, closing ---------- #}
+  <div class="section">
+    <h2 class="section-title">Technical toolkit</h2>
+    <table class="info-grid">
+      {% for group in cv.toolkit %}
+      <tr>
+        <td class="info-label">{{ group.name }}</td>
+        <td class="info-items">{{ group.entries }}</td>
+      </tr>
+      {% endfor %}
+    </table>
+  </div>
+
+  <table class="head-grid">
+    <tr>
+      <td style="width: 52%; vertical-align: top;">
+        <div class="section" style="margin-top: 0;">
+          <h2 class="section-title">Working principles</h2>
+          {% for principle in cv.principles %}
+          <p class="toolkit-line"><b>{{ principle.title }}</b> {{ principle.detail }}</p>
+          {% endfor %}
+        </div>
+      </td>
+      <td style="width: 48%; vertical-align: top;">
+        <div class="section" style="margin-top: 0;">
+          <h2 class="section-title">Evidence standard</h2>
+        </div>
+        <div class="note" style="margin-top: 0;">{{ cv.basics.evidence_note }}</div>
+        <p class="toolkit-line" style="margin-top: 8pt;"><b>Availability.</b> {{ cv.basics.availability }}</p>
+        <div class="section" style="margin-top: 10pt;">
+          <h2 class="section-title">Direct lines</h2>
+          <table class="contact-grid">
+            <tr><td class="contact-cell"><small>Email</small>{{ cv.basics.email }}</td></tr>
+            <tr><td class="contact-cell"><small>Phone / Base</small>{{ cv.basics.phone }} — {{ cv.basics.location }}</td></tr>
+            <tr><td class="contact-cell"><small>Portfolio</small>{{ cv.basics.site_label }}</td></tr>
+            <tr><td class="contact-cell"><small>LinkedIn</small>{{ cv.basics.linkedin_label }}</td></tr>
+            <tr><td class="contact-cell"><small>GitHub</small>{{ cv.basics.github_label }}</td></tr>
+          </table>
+        </div>
+      </td>
+    </tr>
+  </table>
+
+  <p class="footer-line">{{ cv.basics.footer_note }} Last updated {{ cv.basics.updated_label }}. {{ cv.basics.site_label }} · {{ cv.basics.email }}</p>
+</body>
+</html>

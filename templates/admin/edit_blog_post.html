@@ -3,15 +3,16 @@
 {% block title %}Edit Blog Post - {{ app_name }}{% endblock %}
 
 {% block content %}
-<div class="admin-header">
-    <h1>Edit Blog Post</h1>
-    <div class="admin-actions">
-        <a href="{{ url_for('admin_blog') }}" class="btn btn-outline">
-            <i class="fas fa-arrow-left"></i> Back to Blog
-        </a>
+<div class="page-head">
+    <div>
+        <span class="page-eyebrow mono-label">CONTENT / EDIT DISPATCH</span>
+        <h1>Edit blog post.</h1>
+    </div>
+    <div class="page-actions">
+        <a href="{{ url_for('admin_blog') }}" class="btn">Back to Blog ←</a>
         {% if post %}
-        <a href="{{ url_for('blog_post', slug=post.slug) }}" class="btn btn-outline" target="_blank">
-            <i class="fas fa-eye"></i> View Post
+        <a href="{{ url_for('blog_post', slug=post.slug) }}" class="btn" target="_blank">
+            View Post ↗
         </a>
         {% endif %}
     </div>
@@ -97,20 +98,19 @@
 
         <div class="form-actions">
             <button type="submit" class="btn btn-primary">
-                <i class="fas fa-save"></i> Update Post
+                Update Post
             </button>
-            <button type="button" class="btn btn-outline" onclick="window.history.back()">
+            <button type="button" class="btn" onclick="window.history.back()">
                 Cancel
             </button>
             <button type="button" class="btn btn-danger delete-post-btn" data-post-id="{{ post.id }}">
-                <i class="fas fa-trash"></i> Delete Post
+                Delete Post
             </button>
         </div>
     </form>
     {% else %}
-    <div class="error-state">
-        <i class="fas fa-exclamation-triangle fa-3x text-warning"></i>
-        <h3>Post Not Found</h3>
+    <div class="empty-state">
+        <h3>Post not found</h3>
         <p>The blog post you're trying to edit doesn't exist.</p>
         <a href="{{ url_for('admin_blog') }}" class="btn btn-primary">Back to Blog</a>
     </div>
@@ -216,103 +216,4 @@
     }
 </script>
 
-<style>
-    .form-grid {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 1rem;
-    }
-
-    .form-group {
-        margin-bottom: 1.5rem;
-    }
-
-    .form-group label {
-        display: block;
-        margin-bottom: 0.5rem;
-        font-weight: 600;
-        color: #1e293b;
-    }
-
-    .form-group input,
-    .form-group select,
-    .form-group textarea {
-        width: 100%;
-        padding: 0.75rem;
-        border: 1px solid #d1d5db;
-        border-radius: 8px;
-        background: #ffffff;
-        color: #1e293b;
-        font-size: 1rem;
-    }
-
-    .form-group input:focus,
-    .form-group select:focus,
-    .form-group textarea:focus {
-        outline: none;
-        border-color: #6366f1;
-        box-shadow: 0 0 0 3px rgba(74, 155, 255, 0.1);
-    }
-
-    .form-group small {
-        display: block;
-        margin-top: 0.25rem;
-        color: #6b7280;
-        font-size: 0.875rem;
-    }
-
-    .checkbox-label {
-        display: flex;
-        align-items: center;
-        cursor: pointer;
-        font-weight: 600;
-        color: #1e293b;
-    }
-
-    .checkbox-label input[type="checkbox"] {
-        width: auto;
-        margin-right: 0.5rem;
-    }
-
-    .form-actions {
-        display: flex;
-        gap: 1rem;
-        margin-top: 2rem;
-        padding-top: 2rem;
-        border-top: 1px solid #d1d5db;
-    }
-
-    .error-state {
-        text-align: center;
-        padding: 3rem;
-    }
-
-    .error-state i {
-        margin-bottom: 1rem;
-    }
-
-    .error-state h3 {
-        margin-bottom: 0.5rem;
-        color: #1e293b;
-    }
-
-    .error-state p {
-        color: #64748b;
-        margin-bottom: 2rem;
-    }
-
-    .text-warning {
-        color: #F59E0B;
-    }
-
-    @media (max-width: 768px) {
-        .form-grid {
-            grid-template-columns: 1fr;
-        }
-
-        .form-actions {
-            flex-direction: column;
-        }
-    }
-</style>
 {% endblock %}

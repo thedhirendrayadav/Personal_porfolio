@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% block title %}Cybersecurity & AI Case Studies — Dhirendra Yadav{% endblock %}
+{% block description %}Browse Dhirendra Yadav's cybersecurity, AI/ML, Python automation, ERP, and systems engineering case studies, with status and evidence clearly stated.{% endblock %}
+{% block keywords %}cybersecurity projects, AI ML portfolio Nepal, Python automation projects, Flask case studies, systems engineering portfolio, Dhirendra Yadav projects{% endblock %}
+{% block content %}
+<header class="page-hero editorial-grid">
+  <p class="eyebrow accent">WORK / CASE FILES · 2026</p><span class="hero-doc-ref">DOC DY-WORK / {{ projects|length }} CASE FILES</span>
+  <h1><span class="outline-text">SELECTED</span><br>WORK.</h1>
+  <p>Systems shaped by security thinking, operational clarity, and practical delivery — each one presented as a case file that can be inspected.</p>
+  <div class="work-index-meta">
+    <span class="chip">{{ projects|length }} CASE FILES</span>
+    <span class="chip">{{ prototypes }} PROTOTYPES & IN DEVELOPMENT</span><span class="chip">{{ completed }} PRODUCTION DEPLOYMENTS</span>
+  </div>
+</header>
+
+<div class="ticker-band" aria-hidden="true"><div class="ticker-track"><div class="ticker-seq"><span>SECURITY FIRST</span><span>EVIDENCE LED</span><span>HONEST STATUS</span><span>SMALL SLICES</span><span>VISIBLE BEHAVIOR</span><span>BUILT IN NEPAL</span><span>REVIEWABLE CASE FILES</span></div><div class="ticker-seq"><span>SECURITY FIRST</span><span>EVIDENCE LED</span><span>HONEST STATUS</span><span>SMALL SLICES</span><span>VISIBLE BEHAVIOR</span><span>BUILT IN NEPAL</span><span>REVIEWABLE CASE FILES</span></div></div></div>
+
+<section class="editorial-grid" style="padding-top: 2.25rem;"><nav class="page-ledger" aria-label="Case file index"><div class="page-ledger-head"><p class="meta accent">INDEX / CASE FILE LEDGER</p><p class="meta">{{ projects|length }} ENTRIES</p></div>{% for project in projects %}<a class="page-ledger-row" href="#case-{{ '%02d'|format(loop.index) }}"><span class="idx">{{ '%02d'|format(loop.index) }}</span><span class="name">{{ project.title }}</span><span class="cell">{{ (project.project_type or 'SYSTEM') }}</span><span class="go" aria-hidden="true">↓</span></a>{% endfor %}</nav></section>
+
+<section class="editorial-section editorial-grid field-manual-section" data-section="00 — FIELDWORK PROTOCOL">
+  <div class="section-head"><span class="section-index" aria-hidden="true">01</span><p class="section-kicker accent">00 / FIELDWORK PROTOCOL</p><h2>How to read the work.</h2><p>Every case file separates what exists, what it demonstrates, and what still needs hardening. The goal is a portfolio that can be inspected rather than a gallery of unsupported claims.</p></div>
+  <div class="manual-grid">
+    <article class="manual-panel" data-reveal><p class="meta accent">01 / EVIDENCE MODEL</p><h3>Claim → source → boundary.</h3><p>Project statements are connected to source records, schemas, tests, captures, or reports. Constraints remain visible so a prototype is never presented as a production deployment.</p><ul class="manual-list"><li><span>CLAIM</span><strong>What the system is intended to show</strong></li><li><span>SOURCE</span><strong>Where the statement can be checked</strong></li><li><span>BOUNDARY</span><strong>What is explicitly outside the evidence</strong></li></ul></article>
+    <article class="manual-panel" data-reveal><p class="meta accent">02 / STATUS LANGUAGE</p><h3>Progress without ambiguity.</h3><p><strong>Prototype</strong> marks an interaction or architecture under validation. <strong>Research System</strong> marks an investigative workflow. <strong>In Development</strong> marks active construction without a finished-production claim.</p><div class="evidence-key" aria-label="Project status legend"><span>PROTOTYPE</span><span>RESEARCH SYSTEM</span><span>IN DEVELOPMENT</span></div></article>
+    <article class="manual-panel" data-reveal><p class="meta accent">03 / DELIVERY LOOP</p><h3>Small slices, visible behavior.</h3><p>Work begins with the user, assets, and trust boundaries; moves through the smallest testable architecture; and ends with evidence, operating signals, and a clear next-hardening list.</p><p class="manual-callout">Security is treated as a delivery constraint from the first model—not a final checklist.</p></article>
+  </div>
+</section>
+
+<section class="editorial-section editorial-grid" data-section="01 — CASE FILES">
+  <div class="section-head"><span class="section-index" aria-hidden="true">02</span><p class="section-kicker accent">01 / CASE FILES</p><h2>The work, filed and numbered.</h2><p>Security, automation, AI, and product engineering case studies — open any file for the system question, architecture, risk register, and verified outcomes.</p></div>
+  <div class="case-list">
+  {% if projects %}{% for project in projects %}<article class="case-study" id="case-{{ '%02d'|format(loop.index) }}" data-evidence="project" data-reveal><div class="case-media field-art"><span class="field-art-label meta" data-field-mark aria-hidden="true">{{ '%02d'|format(loop.index) }} / SYSTEM MAP</span>{% if project.image_url %}<img data-project-image src="{% if project.image_url.startswith('static/') %}/{% endif %}{{ project.image_url }}" alt="Technical systems artwork for {{ project.title }}" width="{{ project.image_width or 1536 }}" height="{{ project.image_height or 1024 }}" loading="lazy" decoding="async">{% else %}<div class="case-placeholder"><span>{{ '%02d'|format(loop.index) }}</span></div>{% endif %}</div><div class="case-copy"><div class="case-meta"><span class="meta">{{ '%02d'|format(loop.index) }} / {{ (project.project_type or 'SYSTEM')|upper }}</span><span class="meta">{{ (project.status or 'COMPLETED')|upper }}</span></div><h3>{{ project.title }}</h3><p>{{ project.description }}</p>{% if project.technologies %}<div class="button-row case-actions">{% for tech in project.technologies[:6] %}<span class="chip">{{ tech }}</span>{% endfor %}</div>{% endif %}<div class="button-row case-actions">{% if content_source == 'curated' %}<a class="button button-primary" href="{{ url_for('curated_project_detail', slug=project.slug) }}">View case study ↗</a>{% elif project.id %}<a class="button button-primary" href="{{ url_for('project_detail', project_id=project.id) }}">View case study ↗</a>{% endif %}{% if project.demo_url %}<a class="button" href="{{ project.demo_url }}" target="_blank" rel="noreferrer">Live system ↗</a>{% endif %}{% if project.github_url or project.repository_url %}<a class="button" href="{{ project.github_url or project.repository_url }}" target="_blank" rel="noreferrer">Source ↗</a>{% endif %}</div></div></article>{% endfor %}
+  {% else %}<div class="empty-state"><h2>Case studies are being prepared.</h2><p>In the meantime, get in touch for a walkthrough of current security, AI, and platform work.</p><div class="button-row"><a class="button" href="{{ url_for('contact') }}">Request a walkthrough ↗</a></div></div>{% endif %}
+  </div>
+</section>
+
+<section class="landmark" data-section="02 — CONNECT"><h2><span class="outline-text">START</span> <span class="accent">YOURS.</span></h2></section>
+<section class="editorial-section editorial-grid">
+  <div class="contact-brief-layout">
+    <div class="project-brief manual-panel"><p class="meta accent">NEXT / YOUR PROJECT</p><h3>Bring the problem; keep the brief short.</h3><p>The most useful first message names the operating problem, the people affected, the known constraints, and the outcome you need. Everything else can be figured out together.</p></div>
+    <div class="response-route"><p class="meta accent">RESPONSE ROUTE / WHAT HAPPENS NEXT</p><div class="route-steps"><div><span>01</span><strong>RECEIVE</strong><small>Read the problem and context.</small></div><i aria-hidden="true"></i><div><span>02</span><strong>CLARIFY</strong><small>Identify missing constraints.</small></div><i aria-hidden="true"></i><div><span>03</span><strong>SCOPE</strong><small>Define a safe next step.</small></div><i aria-hidden="true"></i><div><span>04</span><strong>RESPOND</strong><small>Return with questions or a direction.</small></div></div><div class="button-row" style="margin-top: 2rem;"><a class="button button-primary" href="{{ url_for('contact') }}">Start a conversation ↗</a><a class="button" href="{{ url_for('cv_main') }}">View CV ↗</a></div></div>
+  </div>
+</section>
+{% endblock %}

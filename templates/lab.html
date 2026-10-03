@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% block title %}Cybersecurity Research Lab — Dhirendra Yadav{% endblock %}
+{% block description %}Explore Dhirendra Yadav's research in threat modeling, detection workflows, grounded AI, and deployment observability, with clear methods and evidence targets.{% endblock %}
+{% block content %}
+<header class="page-hero editorial-grid">
+  <p class="eyebrow accent">LAB / CONTROLLED EXPERIMENTS</p><span class="hero-doc-ref">DOC DY-LAB / 4 ACTIVE DOSSIERS</span>
+  <h1><span class="outline-text">RESEARCH</span><br><span class="accent">LAB.</span></h1>
+  <p>Bounded investigations rather than finished-product claims — the place where questions are tested before they earn a place in shipped work.</p>
+  <div class="work-index-meta">
+    <span class="chip">4 ACTIVE DOSSIERS</span>
+    <span class="chip">HYPOTHESIS → METHOD → EVIDENCE</span>
+    <span class="chip">STATUS: IN DEVELOPMENT</span>
+  </div>
+</header>
+
+<section class="editorial-grid" style="padding-top: 2.25rem;"><nav class="page-ledger" aria-label="Dossier index"><div class="page-ledger-head"><p class="meta accent">INDEX / DOSSIER LEDGER</p><p class="meta">4 ENTRIES</p></div><a class="page-ledger-row" href="#dossier-01"><span class="idx">01</span><span class="name">Threat-model workbench</span><span class="cell">Security</span><span class="go" aria-hidden="true">↓</span></a><a class="page-ledger-row" href="#dossier-02"><span class="idx">02</span><span class="name">Detection workflow</span><span class="cell">Automation</span><span class="go" aria-hidden="true">↓</span></a><a class="page-ledger-row" href="#dossier-03"><span class="idx">03</span><span class="name">Retrieval-grounded assistant</span><span class="cell">Applied AI</span><span class="go" aria-hidden="true">↓</span></a><a class="page-ledger-row" href="#dossier-04"><span class="idx">04</span><span class="name">Deployment observability</span><span class="cell">Operations</span><span class="go" aria-hidden="true">↓</span></a></nav></section>
+
+<section class="editorial-section editorial-grid" data-section="01 — PIPELINE">
+  <div class="section-head"><span class="section-index" aria-hidden="true">01</span><p class="section-kicker accent">01 / PIPELINE</p><h2>Controlled learning, in order.</h2><p>Every investigation moves through the same four gates. Nothing skips the queue, and nothing is declared done without passing the last one.</p></div>
+  <div class="lab-pipeline" aria-labelledby="lab-pipeline-title"><p class="meta accent" id="lab-pipeline-title">LAB PIPELINE / CONTROLLED LEARNING</p><div class="system-flow" role="img" aria-label="Lab pipeline from intake to isolate to test to observe"><div class="signal-node"><span>01</span><strong>INTAKE</strong><small>Question and risk</small></div><i aria-hidden="true"></i><div class="signal-node"><span>02</span><strong>ISOLATE</strong><small>Scope and boundary</small></div><i aria-hidden="true"></i><div class="signal-node"><span>03</span><strong>TEST</strong><small>Smallest useful experiment</small></div><i aria-hidden="true"></i><div class="signal-node"><span>04</span><strong>OBSERVE</strong><small>Evidence and limits</small></div></div></div>
+</section>
+
+<section class="editorial-section editorial-grid" data-section="02 — DOSSIERS">
+  <div class="section-head"><span class="section-index" aria-hidden="true">02</span><p class="section-kicker accent">02 / DOSSIERS</p><h2>Open investigations.</h2><p>Each dossier states the research hypothesis, test method, evidence target, and the condition that would invalidate the direction.</p></div>
+  <div class="lab-dossier-grid">
+    <article class="lab-dossier" id="dossier-01" data-evidence="lab" data-reveal><div class="dossier-head"><p class="meta accent">01 / SECURITY</p><span class="status-flag">IN DEVELOPMENT</span></div><h3>Threat-model workbench</h3><dl><div><dt>RESEARCH HYPOTHESIS</dt><dd>A compact asset-and-boundary worksheet can expose abuse paths before implementation choices become expensive.</dd></div><div><dt>METHOD</dt><dd>Map actors, assets, entry points, trust crossings, misuse cases, and proposed controls.</dd></div><div><dt>EVIDENCE TARGET</dt><dd>A reviewable model that connects each risk to an owner, control, and verification step.</dd></div><div><dt>CONSTRAINT</dt><dd>The model supports decisions; it does not prove a system is secure.</dd></div></dl></article>
+    <article class="lab-dossier" id="dossier-02" data-evidence="lab" data-reveal><div class="dossier-head"><p class="meta accent">02 / AUTOMATION</p><span class="status-flag">IN DEVELOPMENT</span></div><h3>Detection workflow</h3><dl><div><dt>RESEARCH HYPOTHESIS</dt><dd>Alerts become more actionable when collection, context, prioritization, and human review are visible in one flow.</dd></div><div><dt>METHOD</dt><dd>Use synthetic events to exercise normalization, rule evaluation, evidence capture, and escalation states.</dd></div><div><dt>EVIDENCE TARGET</dt><dd>Repeatable test cases showing why an event was promoted, suppressed, or sent for review.</dd></div><div><dt>CONSTRAINT</dt><dd>No claim of live monitoring coverage is made without a deployed data source.</dd></div></dl></article>
+    <article class="lab-dossier" id="dossier-03" data-evidence="lab" data-reveal><div class="dossier-head"><p class="meta accent">03 / APPLIED AI</p><span class="status-flag">IN DEVELOPMENT</span></div><h3>Retrieval-grounded assistant</h3><dl><div><dt>RESEARCH HYPOTHESIS</dt><dd>Answers are more useful when every response is bounded by approved sources and exposes its supporting context.</dd></div><div><dt>METHOD</dt><dd>Compare retrieval, source filtering, refusal behavior, and citation coverage on a controlled document set.</dd></div><div><dt>EVIDENCE TARGET</dt><dd>Evaluation cases for grounded answers, missing context, conflicting sources, and safe refusal.</dd></div><div><dt>CONSTRAINT</dt><dd>Generated output remains advisory and requires verification for consequential decisions.</dd></div></dl></article>
+    <article class="lab-dossier" id="dossier-04" data-evidence="lab" data-reveal><div class="dossier-head"><p class="meta accent">04 / OPERATIONS</p><span class="status-flag">IN DEVELOPMENT</span></div><h3>Deployment observability</h3><dl><div><dt>RESEARCH HYPOTHESIS</dt><dd>A small release is safer when health, configuration, migrations, and rollback evidence are treated as one deployment record.</dd></div><div><dt>METHOD</dt><dd>Exercise readiness checks, structured logs, failure states, and recovery notes against a controlled service.</dd></div><div><dt>EVIDENCE TARGET</dt><dd>A concise release ledger showing what changed, what was checked, and how recovery would proceed.</dd></div><div><dt>CONSTRAINT</dt><dd>Local checks do not establish production reliability without live operational evidence.</dd></div></dl></article>
+  </div>
+</section>
+
+<section class="editorial-section editorial-grid" data-section="03 — BOUNDARIES">
+  <div class="section-head"><span class="section-index" aria-hidden="true">03</span><p class="section-kicker accent">03 / BOUNDARIES</p><h2>What the lab is — and is not.</h2><p>Stating the boundaries up front keeps every experiment honest and every result useful.</p></div>
+  <div class="manual-grid">
+    <article class="manual-panel" data-reveal><p class="meta accent">01 / WHAT IT IS</p><h3>A test bench.</h3><p>Small, reversible experiments that produce written evidence: models, test cases, ledgers, and evaluation notes that later feed real deliveries.</p><ul class="manual-list"><li><span>AIM</span><strong>Learn before the cost of being wrong is high</strong></li><li><span>OUTPUT</span><strong>Evidence a reviewer can inspect</strong></li><li><span>CADENCE</span><strong>Bounded runs with written conclusions</strong></li></ul></article>
+    <article class="manual-panel" data-reveal><p class="meta accent">02 / WHAT IT IS NOT</p><h3>A product claim.</h3><p>Nothing in the lab is presented as deployed, monitored, or production-grade. Findings graduate into projects only with their own evidence.</p><p class="secret-warning">No dossier on this page asserts live coverage, production reliability, or finished-product status.</p></article>
+  </div>
+</section>
+
+<section class="landmark" data-section="04 — FOLLOW"><h2><span class="outline-text">FOLLOW THE</span> <span class="accent">EVIDENCE.</span></h2></section>
+<section class="editorial-section editorial-grid">
+  <div class="section-head"><span class="section-index" aria-hidden="true">04</span><p class="section-kicker accent">04 / FOLLOW</p><h2>Findings become field notes.</h2><p>Conclusions that survive the pipeline are written up in the archive — the same evidence standard, applied to prose.</p></div>
+  <div class="button-row">
+    <a class="button button-primary" href="{{ url_for('blog') }}">Read the field notes ↗</a>
+    <a class="button" href="{{ url_for('work_page') }}">Explore selected work ↗</a>
+    <a class="button" href="{{ url_for('contact') }}">Start a conversation ↗</a>
+  </div>
+</section>
+{% endblock %}

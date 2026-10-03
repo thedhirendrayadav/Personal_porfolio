@@ -3,9 +3,19 @@
 {% block title %}Edit Project - Admin Panel{% endblock %}
 
 {% block content %}
+<div class="page-head">
+    <div>
+        <span class="page-eyebrow mono-label">CONTENT / EDIT PROJECT</span>
+        <h1>Edit project.</h1>
+    </div>
+    <div class="page-actions">
+        <a href="{{ url_for('admin_projects') }}" class="btn">Back to Projects ←</a>
+    </div>
+</div>
+
 <div class="admin-card">
     <div class="admin-card-header">
-        <h2>✏️ Edit Project: {{ project.title }}</h2>
+        <h2>{{ project.title }}</h2>
     </div>
 
     <div class="admin-card-body">
@@ -84,7 +94,7 @@
             </div>
 
             <!-- URLs Section -->
-            <div style="margin-top: 2rem; padding-top: 2rem; border-top: 1px solid #e2e8f0;">
+            <div style="margin-top: 2rem; padding-top: 2rem; border-top: 1px solid var(--line);">
                 <h3 style="margin-bottom: 1rem; color: #374151;">Project Links</h3>
                 
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
@@ -109,7 +119,7 @@
             </div>
 
             <!-- Form Actions -->
-            <div style="display: flex; gap: 1rem; justify-content: flex-end; margin-top: 2rem; padding-top: 2rem; border-top: 1px solid #e2e8f0;">
+            <div style="display: flex; gap: 1rem; justify-content: flex-end; margin-top: 2rem; padding-top: 2rem; border-top: 1px solid var(--line);">
                 <a href="{{ url_for('admin_projects') }}" class="btn btn-secondary">Cancel</a>
                 <button type="submit" class="btn btn-primary">
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
@@ -149,8 +159,8 @@
         const tag = document.createElement('span');
         tag.className = 'tech-tag';
         tag.style.cssText = `
-            background: #6366f1;
-            color: white;
+            background: var(--accent);
+            color: var(--accent-fg);
             padding: 0.25rem 0.5rem;
             border-radius: 4px;
             font-size: 0.75rem;

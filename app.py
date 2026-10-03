@@ -11,6 +11,7 @@ if sys.stdout.encoding and sys.stdout.encoding.lower() != "utf-8":
 
 from flask import Flask, render_template, request, jsonify, session, redirect, url_for, flash, Response
 import datetime
+from xml.sax.saxutils import escape
 import json
 import os
 import secrets
@@ -19,9 +20,28 @@ from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 from functools import wraps
 from werkzeug.exceptions import NotFound
+from werkzeug.middleware.proxy_fix import ProxyFix
 from werkzeug.routing import RequestRedirect
-from config import APP_CONFIG, ADMIN_CONFIG, EMAIL_CONFIG
+from config import APP_CONFIG, ADMIN_CONFIG, DATABASE_TYPE, EMAIL_CONFIG, SUPABASE_CONFIG
+
+IS_RENDER = os.environ.get("RENDER", "").strip().lower() in {"1", "true", "yes"}
+if IS_RENDER:
+    required_render_settings = {
+        "DATABASE_TYPE": DATABASE_TYPE if DATABASE_TYPE == "supabase" else "",
+        "SUPABASE_URL": SUPABASE_CONFIG["url"],
+        "SUPABASE_SECRET_KEY": SUPABASE_CONFIG["key"],
+        "SECRET_KEY": ADMIN_CONFIG["secret_key"],
+        "ADMIN_USERNAME": ADMIN_CONFIG["username"],
+        "ADMIN_PASSWORD": ADMIN_CONFIG["password"],
+    }
+    missing_render_settings = [name for name, value in required_render_settings.items() if not value]
+    if missing_render_settings:
+        raise RuntimeError(
+            "Missing Render environment variables: " + ", ".join(missing_render_settings)
+        )
+
 from unified_models import ProjectModel, CategoryModel, BlogModel, ContactModel
+from models.cv_model import CvModel
 from database import db
 from project_content import (
     get_curated_neighbors,
@@ -44,6 +64,7 @@ def ensure_database_and_tables():
         project_model.create_projects_table()
         category_model.create_categories_table()
         blog_model.create_blog_tables()
+        CvModel().create_cv_table()
     except Exception as e:
         print(f"Database setup error: {e}")
         # Continue without database for static content
@@ -111,8 +132,18 @@ def send_email_notification(name, email, subject, message):
 
 
 app = Flask(__name__)
+if IS_RENDER:
+    # Render terminates TLS before forwarding requests to the Gunicorn process.
+    app.wsgi_app = ProxyFix(app.wsgi_app, x_for=1, x_proto=1, x_host=1)
+
+
+@app.get("/healthz")
+def health_check():
+    return {"status": "ok"}, 200
+
+
 ASSET_VERSION = os.environ.get('ASSET_VERSION', str(int(datetime.datetime.now().timestamp())))
-SITE_URL = os.environ.get('SITE_URL', 'https://www.dhirendrayadav.site').rstrip('/')
+SITE_URL = os.environ.get('SITE_URL', 'https://dhirendrayadav.site').rstrip('/')
 SITE_NAME = 'Dhirendra Yadav'
 SITE_DESCRIPTION = 'Dhirendra Yadav builds secure automation, AI/ML systems, and practical digital products from Bhaktapur, Nepal.'
 INDEXNOW_KEY = os.environ.get('INDEXNOW_KEY', 'dy-portfolio-indexnow-20260728')
@@ -151,7 +182,7 @@ def redirect_noncanonical_trailing_slash():
 # Security Configuration
 app.config.update(
     SECRET_KEY=os.environ.get('SECRET_KEY', ADMIN_CONFIG["secret_key"]),
-    SESSION_COOKIE_SECURE=False,  # Set to True in production with HTTPS
+    SESSION_COOKIE_SECURE=IS_RENDER,
     SESSION_COOKIE_HTTPONLY=True,
     SESSION_COOKIE_SAMESITE='Lax',
     PERMANENT_SESSION_LIFETIME=datetime.timedelta(hours=2),
@@ -159,7 +190,8 @@ app.config.update(
     # versioned production assets between page views.
     SEND_FILE_MAX_AGE_DEFAULT=(
         datetime.timedelta(days=7)
-        if os.environ.get('RAILWAY_ENVIRONMENT')
+        if IS_RENDER
+        or os.environ.get('RAILWAY_ENVIRONMENT')
         or os.environ.get('RAILWAY_ENVIRONMENT_NAME')
         else 0
     )
@@ -253,12 +285,17 @@ def admin_required(f):
         
         # Check session timeout
         if 'last_activity' in session:
-            if datetime.datetime.now() - session['last_activity'] > datetime.timedelta(hours=2):
+            last_activity = session['last_activity']
+            # Werkzeug tags session datetimes as UTC on load, but a value set in the
+            # same request is still naive, so normalise before subtracting.
+            if last_activity.tzinfo is None:
+                last_activity = last_activity.replace(tzinfo=datetime.timezone.utc)
+            if datetime.datetime.now(datetime.timezone.utc) - last_activity > datetime.timedelta(hours=2):
                 session.clear()
                 flash('Session expired. Please log in again.', 'warning')
                 return redirect(url_for('admin_login'))
         
-        session['last_activity'] = datetime.datetime.now()
+        session['last_activity'] = datetime.datetime.now(datetime.timezone.utc)
         return f(*args, **kwargs)
     return decorated_function
 
@@ -295,7 +332,7 @@ def admin_login():
             session.permanent = True
             session['admin_logged_in'] = True
             session['admin_username'] = username
-            session['last_activity'] = datetime.datetime.now()
+            session['last_activity'] = datetime.datetime.now(datetime.timezone.utc)
             flash('Successfully logged in!', 'success')
             
             # Redirect to intended page or dashboard
@@ -350,21 +387,22 @@ def index():
 def about():
     return render_template("about.html", app_name=APP_CONFIG["name"])
 
-@app.route("/portfolio")
-def portfolio():
+@app.route("/work")
+def work_page():
+    """Standalone selected-work page (all case studies)."""
     project_model = ProjectModel()
     category_model = CategoryModel()
 
     try:
-        database_projects = project_model.get_all_projects(featured_only=True)
+        database_projects = project_model.get_all_projects()
         categories = category_model.get_all_categories()
     except Exception as exc:
-        print(f"Portfolio project load error: {exc}")
+        print(f"Work page project load error: {exc}")
         database_projects = []
         categories = []
     projects = database_projects or load_curated_projects()
     content_source = "database" if database_projects else "curated"
-    
+
     # Retain model-normalized technology lists while supporting legacy JSON strings.
     for project in projects:
         if isinstance(project.get('technologies'), str):
@@ -372,12 +410,27 @@ def portfolio():
                 project['technologies'] = json.loads(project['technologies'])
             except json.JSONDecodeError:
                 project['technologies'] = []
-    
-    return render_template("portfolio.html", 
+
+    completed = sum(1 for p in projects if (p.get('status') or '').lower() == 'completed')
+    prototypes = sum(1 for p in projects if (p.get('status') or '').lower() in ('prototype', 'research system', 'in development'))
+
+    return render_template("work.html",
                          app_name=APP_CONFIG["name"],
                          projects=projects,
                          categories=categories,
-                         content_source=content_source)
+                         content_source=content_source,
+                         completed=completed,
+                         prototypes=prototypes)
+
+@app.route("/portfolio")
+def portfolio():
+    """Legacy portfolio URL — the standalone work page replaces it."""
+    return redirect(url_for('work_page'), code=301)
+
+@app.route("/lab")
+def lab_page():
+    """Standalone research lab page."""
+    return render_template("lab.html", app_name=APP_CONFIG["name"])
 
 
 @app.route("/work/<slug>")
@@ -755,7 +808,13 @@ def blog_post(slug):
             related_posts = blog_model.get_posts_by_category(post['category'], limit=3)
         except Exception:
             related_posts = []
+    # Drop the post itself so a lone same-category match can't leave the
+    # "Related notes." section rendering as a bare heading. Slug comparison
+    # works for both database posts and curated entries without ids.
+    related_posts = [candidate for candidate in related_posts if candidate.get('slug') != post.get('slug')]
     recent_posts = get_public_recent_field_notes(limit=5)
+    if not related_posts:
+        related_posts = [candidate for candidate in recent_posts if candidate.get('slug') != post.get('slug')]
     categories = get_public_categories()
     
     return render_template("blog/post.html",
@@ -963,7 +1022,10 @@ def download_cv():
     from io import BytesIO
     from xhtml2pdf import pisa
 
-    html_content = render_template('cv_print_optimized.html')
+    cv_model = CvModel()
+    cv = cv_model.get_content()
+
+    html_content = render_template('cv_print.html', cv=cv)
     pdf_buffer = BytesIO()
     pisa_status = pisa.CreatePDF(
         src=html_content,
@@ -985,18 +1047,32 @@ def download_cv():
 
 @app.route("/cv")
 def cv_main():
-    """Main CV page - print optimized"""
-    return render_template('cv_print_optimized.html')
+    """Public CV page in the site's editorial design."""
+    cv_model = CvModel()
+    cv = cv_model.get_content()
+    return render_template('cv.html', app_name=APP_CONFIG["name"], cv=cv)
+
+@app.route("/admin/cv", methods=['GET', 'POST'])
+@admin_required
+def admin_cv():
+    """Edit the CV document rendered by /cv and the PDF download."""
+    cv_model = CvModel()
+
+    if request.method == 'POST':
+        payload = request.get_json(silent=True)
+        if not isinstance(payload, dict) or not isinstance(payload.get('basics'), dict):
+            return jsonify({'success': False, 'message': 'Invalid CV payload.'}), 400
+        try:
+            cv_model.save_content(payload)
+        except Exception as exc:
+            app.logger.error('CV save failed: %s', exc)
+            return jsonify({'success': False, 'message': 'Could not save the CV. Check the database connection.'}), 500
+        return jsonify({'success': True})
+
+    cv = cv_model.get_content()
+    return render_template("admin/cv.html", app_name=APP_CONFIG["name"], cv=cv, csrf_token=generate_csrf_token())
 
 
-# Debug route to check if static files are accessible
-@app.route("/debug/static")
-def debug_static():
-    import os
-    static_path = os.path.join(app.root_path, 'static', 'images', 'profile.jpg')
-    file_exists = os.path.exists(static_path)
-    file_size = os.path.getsize(static_path) if file_exists else 0
-    return f"Static file check:<br>Path: {static_path}<br>Exists: {file_exists}<br>Size: {file_size} bytes"
 
 
 # Error handlers
@@ -1048,7 +1124,7 @@ Sitemap: {SITE_URL}/sitemap.xml
     return Response(body, mimetype='text/plain')
 
 
-def normalize_sitemap_date(value, fallback):
+def normalize_sitemap_date(value, fallback=None):
     """Return an ISO calendar date without using the request date."""
     if value is None:
         return fallback
@@ -1064,31 +1140,23 @@ def normalize_sitemap_date(value, fallback):
 @app.route('/sitemap.xml')
 def sitemap_xml():
     """Generate a discoverable sitemap from public routes and content."""
-    release_date = '2026-07-28'
-    route_dates = {
-        '/': release_date,
-        '/about': release_date,
-        '/skills': release_date,
-        '/portfolio': release_date,
-        '/contact': release_date,
-        '/blog': release_date,
-        '/faq': release_date,
-    }
     urls = [
-        ('/', '1.0', route_dates['/']),
-        ('/about', '0.8', route_dates['/about']),
-        ('/skills', '0.8', route_dates['/skills']),
-        ('/portfolio', '0.9', route_dates['/portfolio']),
-        ('/contact', '0.7', route_dates['/contact']),
-        ('/blog', '0.8', route_dates['/blog']),
-        ('/faq', '0.6', route_dates['/faq']),
+        ('/', '1.0', None),
+        ('/about', '0.8', None),
+        ('/skills', '0.8', None),
+        ('/work', '0.9', None),
+        ('/lab', '0.7', None),
+        ('/contact', '0.7', None),
+        ('/blog', '0.8', None),
+        ('/faq', '0.6', None),
+        ('/cv', '0.6', None),
     ]
     try:
         urls.extend(
             (
                 f"/work/{project['slug']}",
                 '0.7',
-                normalize_sitemap_date(project.get('updated_at'), release_date),
+                normalize_sitemap_date(project.get('updated_at')),
             )
             for project in load_curated_projects()
         )
@@ -1100,10 +1168,7 @@ def sitemap_xml():
             (
                 f"/blog/{post['slug']}",
                 '0.7',
-                normalize_sitemap_date(
-                    post.get('updated_at') or post.get('created_at'),
-                    release_date,
-                ),
+                normalize_sitemap_date(post.get('updated_at') or post.get('created_at')),
             )
             for post in posts
             if post.get('slug')
@@ -1117,7 +1182,7 @@ def sitemap_xml():
         if previous is None or priority > previous[0]:
             unique_urls[path] = (priority, lastmod)
     entries = ''.join(
-        f'<url><loc>{SITE_URL}{path}</loc><lastmod>{lastmod}</lastmod><changefreq>monthly</changefreq><priority>{priority}</priority></url>'
+        f'<url><loc>{escape(SITE_URL + path)}</loc>{f"<lastmod>{lastmod}</lastmod>" if lastmod else ""}<changefreq>monthly</changefreq><priority>{priority}</priority></url>'
         for path, (priority, lastmod) in unique_urls.items()
     )
     xml = f'<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">{entries}</urlset>'
@@ -1144,7 +1209,7 @@ def llms_txt():
 - [Home]({SITE_URL}/): Identity, specialties, selected work, and current availability.
 - [About]({SITE_URL}/about): Background, education, working principles, and professional focus.
 - [Expertise]({SITE_URL}/skills): Cybersecurity, AI/ML, product engineering, and automation capabilities.
-- [Selected work]({SITE_URL}/portfolio): Evidence-led project and systems case studies.
+- [Selected work]({SITE_URL}/work): Evidence-led project and systems case studies.
 - [Writing]({SITE_URL}/blog): Field notes and technical analysis.
 - [FAQ]({SITE_URL}/faq): Direct answers about services, location, and project status.
 - [Contact]({SITE_URL}/contact): Project enquiries and collaboration.

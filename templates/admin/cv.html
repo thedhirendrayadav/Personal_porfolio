@@ -1,0 +1,378 @@
+{% extends "admin/base.html" %}
+
+{% block title %}CV Editor - {{ app_name }}{% endblock %}
+
+{% block content %}
+<div class="page-head">
+    <div>
+        <span class="page-eyebrow mono-label">CONTENT / CURRICULUM VITAE</span>
+        <h1>CV editor.</h1>
+    </div>
+    <div class="page-actions">
+        <a href="{{ url_for('cv_main') }}" target="_blank" class="btn">View CV Page ↗</a>
+        <a href="{{ url_for('download_cv') }}" class="btn">Download PDF ↓</a>
+    </div>
+</div>
+
+<div class="alert" id="cvStatus" hidden></div>
+
+<form id="cvForm">
+    <!-- Basics -->
+    <div class="admin-card">
+        <div class="admin-card-header"><h2>Basics</h2></div>
+        <div class="admin-card-body">
+            <div class="form-grid">
+                <div class="form-group">
+                    <label class="form-label" for="basics.name">Name *</label>
+                    <input class="form-input" data-field="basics.name" id="basics.name" value="{{ cv.basics.name }}" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="basics.updated_label">Last updated label</label>
+                    <input class="form-input" data-field="basics.updated_label" id="basics.updated_label" value="{{ cv.basics.updated_label }}">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="form-label" for="basics.role">Role line</label>
+                <input class="form-input" data-field="basics.role" id="basics.role" value="{{ cv.basics.role }}">
+            </div>
+            <div class="form-group">
+                <label class="form-label" for="basics.tagline">Tagline (page hero)</label>
+                <textarea class="form-textarea" data-field="basics.tagline" id="basics.tagline" rows="2">{{ cv.basics.tagline }}</textarea>
+            </div>
+            <div class="form-group">
+                <label class="form-label" for="basics.summary">Professional summary</label>
+                <textarea class="form-textarea" data-field="basics.summary" id="basics.summary" rows="4">{{ cv.basics.summary }}</textarea>
+            </div>
+            <div class="form-grid">
+                <div class="form-group">
+                    <label class="form-label" for="basics.email">Email</label>
+                    <input class="form-input" data-field="basics.email" id="basics.email" value="{{ cv.basics.email }}">
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="basics.phone">Phone</label>
+                    <input class="form-input" data-field="basics.phone" id="basics.phone" value="{{ cv.basics.phone }}">
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="basics.location">Location</label>
+                    <input class="form-input" data-field="basics.location" id="basics.location" value="{{ cv.basics.location }}">
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="basics.site">Portfolio URL</label>
+                    <input class="form-input" data-field="basics.site" id="basics.site" value="{{ cv.basics.site }}">
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="basics.site_label">Portfolio label</label>
+                    <input class="form-input" data-field="basics.site_label" id="basics.site_label" value="{{ cv.basics.site_label }}">
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="basics.linkedin">LinkedIn URL</label>
+                    <input class="form-input" data-field="basics.linkedin" id="basics.linkedin" value="{{ cv.basics.linkedin }}">
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="basics.linkedin_label">LinkedIn label</label>
+                    <input class="form-input" data-field="basics.linkedin_label" id="basics.linkedin_label" value="{{ cv.basics.linkedin_label }}">
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="basics.github">GitHub URL</label>
+                    <input class="form-input" data-field="basics.github" id="basics.github" value="{{ cv.basics.github }}">
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="basics.github_label">GitHub label</label>
+                    <input class="form-input" data-field="basics.github_label" id="basics.github_label" value="{{ cv.basics.github_label }}">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="form-label" for="basics.availability">Additional information</label>
+                <textarea class="form-textarea" data-field="basics.availability" id="basics.availability" rows="3">{{ cv.basics.availability }}</textarea>
+            </div>
+            <div class="form-group">
+                <label class="form-label" for="basics.evidence_note">Evidence standard note</label>
+                <textarea class="form-textarea" data-field="basics.evidence_note" id="basics.evidence_note" rows="3">{{ cv.basics.evidence_note }}</textarea>
+            </div>
+            <div class="form-group">
+                <label class="form-label" for="basics.footer_note">PDF footer note</label>
+                <input class="form-input" data-field="basics.footer_note" id="basics.footer_note" value="{{ cv.basics.footer_note }}">
+            </div>
+        </div>
+    </div>
+
+    <!-- Experience -->
+    <div class="admin-card">
+        <div class="admin-card-header">
+            <h2>Experience</h2>
+            <button type="button" class="btn btn-sm" data-add="experience">Add Entry +</button>
+        </div>
+        <div class="admin-card-body" data-list="experience">
+            {% for item in cv.experience %}
+            <div class="cv-row">
+                <div class="form-grid">
+                    <div class="form-group"><label class="form-label">Title *</label><input class="form-input" data-field="title" value="{{ item.title }}"></div>
+                    <div class="form-group"><label class="form-label">Period</label><input class="form-input" data-field="period" value="{{ item.period }}"></div>
+                </div>
+                <div class="form-group"><label class="form-label">Organization</label><input class="form-input" data-field="org" value="{{ item.org }}"></div>
+                <div class="form-group"><label class="form-label">Bullets (one per line)</label><textarea class="form-textarea" data-field="bullets" rows="3">{% for line in item.bullets %}{{ line }}
+{% endfor %}</textarea></div>
+                <button type="button" class="btn btn-sm btn-danger" data-remove>Remove Entry</button>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Projects -->
+    <div class="admin-card">
+        <div class="admin-card-header">
+            <h2>Selected projects</h2>
+            <button type="button" class="btn btn-sm" data-add="projects">Add Project +</button>
+        </div>
+        <div class="admin-card-body" data-list="projects">
+            {% for item in cv.projects %}
+            <div class="cv-row">
+                <div class="form-grid">
+                    <div class="form-group"><label class="form-label">Title *</label><input class="form-input" data-field="title" value="{{ item.title }}"></div>
+                    <div class="form-group"><label class="form-label">Status</label><input class="form-input" data-field="status" value="{{ item.status }}"></div>
+                </div>
+                <div class="form-group"><label class="form-label">Description</label><textarea class="form-textarea" data-field="description" rows="2">{{ item.description }}</textarea></div>
+                <div class="form-group"><label class="form-label">Tech stack</label><input class="form-input" data-field="tech" value="{{ item.tech }}"></div>
+                <button type="button" class="btn btn-sm btn-danger" data-remove>Remove Project</button>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Skill groups -->
+    <div class="admin-card">
+        <div class="admin-card-header">
+            <h2>Skill groups</h2>
+            <button type="button" class="btn btn-sm" data-add="skill_groups">Add Group +</button>
+        </div>
+        <div class="admin-card-body" data-list="skill_groups">
+            {% for item in cv.skill_groups %}
+            <div class="cv-row">
+                <div class="form-grid">
+                    <div class="form-group"><label class="form-label">Group name *</label><input class="form-input" data-field="name" value="{{ item.name }}"></div>
+                    <div class="form-group"><label class="form-label">Items (comma-separated)</label><input class="form-input" data-field="entries" value="{{ item.entries }}"></div>
+                </div>
+                <button type="button" class="btn btn-sm btn-danger" data-remove>Remove Group</button>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Toolkit -->
+    <div class="admin-card">
+        <div class="admin-card-header">
+            <h2>Technical toolkit</h2>
+            <button type="button" class="btn btn-sm" data-add="toolkit">Add Row +</button>
+        </div>
+        <div class="admin-card-body" data-list="toolkit">
+            {% for item in cv.toolkit %}
+            <div class="cv-row">
+                <div class="form-grid">
+                    <div class="form-group"><label class="form-label">Label *</label><input class="form-input" data-field="name" value="{{ item.name }}"></div>
+                    <div class="form-group"><label class="form-label">Items (comma-separated)</label><input class="form-input" data-field="entries" value="{{ item.entries }}"></div>
+                </div>
+                <button type="button" class="btn btn-sm btn-danger" data-remove>Remove Row</button>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Education -->
+    <div class="admin-card">
+        <div class="admin-card-header">
+            <h2>Education</h2>
+            <button type="button" class="btn btn-sm" data-add="education">Add Entry +</button>
+        </div>
+        <div class="admin-card-body" data-list="education">
+            {% for item in cv.education %}
+            <div class="cv-row">
+                <div class="form-grid">
+                    <div class="form-group"><label class="form-label">Degree *</label><input class="form-input" data-field="degree" value="{{ item.degree }}"></div>
+                    <div class="form-group"><label class="form-label">Period</label><input class="form-input" data-field="period" value="{{ item.period }}"></div>
+                </div>
+                <div class="form-group"><label class="form-label">Institution</label><input class="form-input" data-field="org" value="{{ item.org }}"></div>
+                <div class="form-group"><label class="form-label">Detail</label><textarea class="form-textarea" data-field="detail" rows="2">{{ item.detail }}</textarea></div>
+                <button type="button" class="btn btn-sm btn-danger" data-remove>Remove Entry</button>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Principles -->
+    <div class="admin-card">
+        <div class="admin-card-header">
+            <h2>Working principles</h2>
+            <button type="button" class="btn btn-sm" data-add="principles">Add Principle +</button>
+        </div>
+        <div class="admin-card-body" data-list="principles">
+            {% for item in cv.principles %}
+            <div class="cv-row">
+                <div class="form-group"><label class="form-label">Title *</label><input class="form-input" data-field="title" value="{{ item.title }}"></div>
+                <div class="form-group"><label class="form-label">Detail</label><input class="form-input" data-field="detail" value="{{ item.detail }}"></div>
+                <button type="button" class="btn btn-sm btn-danger" data-remove>Remove Principle</button>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <div class="form-actions">
+        <button type="submit" class="btn btn-primary" id="cvSaveBtn">Save CV</button>
+        <a href="{{ url_for('cv_main') }}" target="_blank" class="btn">Preview CV Page ↗</a>
+    </div>
+</form>
+
+<style>
+    .cv-row {
+        border: 1px solid var(--line);
+        padding: 1.25rem;
+        margin-bottom: 1rem;
+        background: color-mix(in srgb, var(--accent) 3%, var(--card));
+    }
+    .cv-row [data-remove] { margin-top: .25rem; }
+    .form-grid { margin-bottom: 0; }
+</style>
+
+<script>
+(function () {
+    const form = document.getElementById('cvForm');
+    const status = document.getElementById('cvStatus');
+    const saveBtn = document.getElementById('cvSaveBtn');
+
+    const ROW_PROTOTYPES = {
+        experience: { title: '', org: '', period: '', bullets: '' },
+        projects: { title: '', status: 'Prototype', description: '', tech: '' },
+        skill_groups: { name: '', entries: '' },
+        toolkit: { name: '', entries: '' },
+        education: { degree: '', org: '', period: '', detail: '' },
+        principles: { title: '', detail: '' }
+    };
+
+    const escapeHtml = (value) => String(value ?? '')
+        .replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;').replaceAll('"', '&quot;');
+
+    function makeField(label, field, value, rows) {
+        if (rows) {
+            return `<div class="form-group"><label class="form-label">${label}</label><textarea class="form-textarea" data-field="${field}" rows="${rows}">${escapeHtml(value)}</textarea></div>`;
+        }
+        return `<div class="form-group"><label class="form-label">${label}</label><input class="form-input" data-field="${field}" value="${escapeHtml(value)}"></div>`;
+    }
+
+    function buildRow(listKey, data) {
+        const spec = ROW_PROTOTYPES[listKey];
+        const d = data || spec;
+        let inner = '';
+        if (listKey === 'experience') {
+            inner = `<div class="form-grid">${makeField('Title *', 'title', d.title)}${makeField('Period', 'period', d.period)}</div>`
+                + makeField('Organization', 'org', d.org)
+                + makeField('Bullets (one per line)', 'bullets', (d.bullets || []).join('\n'), 3);
+        } else if (listKey === 'projects') {
+            inner = `<div class="form-grid">${makeField('Title *', 'title', d.title)}${makeField('Status', 'status', d.status)}</div>`
+                + makeField('Description', 'description', d.description, 2)
+                + makeField('Tech stack', 'tech', d.tech);
+        } else if (listKey === 'education') {
+            inner = `<div class="form-grid">${makeField('Degree *', 'degree', d.degree)}${makeField('Period', 'period', d.period)}</div>`
+                + makeField('Institution', 'org', d.org)
+                + makeField('Detail', 'detail', d.detail, 2);
+        } else if (listKey === 'principles') {
+            inner = makeField('Title *', 'title', d.title) + makeField('Detail', 'detail', d.detail);
+        } else {
+            inner = `<div class="form-grid">${makeField('Label *', 'name', d.name)}${makeField('Items (comma-separated)', 'entries', d.entries)}</div>`;
+        }
+        const row = document.createElement('div');
+        row.className = 'cv-row';
+        row.innerHTML = inner + '<button type="button" class="btn btn-sm btn-danger" data-remove>Remove</button>';
+        return row;
+    }
+
+    // Add / remove row handlers
+    form.addEventListener('click', (e) => {
+        const addBtn = e.target.closest('[data-add]');
+        if (addBtn) {
+            const listKey = addBtn.getAttribute('data-add');
+            const list = form.querySelector(`[data-list="${listKey}"]`);
+            list.appendChild(buildRow(listKey));
+            return;
+        }
+        const removeBtn = e.target.closest('[data-remove]');
+        if (removeBtn) {
+            removeBtn.closest('.cv-row')?.remove();
+        }
+    });
+
+    const setByPath = (obj, path, value) => {
+        const parts = path.split('.');
+        let node = obj;
+        for (let i = 0; i < parts.length - 1; i++) {
+            if (!node[parts[i]] || typeof node[parts[i]] !== 'object') node[parts[i]] = {};
+            node = node[parts[i]];
+        }
+        node[parts[parts.length - 1]] = value;
+    };
+
+    function serialize() {
+        const payload = {};
+        // Simple fields (basics.*)
+        form.querySelectorAll('[data-field]').forEach((el) => {
+            const path = el.getAttribute('data-field');
+            if (!path.includes('.') || el.closest('[data-list]')) return;
+            setByPath(payload, path, el.value.trim());
+        });
+        // Row lists
+        form.querySelectorAll('[data-list]').forEach((list) => {
+            const key = list.getAttribute('data-list');
+            const rows = [];
+            list.querySelectorAll('.cv-row').forEach((row) => {
+                const item = {};
+                row.querySelectorAll('[data-field]').forEach((el) => {
+                    const field = el.getAttribute('data-field');
+                    if (field === 'bullets') {
+                        item[field] = el.value.split('\n').map((l) => l.trim()).filter(Boolean);
+                    } else {
+                        item[field] = el.value.trim();
+                    }
+                });
+                if (Object.values(item).some((v) => (Array.isArray(v) ? v.length : v))) rows.push(item);
+            });
+            payload[key] = rows;
+        });
+        return payload;
+    }
+
+    function showStatus(message, isError) {
+        status.textContent = message;
+        status.hidden = false;
+        status.className = 'alert ' + (isError ? 'alert-error' : 'alert-success');
+    }
+
+    form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const body = serialize();
+        if (!body.basics || !body.basics.name) {
+            showStatus('Name is required.', true);
+            return;
+        }
+        saveBtn.disabled = true;
+        saveBtn.textContent = 'Saving...';
+        fetch('{{ url_for("admin_cv") }}', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'X-CSRF-Token': '{{ csrf_token }}' },
+            body: JSON.stringify(body)
+        })
+            .then((r) => r.json())
+            .then((data) => {
+                if (data.success) {
+                    showStatus('CV saved — the public CV page and the PDF download are updated.', false);
+                } else {
+                    showStatus(data.message || 'Could not save the CV.', true);
+                }
+            })
+            .catch(() => showStatus('Could not save the CV. Check your connection and try again.', true))
+            .finally(() => {
+                saveBtn.disabled = false;
+                saveBtn.textContent = 'Save CV';
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            });
+    });
+})();
+</script>
+{% endblock %}

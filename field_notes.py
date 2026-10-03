@@ -7,6 +7,8 @@ CURATED_FIELD_NOTES = [
         "id": "curated-flask-public-content-and-administration",
         "title": "How a Flask portfolio platform separates public content from administration",
         "slug": "flask-public-content-and-administration",
+        "seo_title": 'Flask Public Content and Admin Security — Dhirendra Yadav',
+        "seo_description": 'A Flask portfolio separates public pages, editable content, contact input and admin access. This field note explains the boundaries and evidence.',
         "excerpt": "A field note on separating public pages, mutable content, contact input, and administration in a Flask portfolio application.",
         "content": """
 <h2>What boundary matters first?</h2>
@@ -32,6 +34,8 @@ CURATED_FIELD_NOTES = [
         "id": "curated-trustworthy-prototype-project-pages",
         "title": "What makes a prototype project page trustworthy?",
         "slug": "trustworthy-prototype-project-pages",
+        "seo_title": 'Trustworthy Prototype Project Pages — Dhirendra Yadav',
+        "seo_description": 'Learn how a prototype project page connects claims to source evidence, describes constraints, and avoids implying production readiness.',
         "excerpt": "A practical evidence model for describing prototype systems without turning an implementation claim into a production claim.",
         "content": """
 <h2>What should a project page prove?</h2>

@@ -9,31 +9,39 @@ APP_CONFIG = {
 }
 
 # Database Configuration - Support both MySQL and Supabase
-DATABASE_TYPE = os.getenv("DATABASE_TYPE", "mysql")  # Default to mysql for backward compatibility
+DATABASE_TYPE = os.getenv("DATABASE_TYPE", "mysql").strip().lower()
 
 # MySQL Configuration
-# On Railway, a linked MySQL plugin injects MYSQLHOST/MYSQLUSER/MYSQLPASSWORD/
-# MYSQLDATABASE/MYSQLPORT. Fall back to local dev values when those are absent.
+# Local MySQL development settings. Production Render deployments use Supabase.
+# Render injects the unspaced names; the .env files use the spaced ones.
 MYSQL_CONFIG = {
-    "host": os.getenv("MYSQLHOST", "127.0.0.1"),
-    "port": int(os.getenv("MYSQLPORT", "3306")),
-    "user": os.getenv("MYSQLUSER", "root"),
-    "password": os.getenv("MYSQLPASSWORD", "Dhire12345@@"),
-    "database": os.getenv("MYSQLDATABASE", "personal_portfolio"),
+    "host": os.getenv("MYSQLHOST") or os.getenv("MYSQL_HOST", "127.0.0.1"),
+    "port": int(os.getenv("MYSQLPORT") or os.getenv("MYSQL_PORT", "3306")),
+    "user": os.getenv("MYSQLUSER") or os.getenv("MYSQL_USER", "root"),
+    "password": os.getenv("MYSQLPASSWORD") or os.getenv("MYSQL_PASSWORD", ""),
+    "database": os.getenv("MYSQLDATABASE") or os.getenv("MYSQL_DATABASE", "personal_portfolio"),
 }
 
 # Supabase Configuration
 SUPABASE_CONFIG = {
     "url": os.getenv("SUPABASE_URL"),
-    "key": os.getenv("SUPABASE_KEY"),
-    "service_key": os.getenv("SUPABASE_SERVICE_KEY"),
+    # This app calls Supabase only from its server. Prefer the current secret
+    # key while retaining compatibility with legacy deployment variables.
+    "key": (
+        "".join((
+            os.getenv("SUPABASE_SECRET_KEY")
+        or os.getenv("SUPABASE_SERVICE_KEY")
+        or os.getenv("SUPABASE_KEY")
+        or ""
+        ).split()) or None
+    ),
 }
 
 # Admin Authentication Configuration
 ADMIN_CONFIG = {
-    "username": os.getenv("ADMIN_USERNAME", "Dhirendra"),
-    "password": os.getenv("ADMIN_PASSWORD", "Dhire12345@@kumar@@"),
-    "secret_key": os.getenv("SECRET_KEY", "your-very-secure-secret-key-for-production-2024")
+    "username": os.getenv("ADMIN_USERNAME", ""),
+    "password": os.getenv("ADMIN_PASSWORD", ""),
+    "secret_key": os.getenv("SECRET_KEY"),
 }
 
 # Email Configuration (Gmail SMTP)

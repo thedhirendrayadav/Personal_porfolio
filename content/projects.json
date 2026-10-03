@@ -1,6 +1,8 @@
 [
   {
     "slug": "multi-channel-ai-messaging",
+    "seo_title": "AI Messaging Platform Case Study — Dhirendra Yadav",
+    "seo_description": "Case study: a prototype messaging backend that routes channel adapters and Redis-backed queues for asynchronous processing, with scope and evidence shown.",
     "title": "Multi-Channel AI Messaging Platform",
     "short_title": "AI Messaging",
     "description": "A prototype messaging backend that normalizes channel operations behind adapters and moves message work through Redis-backed queues.",
@@ -136,6 +138,8 @@
   },
   {
     "slug": "nepse-market-intelligence",
+    "seo_title": "NEPSE Market Intelligence Case Study — Dhirendra Yadav",
+    "seo_description": "Research system for price ingestion, technical indicators, news sentiment, ensemble forecasts, backtesting, API, and dashboard; review its limits.",
     "title": "NEPSE Market Intelligence",
     "short_title": "NEPSE Intelligence",
     "description": "A research system connecting price ingestion, technical indicators, news sentiment, ensemble prediction, backtesting, an API, and a dashboard.",
@@ -281,6 +285,8 @@
   },
   {
     "slug": "secure-portfolio-platform",
+    "seo_title": "Secure Portfolio Platform Case Study — Dhirendra Yadav",
+    "seo_description": "A Flask portfolio and content platform with database fallbacks, protected contact input, response headers, and evidence-backed public pages.",
     "title": "Secure Portfolio Platform",
     "short_title": "Portfolio Platform",
     "description": "A Flask portfolio and content-management application with database fallbacks, contact protections, response headers, and public-page contract tests.",
@@ -302,7 +308,7 @@
     "problem": "A public site combines untrusted form input, authenticated administration, mutable content, database variability, and multiple runtime entry points.",
     "role": "The inspected repository establishes implementation and test artifacts but does not establish an individual contributor role.",
     "scope": "The audited slice covers Flask routes, contact CSRF and throttling, response headers, project persistence, database-manager selection, runtime entry points, and public-page tests.",
-    "constraints": "The contact limiter is process-local, the session cookie secure flag is disabled in current configuration, and runtime entry points do not prove a live deployment.",
+    "constraints": "The contact limiter is process-local, and deployment configuration does not by itself prove a live production deployment.",
     "claim_sources": {
       "title": ["app.py"],
       "short_title": ["app.py"],
@@ -310,11 +316,11 @@
       "project_type": ["app.py"],
       "status": ["app.py"],
       "technologies": ["app.py", "models/project_model.py", "tests/test_public_pages.py"],
-      "thesis": ["app.py", "models/project_model.py", "api/index.py"],
+      "thesis": ["app.py", "models/project_model.py", "render.yaml"],
       "problem": ["app.py", "models/project_model.py"],
       "role": ["tests/test_public_pages.py"],
-      "scope": ["app.py", "models/project_model.py", "api/index.py", "Procfile", "tests/test_public_pages.py"],
-      "constraints": ["app.py", "api/index.py"]
+      "scope": ["app.py", "models/project_model.py", "Procfile", "render.yaml", "tests/test_public_pages.py"],
+      "constraints": ["app.py", "render.yaml"]
     },
     "architecture": [
       {
@@ -338,8 +344,8 @@
       {
         "label": "Runtime entry points",
         "category": "external",
-        "relationship": "expose the Flask application to process and serverless runtimes",
-        "source": "api/index.py"
+        "relationship": "run the Flask application as a Gunicorn web service on Render",
+        "source": "render.yaml"
       }
     ],
     "trust_boundaries": [
@@ -387,9 +393,9 @@
       },
       {
         "type": "source",
-        "label": "api/index.py",
-        "title": "Serverless entry point",
-        "claim": "A Vercel-facing module imports and exports the Flask application with fallback handling."
+        "label": "render.yaml",
+        "title": "Render deployment definition",
+        "claim": "The Render Blueprint runs the Flask app with Gunicorn, selects Supabase, and configures the health check."
       }
     ],
     "outcomes": [
@@ -406,15 +412,13 @@
       {
         "item": "Move contact throttling to shared storage before relying on it across multiple processes.",
         "source": "app.py"
-      },
-      {
-        "item": "Require secure session cookies in HTTPS deployments and remove permissive inline content policy directives where feasible.",
-        "source": "app.py"
       }
     ]
   },
   {
     "slug": "runpod-media-orchestrator",
+    "seo_title": "RunPod Media Orchestrator Case Study — Dhirendra Yadav",
+    "seo_description": "Prototype orchestration for GPU provisioning, prompt transfer, media jobs, result retrieval, and teardown; inspect workflow boundaries and evidence.",
     "title": "RunPod Media Orchestrator",
     "short_title": "Media Orchestrator",
     "description": "Prototype RunPod workflow for provisioning GPU compute, transferring prompts, running media jobs, retrieving outputs, and tearing down resources.",
@@ -554,6 +558,8 @@
   },
   {
     "slug": "hotmail-automation",
+    "seo_title": "Hotmail Automation Prototype — Dhirendra Yadav",
+    "seo_description": "Prototype workflow concept for inbox triage, reusable message templates, and operator-approved follow-up. Review intended scope and evidence limits.",
     "title": "Hotmail Automation",
     "short_title": "Mail Automation",
     "description": "A prototype workflow concept for organizing inbox triage, message templates, and operator-approved follow-up actions.",
@@ -579,6 +585,8 @@
   },
   {
     "slug": "erp-system",
+    "seo_title": "ERP System Prototype — Dhirendra Yadav",
+    "seo_description": "Prototype ERP concept for inventory, purchasing, sales, and operational reporting, with scope, status, and evidence boundaries documented.",
     "title": "ERP System",
     "short_title": "ERP Core",
     "description": "A prototype enterprise resource planning concept connecting inventory, purchasing, sales, and operational reporting.",
@@ -604,6 +612,8 @@
   },
   {
     "slug": "school-management",
+    "seo_title": "School Management Prototype — Dhirendra Yadav",
+    "seo_description": "Prototype school management concept for student records, classes, attendance, communication, and progress views, with status and limits documented.",
     "title": "School Management",
     "short_title": "School OS",
     "description": "A prototype school operations concept for student records, classes, attendance, communication, and progress views.",
@@ -629,6 +639,8 @@
   },
   {
     "slug": "restaurant-management",
+    "seo_title": "Restaurant Management Prototype — Dhirendra Yadav",
+    "seo_description": "Prototype restaurant operations concept for menus, tables, orders, kitchen flow, stock, and daily reporting, with project scope and status.",
     "title": "Restaurant Management",
     "short_title": "Restaurant Ops",
     "description": "A prototype restaurant operations concept connecting menus, tables, orders, kitchen flow, stock, and daily reporting.",
@@ -654,6 +666,8 @@
   },
   {
     "slug": "attendance-management",
+    "seo_title": "Attendance Management Prototype — Dhirendra Yadav",
+    "seo_description": "Prototype attendance workflow for check-in records, approvals, schedule context, and role-aware reporting, with evidence and status boundaries.",
     "title": "Attendance Management",
     "short_title": "Attendance",
     "description": "A prototype attendance concept for check-in records, approvals, schedule context, and role-aware reporting.",
@@ -679,6 +693,8 @@
   },
   {
     "slug": "accounting-software",
+    "seo_title": "Accounting Software Prototype — Dhirendra Yadav",
+    "seo_description": "Prototype accounting concept covering the chart of accounts, journal entries, reconciliation, and review states; see its scope and status.",
     "title": "Accounting Software",
     "short_title": "Accounting",
     "description": "A prototype accounting product concept for chart of accounts, journal entries, reconciliation, and review states.",
@@ -704,6 +720,8 @@
   },
   {
     "slug": "billing-software",
+    "seo_title": "Billing Software Prototype — Dhirendra Yadav",
+    "seo_description": "Prototype billing concept for customer accounts, invoices, line items, payment status, and operator review, with scope and status boundaries.",
     "title": "Billing Software",
     "short_title": "Billing",
     "description": "A prototype billing concept for customer accounts, invoices, line items, payment status, and operator review.",
@@ -729,6 +747,8 @@
   },
   {
     "slug": "staff-management-system",
+    "seo_title": "Staff Management System Prototype — Dhirendra Yadav",
+    "seo_description": "Prototype staff operations concept for profiles, roles, leave, attendance context, and manager workflows; inspect its evidence and boundaries.",
     "title": "Staff Management System",
     "short_title": "Staff Management",
     "description": "A prototype staff operations concept for profiles, roles, leave, attendance context, and manager workflows.",

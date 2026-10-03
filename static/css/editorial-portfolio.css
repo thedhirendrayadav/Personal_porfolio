@@ -1,4 +1,4 @@
-@layer reset, tokens, base, shell, components, pages, responsive;
+@layer reset, tokens, base, shell, components, pages, responsive, hud;
 
 @layer reset {
   *, *::before, *::after { box-sizing: border-box; }
@@ -8,6 +8,9 @@
   img, video { display: block; max-width: 100%; }
   button, input, textarea, select { font: inherit; }
   a { color: inherit; text-decoration: none; }
+  /* Keep the hidden attribute authoritative even over component display rules
+     (e.g. .case-placeholder { display: grid } would otherwise defeat it). */
+  [hidden] { display: none !important; }
 }
 
 @layer components {
@@ -217,7 +220,7 @@
   }
   .landmark h1, .landmark h2 {
     max-width: var(--container); margin-inline: auto;
-    font-size: clamp(4.2rem, 11rem, 10rem);
+    font-size: clamp(4.2rem, 11vw, 10rem);
     line-height: .78; letter-spacing: -.055em; text-transform: uppercase;
   }
   .editorial-section { position: relative; padding-block: clamp(4.5rem, 9vw, 9rem); }
@@ -239,17 +242,17 @@
     box-shadow: 0 .45rem 0 color-mix(in srgb, var(--accent) 32%, transparent);
     pointer-events: none;
   }
-  [data-reveal] { opacity: 0; transform: translateY(28px); transition: opacity .7s ease, transform .7s cubic-bezier(.2, .75, .2, 1); }
-  [data-reveal].is-visible { opacity: 1; transform: none; }
+  .js [data-reveal] { opacity: 0; transform: translateY(28px); transition: opacity .7s ease, transform .7s cubic-bezier(.2, .75, .2, 1); }
+  .js [data-reveal].is-visible { opacity: 1; transform: none; }
   @media (prefers-reduced-motion: reduce) {
-    [data-reveal] { opacity: 1 !important; transform: none !important; transition: none; }
+    .js [data-reveal] { opacity: 1 !important; transform: none !important; transition: none; }
   }
 }
 
 @layer shell {
   .site-header {
     position: fixed; inset: 0 var(--spine-w) auto 0; z-index: 100; height: var(--header-h);
-    display: grid; grid-template-columns: minmax(12rem, 1fr) auto minmax(12rem, 1fr);
+    display: grid; grid-template-columns: minmax(min-content, 1fr) auto minmax(min-content, 1fr);
     align-items: center; gap: 1.5rem; padding-inline: var(--gutter);
     border-bottom: 1px solid var(--line); background: color-mix(in srgb, var(--canvas) 88%, transparent);
     backdrop-filter: blur(16px);
@@ -287,6 +290,7 @@
   .footer-hud-mode, .footer-hud-theme, .footer-hud-font {
     display: inline-flex; align-items: center; gap: .5rem; min-height: 44px; padding: 0;
     border: 0; background: transparent; color: var(--muted); font: inherit; letter-spacing: inherit; cursor: pointer;
+    white-space: nowrap;
   }
   .footer-hud-swatch { width: .625rem; height: .625rem; background: var(--accent); transition: background .2s ease; }
   .footer-hud-mode:hover, .footer-hud-theme:hover, .footer-hud-font:hover { color: var(--ink); }
@@ -397,6 +401,28 @@
   .rich-text > * + * { margin-top: 1.4em; }
   .rich-text h2, .rich-text h3 { margin-top: 2em; line-height: 1.1; }
   .rich-text a { color: var(--accent); text-decoration: underline; }
+  .faq-list { border-top: 1px solid var(--line); }
+  .faq-list details { border-bottom: 1px solid var(--line); }
+  .faq-list summary {
+    display: grid; grid-template-columns: 2.5rem minmax(0, 1fr); align-items: baseline; gap: 1rem;
+    padding-block: 1.6rem; cursor: pointer; list-style: none;
+    font-size: clamp(1.25rem, 2.2vw, 2rem); line-height: 1.1; letter-spacing: -.02em;
+    transition: color .2s ease, padding-left .3s ease;
+  }
+  .faq-list summary::-webkit-details-marker { display: none; }
+  .faq-list summary::before {
+    content: "+"; color: var(--accent); font-family: var(--mono); font-size: 1.1rem; font-weight: 500;
+  }
+  .faq-list details[open] summary::before { content: "−"; }
+  .faq-list summary:hover, .faq-list details[open] summary { color: var(--accent); }
+  .faq-list details p {
+    max-width: 62ch; margin: 0; padding: 0 0 1.6rem 3.5rem; color: var(--muted); font-size: 1.05rem; line-height: 1.65;
+  }
+  .faq-list details p a { color: var(--accent); text-decoration: underline; }
+  @media (max-width: 640px) {
+    .faq-list summary { grid-template-columns: 1.8rem minmax(0, 1fr); gap: .75rem; }
+    .faq-list details p { padding-left: 0; }
+  }
 }
 
 @layer responsive {
@@ -458,11 +484,13 @@
     [data-reveal] { opacity: 1; transform: none; }
     .hero-name-depth { transform: none; }
     .hero-portrait-cutout img { transform: none; }
-    .about-portrait-cutout img { filter: grayscale(.82) contrast(1.12); }
+    .about-portrait-cutout img { filter: grayscale(1) contrast(1.14); }
     .field-art img { transform: none !important; }
+    /* Freeze the sweep at its rest state (0 width) instead of pinning the
+       hover state on every row; hover still fills instantly without motion. */
     .capability-row,
     .lab-note,
-    .article-row { background-size: 100% 100%; transition: none !important; }
+    .article-row { background-size: 0 100%; transition: none !important; }
   }
 }
 
@@ -506,30 +534,18 @@
   .hero-display h1 strong {
     position: relative; isolation: isolate;
     color: var(--accent);
-    text-shadow:
-      3px 3px 0 color-mix(in srgb, var(--ink) 26%, transparent),
-      7px 7px 0 color-mix(in srgb, var(--accent) 24%, transparent);
+    text-shadow: 4px 4px 0 color-mix(in srgb, var(--accent) 20%, transparent);
   }
   .hero-accent-depth::before,
-  .hero-accent-depth::after {
-    content: attr(data-text); position: absolute; inset: 0; z-index: -1; color: transparent;
-    pointer-events: none; -webkit-text-stroke: 1px var(--ink);
-  }
-  .hero-accent-depth::before { transform: translate(5px, 5px); opacity: .7; }
-  .hero-accent-depth::after { transform: translate(10px, 10px); opacity: .28; -webkit-text-stroke-color: var(--signal); }
-  .hero-name-depth {
-    position: relative; isolation: isolate; transform-origin: left center;
-    transform: perspective(700px) rotateY(-2deg) rotateX(1deg);
-    text-shadow: 1px 1px 0 var(--ink);
-  }
-  .hero-name-depth::before,
-  .hero-name-depth::after {
+  .hero-accent-depth::after { content: none; }
+  .hero-name-depth { position: relative; isolation: isolate; }
+  .hero-name-depth::before {
     content: attr(data-text); position: absolute; inset: 0; z-index: -1; color: transparent;
     pointer-events: none; -webkit-text-stroke: 1px var(--accent);
+    transform: translate(4px, 4px); opacity: .3;
   }
-  .hero-name-depth::before { transform: translate(5px, 5px); opacity: .78; }
-  .hero-name-depth::after { transform: translate(10px, 10px); opacity: .24; -webkit-text-stroke-color: var(--signal); }
-  .hero-portrait { position: absolute; inset: 0 0 0 auto; width: min(39vw, 34rem); height: 100%; }
+  .hero-name-depth::after { content: none; }
+  .hero-portrait { position: absolute; inset: 0 0 0 auto; width: auto; max-width: min(39vw, 34rem); height: 100%; aspect-ratio: 6 / 5; }
   .hero-portrait-cutout { isolation: isolate; overflow: visible; background: transparent; }
   .hero-portrait-cutout::before {
     content: ""; position: absolute; z-index: 0; inset: 9% 0 3% 9%;
@@ -544,13 +560,15 @@
   }
   .hero-portrait-cutout::after {
     content: ""; position: absolute; z-index: 3; inset: 9% 0 3% 9%; pointer-events: none;
-    background: repeating-linear-gradient(0deg, transparent 0 6px, color-mix(in srgb, var(--accent) 12%, transparent) 6px 7px);
+    background:
+      linear-gradient(color-mix(in srgb, var(--accent) 7%, transparent), color-mix(in srgb, var(--accent) 7%, transparent)),
+      repeating-linear-gradient(0deg, transparent 0 3px, color-mix(in srgb, var(--accent) 8%, transparent) 3px 4px);
     clip-path: polygon(8% 0, 100% 0, 100% 84%, 84% 100%, 0 100%, 0 10%);
     mix-blend-mode: screen;
   }
   .hero-portrait-cutout img {
     position: relative; z-index: 2; object-fit: contain; object-position: center bottom;
-    filter: grayscale(.82) contrast(1.1) drop-shadow(10px 8px 0 color-mix(in srgb, var(--accent) 52%, transparent));
+    filter: grayscale(1) contrast(1.14) brightness(.96) drop-shadow(12px 12px 0 color-mix(in srgb, var(--accent) 24%, transparent));
     mix-blend-mode: normal;
     transform: scale(1.16);
     transform-origin: center bottom;
@@ -606,7 +624,7 @@
     height: 100%;
     object-fit: contain;
     object-position: center bottom;
-    filter: grayscale(.82) contrast(1.12) drop-shadow(.55rem .65rem 0 color-mix(in srgb, var(--accent) 28%, transparent));
+    filter: grayscale(1) contrast(1.14) brightness(.96) drop-shadow(.55rem .55rem 0 color-mix(in srgb, var(--accent) 24%, transparent));
     mix-blend-mode: normal;
   }
   .about-lead, .about-copy h2 { font-size: clamp(2rem, 4vw, 4.8rem); line-height: 1; letter-spacing: -.045em; margin-bottom: 2rem; }
@@ -715,6 +733,21 @@
   .post-aside { align-self: start; position: sticky; top: calc(var(--header-h) + 2rem); display: grid; gap: 1rem; }
   .post-aside .button { width: max-content; margin-top: 1rem; }
   .tag-list { display: flex; flex-wrap: wrap; gap: .5rem; }
+  /* CV page */
+  .cv-summary { max-width: 72ch; font-size: clamp(1.15rem, 1.9vw, 1.5rem); line-height: 1.5; color: var(--muted); }
+  .cv-bullets { display: grid; gap: .55rem; }
+  .cv-bullets li { position: relative; padding-left: 1.35rem; color: var(--muted); max-width: 62ch; }
+  .cv-bullets li::before { content: "▸"; position: absolute; left: 0; top: 0; color: var(--accent); font-size: .8em; }
+  .cv-projects .article-row { align-items: start; min-height: 0; padding-block: 2rem; }
+  .cv-projects .article-row > div { min-width: 0; }
+  .cv-capabilities .capability-row { padding-block: 1.5rem; }
+  .cv-principles .manual-panel h3 { margin-block: clamp(1.75rem, 4vw, 3.5rem) 1rem; font-size: clamp(1.45rem, 2.4vw, 2.1rem); }
+  .cv-masthead .meta { color: var(--muted); }
+  .cv-tagline { max-width: 44ch; font-size: 1.25rem; color: var(--muted); align-self: flex-end; }
+  .cv-hero-foot {
+    display: flex; justify-content: space-between; align-items: flex-end;
+    gap: 1.5rem; flex-wrap: wrap; margin-top: 2.5rem;
+  }
   .rich-text img { width: 100%; }
   .rich-text blockquote { padding: 1.5rem; border-left: 3px solid var(--accent); background: var(--surface); }
   .rich-text pre { max-width: 100%; padding: 1.25rem; overflow-x: auto; background: var(--surface); border: 1px solid var(--line); }
@@ -734,7 +767,7 @@
     .home-hero { height: auto; min-height: calc(100svh - var(--header-h)); }
     .hero-display { align-items: end; min-height: 37rem; }
     .hero-display h1 { max-width: 100%; font-size: clamp(4.4rem, 18vw, 8rem); }
-    .hero-portrait { width: 65%; height: 72%; opacity: .82; }
+    .hero-portrait { width: 65%; max-width: none; height: 72%; opacity: .82; }
     .hero-portrait-cutout img { transform: none; }
     .hero-bottom, .about-split, .about-profile { grid-template-columns: 1fr; }
     .mission-brief { max-width: 100%; }
@@ -771,7 +804,7 @@
     .hero-meta .meta { text-align: left; }
     .hero-display { min-height: 31rem; }
     .hero-display h1 { max-width: 100%; font-size: 3.75rem; }
-    .hero-portrait { width: 80%; height: 70%; }
+    .hero-portrait { width: 80%; max-width: none; height: 70%; }
     .landmark h1, .landmark h2 { font-size: 3.25rem; }
     .page-hero h1 { max-width: 100%; font-size: 3.5rem; }
     .evidence-grid { grid-template-columns: 1fr; }
@@ -783,5 +816,663 @@
     .blog-search .button { width: 100%; }
     .contact-ledger div { grid-template-columns: 1fr; gap: .35rem; }
     .error-code { font-size: clamp(8rem, 32vw, 11rem); }
+  }
+}
+
+
+
+/* ------------------------------------------------------------------ */
+/* Modern tactical-HUD enhancements: decoder detail, diegetic marks,   */
+/* chamfered geometry, scanlines, chromatic aberration, command console, */
+/* opt-in audio feedback. All decorative, motion-gated, zero new assets. */
+/* ------------------------------------------------------------------ */
+@layer hud {
+  :root {
+    --chamfer: clamp(6px, 1vw, 11px);
+    --scan-opacity: .065;
+  }
+
+  /* Freeze the page behind the command console. */
+  body.hud-locked { overflow: hidden; }
+
+  /* 4a. Restrained optical scanline / CRT texture (fixed, non-blocking). */
+  .crt-scan {
+    position: fixed;
+    inset: 0;
+    z-index: 40;
+    pointer-events: none;
+    background-image: repeating-linear-gradient(0deg, #000 0 1px, transparent 1px 4px);
+    opacity: var(--scan-opacity);
+  }
+
+  /* 2b. Pulsing status blip (diegetic radar dot) — decorative. */
+  .status-blip {
+    display: inline-block;
+    flex: 0 0 auto;
+    width: .4rem;
+    height: .4rem;
+    margin-right: .55rem;
+    border-radius: 50%;
+    background: var(--accent);
+    vertical-align: middle;
+    box-shadow: 0 0 0 0 color-mix(in srgb, var(--accent) 70%, transparent);
+    animation: status-blip 2.4s ease-out infinite;
+  }
+  .status-live { display: inline-flex; align-items: center; }
+  @keyframes status-blip {
+    0% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--accent) 60%, transparent); }
+    70% { box-shadow: 0 0 0 .5rem transparent; }
+    100% { box-shadow: 0 0 0 0 transparent; }
+  }
+
+  /* 2a. Diegetic geospatial / status watermark on the hero (decorative). */
+  .home-hero .hero-meta .meta::after {
+    content: "27.6710°N 85.4298°E // FIELD LOG // 2026";
+    display: block;
+    margin-top: .75rem;
+    color: var(--muted);
+    font-family: var(--mono);
+    font-size: .58rem;
+    letter-spacing: .16em;
+    opacity: .7;
+  }
+
+  /* 3. Chamfered / angled geometry (45° corner cuts, avionics feel). */
+  .button, .button-primary {
+    clip-path: polygon(0 0, calc(100% - var(--chamfer)) 0, 100% var(--chamfer), 100% 100%, var(--chamfer) 100%, 0 calc(100% - var(--chamfer)));
+    transition: background .35s ease, color .35s ease, border-color .35s ease, box-shadow .35s ease;
+  }
+  .chip, .nav-cv-link {
+    clip-path: polygon(0 0, calc(100% - .5rem) 0, 100% .5rem, 100% 100%, .5rem 100%, 0 calc(100% - .5rem));
+  }
+
+  /* clip-path also clips outlines, so keep a visible focus ring inside the cut. */
+  .button:focus-visible, .button-primary:focus-visible, .nav-cv-link:focus-visible, .chip:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: -3px;
+    box-shadow: inset 0 0 0 2px var(--accent);
+  }
+
+  /* 4b. Chromatic aberration (RGB split) on interaction — subtle lens artifact. */
+  .editorial-nav a, .section-kicker, .button, .nav-cv-link, .case-study .case-copy h3 {
+    transition: text-shadow .25s ease, color .35s ease;
+  }
+  .editorial-nav a:hover, .editorial-nav a:focus-visible,
+  .section-kicker:hover,
+  .button:hover, .button:focus-visible,
+  .nav-cv-link:hover, .nav-cv-link:focus-visible,
+  .case-study .case-copy h3:hover {
+    text-shadow: -.05rem 0 color-mix(in srgb, var(--signal) 55%, transparent), .05rem 0 color-mix(in srgb, var(--accent) 60%, transparent);
+  }
+
+
+  /* 2c. HUD footer readouts (truthful live telemetry) + new controls. */
+  .footer-hud-readout { display: inline-flex; align-items: center; gap: 1.1rem; min-width: 0; }
+  .footer-hud-clock, .footer-hud-geo { white-space: nowrap; }
+  .footer-hud-geo { color: var(--muted); }
+  [data-hud-clock] { color: var(--accent); }
+  .footer-hud-sfx, .footer-hud-cli {
+    display: inline-flex; align-items: center; gap: .5rem;
+    min-height: 44px; padding: 0; border: 0; background: transparent;
+    color: var(--muted); font: inherit; letter-spacing: inherit; cursor: pointer;
+    white-space: nowrap;
+  }
+  .footer-hud-sfx > span:last-child, .footer-hud-cli > span:last-child { color: var(--accent); }
+  .footer-hud-sfx[aria-pressed="true"] > span:first-child::before {
+    content: ""; display: inline-block; width: .4rem; height: .4rem; margin-right: .4rem;
+    border-radius: 50%; background: var(--accent); vertical-align: middle;
+    box-shadow: 0 0 0 0 color-mix(in srgb, var(--accent) 70%, transparent);
+    animation: status-blip 1.8s ease-out infinite;
+  }
+  .footer-hud-sfx:focus-visible, .footer-hud-cli:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+
+  /* 5. Command console (Ctrl/⌘ + K). */
+  .cmdk {
+    position: fixed; inset: 0; z-index: 200;
+    display: grid; place-items: start center;
+    padding: clamp(3rem, 12vh, 8rem) 1rem 1rem;
+    background: color-mix(in srgb, var(--canvas) 78%, transparent);
+    backdrop-filter: blur(6px);
+    opacity: 0; visibility: hidden;
+    transition: opacity .2s ease, visibility .2s ease;
+  }
+  .cmdk[data-open] { opacity: 1; visibility: visible; }
+  .cmdk__dialog {
+    width: min(38rem, 100%);
+    border: 1px solid var(--line-strong);
+    background: var(--surface); color: var(--ink);
+    box-shadow: 0 1.5rem 4rem color-mix(in srgb, #000 55%, transparent);
+    clip-path: polygon(0 0, calc(100% - 1rem) 0, 100% 1rem, 100% 100%, 1rem 100%, 0 calc(100% - 1rem));
+    transform: translateY(-.5rem);
+    transition: transform .2s ease;
+  }
+  .cmdk[data-open] .cmdk__dialog { transform: none; }
+  .cmdk__field { display: flex; align-items: center; gap: .6rem; padding: .9rem 1.1rem; border-bottom: 1px solid var(--line); }
+  .cmdk__prompt { color: var(--accent); font-family: var(--mono); font-size: 1rem; }
+  .cmdk__input { flex: 1; min-width: 0; background: transparent; border: 0; outline: 0; color: var(--ink); font-family: var(--mono); font-size: .95rem; letter-spacing: .04em; }
+  .cmdk__close { flex: 0 0 auto; min-width: 2rem; min-height: 2rem; border: 1px solid var(--line); background: transparent; color: var(--muted); cursor: pointer; font: inherit; }
+  .cmdk__close:hover { color: var(--ink); border-color: var(--accent); }
+
+
+  .cmdk__results { max-height: min(52vh, 22rem); overflow-y: auto; margin: 0; padding: .35rem 0; list-style: none; }
+  .cmdk__item { display: grid; grid-template-columns: auto 1fr auto; align-items: baseline; gap: .75rem; padding: .6rem 1.1rem; cursor: pointer; }
+  .cmdk__item-cmd { color: var(--accent); font-family: var(--mono); font-size: .72rem; letter-spacing: .08em; }
+  .cmdk__item-label { color: var(--ink); font-size: .9rem; }
+  .cmdk__item-group { color: var(--muted); font-family: var(--mono); font-size: .58rem; letter-spacing: .14em; }
+  .cmdk__item[aria-selected="true"] { background: color-mix(in srgb, var(--accent) 12%, transparent); }
+  .cmdk__item[aria-selected="true"] .cmdk__item-cmd::before { content: "▸ "; }
+  .cmdk__empty { padding: 1rem 1.1rem; color: var(--muted); font-family: var(--mono); font-size: .72rem; letter-spacing: .06em; }
+  .cmdk__hint { padding: .6rem 1.1rem; border-top: 1px solid var(--line); color: var(--muted); font-family: var(--mono); font-size: .58rem; letter-spacing: .12em; }
+  .cmdk__hint b { color: var(--accent); font-weight: 400; }
+
+  /* Responsive integrity for the HUD enhancements. */
+  @media (max-width: 1080px) { .footer-hud-geo { display: none; } }
+
+  /* Mid-width laptops: the full header row (nav + wordmark + CTA) and the full
+     HUD row (readout + section + five controls) no longer fit side by side.
+     Drop the redundant header CTA (06/CONTACT and the footer email remain),
+     tighten the nav, and release the HUD center readout so nothing overlaps. */
+  @media (max-width: 1240px) {
+    .wordmark-copy { display: none; }
+    .editorial-nav { gap: clamp(.7rem, 1.4vw, 1.4rem); }
+    .editorial-nav a { letter-spacing: .12em; }
+    .footer-hud-sfx, .footer-hud-cli { display: none; }
+    .footer-hud-actions { gap: .85rem; }
+  }
+  @media (max-width: 680px) {
+    .footer-hud-clock { display: none; }
+    .home-hero .hero-meta .meta::after { letter-spacing: .1em; font-size: .54rem; }
+    /* Keep the actions bar as tidy as MODE/THEME/FONT: value-only SFX, and
+       the console is a keyboard power feature (Ctrl/⌘+K, "/") so hide its
+       trigger on touch layouts — the mobile menu already covers navigation. */
+    .footer-hud-sfx > span:first-child { display: none; }
+    .footer-hud-cli { display: none; }
+  }
+  @media (max-width: 520px) {
+    .cmdk { padding: 0; place-items: stretch; }
+    .cmdk__dialog { width: 100%; height: 100dvh; max-width: none; border: 0; box-shadow: none; clip-path: none; }
+    .cmdk__input { font-size: 1rem; }
+    .cmdk__results { max-height: none; }
+  }
+
+  /* Reduced-motion: keep content, remove looping / animated decoration. */
+  @media (prefers-reduced-motion: reduce) {
+    .status-blip, .footer-hud-sfx[aria-pressed="true"] > span:first-child::before { animation: none; box-shadow: none; }
+    .crt-scan { display: none; }
+    .cmdk, .cmdk__dialog { transition: none; }
+  }
+
+}
+
+/* ------------------------------------------------------------------ */
+/* Refinement pass: tactile hover states, balanced headings, cleaner   */
+/* anchor landings, and gentler image treatment. All within the        */
+/* existing token system; reduced-motion users get none of the motion. */
+/* ------------------------------------------------------------------ */
+@layer components {
+  /* Anchor targets land below the fixed header instead of underneath it. */
+  [id] { scroll-margin-top: calc(var(--header-h) + 1.5rem); }
+
+  /* Balanced display headings avoid orphaned single words. */
+  .page-hero h1, .section-head h2, .landmark h2, .post-heading h1, .search-header h1, .error-copy h1 {
+    text-wrap: balance;
+  }
+  .section-head p, .page-hero > p:last-child, .post-deck {
+    text-wrap: pretty;
+  }
+
+  /* Chips respond quietly on hover. */
+  .chip { transition: color .25s ease, border-color .25s ease; }
+  .chip:hover { color: var(--ink); border-color: var(--accent); }
+
+  /* Buttons press down slightly — small, tactile confirmation. */
+  .button:active, .nav-cv-link:active { transform: translateY(1px); }
+
+  /* Case files pick up the same accent title treatment as article rows. */
+  .case-study .case-copy h3 { transition: color .35s ease; }
+  .case-study:hover .case-copy h3 { color: var(--accent); }
+
+  /* Form fields warm their baseline as you reach for them. */
+  .field input, .field textarea { transition: border-color .25s ease; }
+  .field input:hover, .field textarea:hover { border-bottom-color: var(--accent); }
+
+  /* Manual panels: the registration corner grows a touch on approach. */
+  .manual-panel::before { transition: width .3s ease, height .3s ease; }
+  .manual-panel:hover::before { width: 2rem; height: 2rem; }
+
+  /* Dossier rows and route steps take a faint accent wash on hover. */
+  .lab-dossier dl > div { transition: background .3s ease; }
+  .lab-dossier dl > div:hover { background: color-mix(in srgb, var(--accent) 3%, transparent); }
+  .route-steps > div { transition: border-color .3s ease, background .3s ease; }
+  .route-steps > div:hover { border-color: var(--accent); }
+
+  /* About-page credentials return to color on approach. */
+  .evidence-grid img { transition: filter .5s ease; }
+  .evidence-grid figure:hover img { filter: grayscale(0) contrast(1.02); }
+
+  /* Footer links sweep an underline, echoing the article-row treatment. */
+  .footer-meta nav a, .work-deck-intro .meta a.accent {
+    background-image: linear-gradient(90deg, var(--accent), var(--accent));
+    background-repeat: no-repeat;
+    background-size: 0 1px;
+    background-position: 0 100%;
+    padding-bottom: 2px;
+    transition: background-size .35s ease, color .25s ease;
+  }
+  .footer-meta nav a:hover, .work-deck-intro .meta a.accent:hover { background-size: 100% 1px; }
+
+  /* Hero index chip rows (standalone work / lab pages). */
+  .work-index-meta { display: flex; flex-wrap: wrap; gap: .6rem; margin-top: 2.25rem; }
+  .work-index-meta .chip { color: var(--ink); }
+
+  /* Quiet, on-brand scrollbar for WebKit browsers. */
+  ::-webkit-scrollbar { width: 10px; height: 10px; }
+  ::-webkit-scrollbar-track { background: var(--canvas); }
+  ::-webkit-scrollbar-thumb { background: var(--line-strong); }
+  ::-webkit-scrollbar-thumb:hover { background: var(--accent); }
+}
+
+/* ------------------------------------------------------------------ */
+/* Decoration kit: diegetic document furniture in the site's own       */
+/* language — instrument rulers, frame coordinates, doc-reference      */
+/* stamps, ghost section numerals, landmark crosshairs, and a footer   */
+/* end-of-document stamp. All faint, all pointer-events none.          */
+/* ------------------------------------------------------------------ */
+@layer components {
+  /* Instrument ruler that grounds every page hero. */
+  .page-hero { position: relative; }
+  .page-hero::before {
+    content: ""; position: absolute; left: var(--gutter); right: var(--gutter); bottom: 0;
+    height: 10px; pointer-events: none;
+    background:
+      linear-gradient(var(--line-strong), var(--line-strong)) 0 100% / 100% 1px no-repeat,
+      repeating-linear-gradient(90deg, var(--line) 0 1px, transparent 1px 28px);
+  }
+  /* Frame coordinates, top-right of every hero. */
+  .page-hero::after {
+    content: "27.6710°N 85.4298°E // FIELD LOG // 2026";
+    position: absolute; top: 0; right: var(--gutter);
+    color: var(--muted); font-family: var(--mono); font-size: .56rem;
+    letter-spacing: .16em; opacity: .75; pointer-events: none;
+  }
+  /* Per-page document reference (template-provided stamp). */
+  .hero-doc-ref {
+    position: absolute; top: 1.9rem; right: var(--gutter);
+    color: var(--accent); font-family: var(--mono); font-size: .62rem;
+    letter-spacing: .14em; pointer-events: none;
+  }
+  .page-landmark, .post-header { position: relative; }
+
+  /* Ghost numerals behind section heads. */
+  .section-index {
+    position: absolute; top: -2.5rem; left: -.5rem; z-index: 0;
+    font-family: var(--display); font-weight: 800; line-height: 1;
+    font-size: clamp(3.5rem, 6.5vw, 6rem); letter-spacing: -.02em;
+    color: transparent; -webkit-text-stroke: 1px var(--line);
+    pointer-events: none; user-select: none;
+  }
+  .section-kicker { position: relative; z-index: 1; }
+
+  /* Crosshair registration marks on landmark bands. */
+  .landmark { position: relative; }
+  .landmark::before, .landmark::after {
+    content: "+"; position: absolute; top: 1rem;
+    color: var(--accent); font-family: var(--mono);
+    font-size: .95rem; line-height: 1; pointer-events: none;
+  }
+  .landmark::before { left: var(--gutter); }
+  .landmark::after { right: var(--gutter); }
+
+  /* Footer end-of-document stamp. */
+  .footer-head-row { display: flex; justify-content: space-between; align-items: baseline; gap: 1.5rem; flex-wrap: wrap; }
+  .footer-stamp { color: var(--muted); font-family: var(--mono); font-size: .58rem; letter-spacing: .16em; }
+
+  @media (max-width: 980px) {
+    .section-index, .page-hero::after, .hero-doc-ref { display: none; }
+    .page-hero::before { height: 7px; }
+  }
+}
+
+/* ------------------------------------------------------------------ */
+/* Decorative content components: instrument ticker bands and page     */
+/* ledgers (clickable index rows). Same hairline/mono language.        */
+/* ------------------------------------------------------------------ */
+@layer components {
+  /* Instrument ticker — a slow readout band of mono phrases. */
+  .ticker-band { overflow: hidden; border-block: 1px solid var(--line); padding-block: .85rem; user-select: none; }
+  .ticker-track { display: flex; width: max-content; animation: ticker-scroll 46s linear infinite; }
+  .ticker-band:hover .ticker-track { animation-play-state: paused; }
+  .ticker-seq { display: flex; align-items: baseline; }
+  .ticker-seq span {
+    font-family: var(--mono); font-size: .66rem; letter-spacing: .18em;
+    color: var(--muted); white-space: nowrap; padding-right: 2.6rem;
+  }
+  .ticker-seq span::after { content: "▪"; margin-left: 2.6rem; color: var(--accent); }
+  .ticker-seq span:first-child { color: var(--ink); }
+  @keyframes ticker-scroll { to { transform: translateX(-50%); } }
+
+  /* Page ledger — a clickable index of a page's entries. */
+  .page-ledger { border: 1px solid var(--line); background: color-mix(in srgb, var(--surface) 55%, transparent); }
+  .page-ledger-head {
+    display: flex; justify-content: space-between; gap: 1rem; flex-wrap: wrap;
+    padding: .8rem 1.25rem; border-bottom: 1px solid var(--line-strong);
+    background: color-mix(in srgb, var(--accent) 5%, transparent);
+  }
+  .page-ledger-row {
+    display: grid; grid-template-columns: 3.25rem minmax(0, 1fr) auto auto;
+    gap: 1.25rem; align-items: center; padding: .8rem 1.25rem;
+    border-top: 1px solid var(--line); transition: background .25s ease;
+  }
+  .page-ledger-row:first-of-type { border-top: 0; }
+  a.page-ledger-row:hover { background: color-mix(in srgb, var(--accent) 7%, transparent); }
+  .page-ledger .idx { font-family: var(--mono); font-size: .68rem; letter-spacing: .12em; color: var(--accent); }
+  .page-ledger .name { font-weight: 500; font-size: 1rem; letter-spacing: -.01em; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .page-ledger .cell { font-family: var(--mono); font-size: .62rem; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); white-space: nowrap; }
+  .page-ledger .go { color: var(--accent); font-family: var(--mono); font-size: .8rem; }
+  @media (max-width: 820px) {
+    .page-ledger .cell { display: none; }
+    .page-ledger-row { grid-template-columns: 2.5rem minmax(0, 1fr) auto; gap: .9rem; }
+  }
+
+
+  /* About personnel-file panel spans the full manual grid. */
+  .about-vitals .manual-panel { grid-column: 1 / -1; }
+  /* CV section index chips. */
+  .cv-section-nav { display: flex; flex-wrap: wrap; gap: .6rem; padding-top: 2.25rem; }
+}
+
+/* ------------------------------------------------------------------ */
+/* Light theme texture calm-down: the dark-theme CRT scanlines and     */
+/* accent-tinted grids read as noisy pinstripes on the paper canvas,   */
+/* so light mode swaps them for whisper-faint ink grids — or none.     */
+/* ------------------------------------------------------------------ */
+@layer components {
+  [data-theme="light"] .crt-scan { display: none; }
+  [data-theme="light"] .field-manual-section,
+  [data-theme="light"] .lab-pipeline,
+  [data-theme="light"] .signal-map,
+  [data-theme="light"] .response-route,
+  [data-theme="light"] .field-art {
+    background-image:
+      linear-gradient(color-mix(in srgb, var(--ink) 3%, transparent) 1px, transparent 1px),
+      linear-gradient(90deg, color-mix(in srgb, var(--ink) 3%, transparent) 1px, transparent 1px);
+  }
+  [data-theme="light"] .home-hero .hero-portrait-cutout::before {
+    background-image:
+      linear-gradient(color-mix(in srgb, var(--ink) 4%, transparent) 1px, transparent 1px),
+      linear-gradient(90deg, color-mix(in srgb, var(--ink) 4%, transparent) 1px, transparent 1px);
+  }
+  [data-theme="light"] .hero-portrait-cutout::after { content: none; }
+  [data-theme="light"] .about-portrait-cutout::before {
+    background-image:
+      linear-gradient(color-mix(in srgb, var(--ink) 3.5%, transparent) 1px, transparent 1px),
+      linear-gradient(90deg, color-mix(in srgb, var(--ink) 3.5%, transparent) 1px, transparent 1px);
+  }
+}
+
+/* ------------------------------------------------------------------ */
+/* Boot loader: full-canvas initialization screen with a mono          */
+/* progress readout. Fades on window load; pointer-events stay off so  */
+/* the page is never blocked, and a failsafe auto-removes it.          */
+/* ------------------------------------------------------------------ */
+/* ------------------------------------------------------------------ */
+/* Ambient background: one shared accent glow on the body, plus a       */
+/* per-page background pattern on body::before (isolation on body keeps  */
+/* it above the canvas, below all content). Each page gets its own       */
+/* subtle instrument texture.                                            */
+/* ------------------------------------------------------------------ */
+@layer hud {
+  body {
+    isolation: isolate;
+    background-color: var(--canvas);
+    background-image:
+      radial-gradient(closest-side, color-mix(in srgb, var(--accent) 9%, transparent), transparent 72%),
+      radial-gradient(closest-side, color-mix(in srgb, var(--signal) 4%, transparent), transparent 70%);
+    background-position: top -24vh right -12vw, 36vw 86vh;
+    background-size: 64vw 64vh, 48vw 48vh;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+  }
+  [data-theme="light"] body {
+    background-image:
+      radial-gradient(closest-side, color-mix(in srgb, var(--accent) 14%, transparent), transparent 72%),
+      radial-gradient(closest-side, color-mix(in srgb, var(--ink) 2.5%, transparent), transparent 70%);
+  }
+  /* Default pattern: the brand dot grid. */
+  body::before {
+    content: "";
+    position: fixed; inset: 0; z-index: -1; pointer-events: none;
+    background-image: radial-gradient(color-mix(in srgb, var(--ink) 15%, transparent) 1.2px, transparent 1.7px);
+    background-size: 24px 24px;
+  }
+  /* WORK — blueprint grid, for the system maps. */
+  body.page-work_page::before {
+    background-image:
+      linear-gradient(color-mix(in srgb, var(--ink) 8%, transparent) 1px, transparent 1px),
+      linear-gradient(90deg, color-mix(in srgb, var(--ink) 8%, transparent) 1px, transparent 1px);
+    background-size: 24px 24px;
+  }
+  /* LAB — radar rings from the observation corner. */
+  body.page-lab_page::before {
+    background-image: repeating-radial-gradient(circle at 88% 6%, color-mix(in srgb, var(--ink) 10%, transparent) 0 1.2px, transparent 1.2px 64px);
+  }
+  /* CV — dense document dots, a finer paper grain. */
+  body.page-cv_main::before {
+    background-image: radial-gradient(color-mix(in srgb, var(--ink) 13%, transparent) 1.1px, transparent 1.5px);
+    background-size: 17px 17px;
+  }
+  /* ABOUT — halftone field, echoing the portrait treatment. */
+  body.page-about::before {
+    background-image: radial-gradient(color-mix(in srgb, var(--ink) 13%, transparent) 1.5px, transparent 2.1px);
+    background-size: 34px 34px;
+  }
+  /* SKILLS — diagonal drafting hatch. */
+  body.page-skills::before {
+    background-image:
+      repeating-linear-gradient(45deg, color-mix(in srgb, var(--ink) 7%, transparent) 0 1.1px, transparent 1.1px 26px),
+      repeating-linear-gradient(-45deg, color-mix(in srgb, var(--ink) 7%, transparent) 0 1.1px, transparent 1.1px 26px);
+  }
+  /* CONTACT — signal arcs radiating from the base. */
+  body.page-contact::before {
+    background-image: repeating-radial-gradient(circle at 6% 96%, color-mix(in srgb, var(--ink) 9%, transparent) 0 1.2px, transparent 1.2px 62px);
+  }
+  /* FAQ — wide survey grid. */
+  body.page-faq::before {
+    background-image:
+      linear-gradient(color-mix(in srgb, var(--ink) 7%, transparent) 1px, transparent 1px),
+      linear-gradient(90deg, color-mix(in srgb, var(--ink) 7%, transparent) 1px, transparent 1px);
+    background-size: 46px 46px;
+  }
+  /* BLOG — single diagonal flow for the field notes. */
+  body.page-blog::before {
+    background-image: repeating-linear-gradient(-45deg, color-mix(in srgb, var(--ink) 6.5%, transparent) 0 1.1px, transparent 1.1px 30px);
+  }
+  /* Light theme: patterns sit a touch quieter on paper. */
+  [data-theme="light"] body::before { opacity: .95; }
+}
+
+/* Boot loader: full-canvas initialization screen with a mono          */
+/* progress readout. Fades on window load; pointer-events stay off so  */
+/* the page is never blocked, and a failsafe auto-removes it.          */
+/* ------------------------------------------------------------------ */
+/* ------------------------------------------------------------------ */
+/* Ambient background: layered directly on the body background (a      */
+/* negative-z pseudo would hide behind body's opaque canvas). Whisper  */
+/* dot grid + one soft accent glow + one deep pool. No lines.          */
+/* ------------------------------------------------------------------ */
+@layer hud {
+  body {
+    background-color: var(--canvas);
+    background-image:
+      radial-gradient(closest-side, color-mix(in srgb, var(--accent) 9%, transparent), transparent 72%),
+      radial-gradient(closest-side, color-mix(in srgb, var(--signal) 4%, transparent), transparent 70%),
+      radial-gradient(color-mix(in srgb, var(--ink) 9%, transparent) 1px, transparent 1.4px);
+    background-position: top -24vh right -12vw, 36vw 86vh, 0 0;
+    background-size: 64vw 64vh, 48vw 48vh, 26px 26px;
+    background-repeat: no-repeat, no-repeat, repeat;
+    background-attachment: fixed, fixed, scroll;
+  }
+  [data-theme="light"] body {
+    background-image:
+      radial-gradient(closest-side, color-mix(in srgb, var(--accent) 14%, transparent), transparent 72%),
+      radial-gradient(closest-side, color-mix(in srgb, var(--ink) 2.5%, transparent), transparent 70%),
+      radial-gradient(color-mix(in srgb, var(--ink) 7%, transparent) 1px, transparent 1.4px);
+  }
+}
+
+@layer hud {
+  .boot-loader {
+    position: fixed; inset: 0; z-index: 300;
+    display: grid; place-items: center;
+    overflow: hidden;
+    color: var(--ink);
+    pointer-events: none;
+    transition: opacity .5s ease, visibility .5s ease;
+    /* Same ambient treatment as the page, so the reveal feels continuous. */
+    background-color: var(--canvas);
+    background-image:
+      radial-gradient(closest-side, color-mix(in srgb, var(--accent) 12%, transparent), transparent 70%),
+      radial-gradient(color-mix(in srgb, var(--ink) 9%, transparent) 1px, transparent 1.4px);
+    background-position: top -18vh right -10vw, 0 0;
+    background-size: 60vw 60vh, 26px 26px;
+    background-repeat: no-repeat, repeat;
+  }
+  .boot-loader[data-done] { opacity: 0; visibility: hidden; }
+
+  /* Corner registration crosshairs. */
+  .boot-corner {
+    position: fixed; font-family: var(--mono); font-size: .95rem; line-height: 1;
+    color: var(--accent); opacity: .8;
+  }
+  .boot-corner-tl { top: 1.1rem; left: 1.2rem; }
+  .boot-corner-tr { top: 1.1rem; right: 1.2rem; }
+  .boot-corner-bl { bottom: 1.2rem; left: 1.2rem; }
+  .boot-corner-br { bottom: 1.2rem; right: 1.2rem; }
+
+  /* Giant ghost percentage behind the boot card. */
+  .boot-ghost {
+    position: absolute; inset: 0;
+    display: grid; place-items: center;
+    font-family: var(--display); font-weight: 800; line-height: 1;
+    font-size: clamp(11rem, 30vw, 26rem); letter-spacing: -.05em;
+    color: transparent; -webkit-text-stroke: 1px var(--line);
+    user-select: none;
+  }
+
+  .boot-inner {
+    position: relative; z-index: 1;
+    width: min(24rem, 84vw);
+    display: grid; gap: 1.15rem; justify-items: stretch;
+  }
+  .boot-inner > * { animation: boot-in .55s cubic-bezier(.2, .75, .2, 1) backwards; }
+  .boot-inner > *:nth-child(2) { animation-delay: .08s; }
+  .boot-inner > *:nth-child(3) { animation-delay: .16s; }
+  .boot-inner > *:nth-child(4) { animation-delay: .24s; }
+  .boot-inner > *:nth-child(5) { animation-delay: .32s; }
+  @keyframes boot-in {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: none; }
+  }
+
+  .boot-mark {
+    justify-self: start;
+    display: grid; place-items: center; width: 2.4rem; height: 2.4rem;
+    background: var(--accent); color: #0b0c0c; font-weight: 700;
+    position: relative;
+  }
+  .boot-mark::after {
+    content: ""; position: absolute; top: -.45rem; left: -.45rem;
+    width: .8rem; height: .8rem;
+    border-top: 1px solid var(--accent); border-left: 1px solid var(--accent);
+  }
+
+  /* Staged boot log — lines type in as progress passes thresholds. */
+  .boot-log { display: grid; gap: .4rem; min-height: 4.2rem; align-content: end; }
+  .boot-log p {
+    margin: 0; display: flex; justify-content: space-between; gap: 1rem;
+    font-family: var(--mono); font-size: .6rem; letter-spacing: .12em;
+    color: var(--muted); text-transform: uppercase;
+    opacity: 0; transform: translateY(4px);
+    transition: opacity .3s ease, transform .3s ease;
+  }
+  .boot-log p.is-on { opacity: 1; transform: none; }
+  .boot-log p b { color: var(--accent); font-weight: 500; }
+
+  .boot-readout {
+    display: flex; justify-content: space-between; align-items: baseline;
+    font-family: var(--mono); font-size: .62rem; letter-spacing: .16em;
+    color: var(--muted); text-transform: uppercase;
+  }
+  .boot-pct { color: var(--accent); }
+
+  .boot-bar { position: relative; height: 2px; background: var(--line); }
+  .boot-bar i {
+    position: absolute; inset: 0; background: var(--accent);
+    transform-origin: left; transform: scaleX(var(--boot-progress, 0));
+  }
+  /* Blip riding the head of the bar. */
+  .boot-blip {
+    position: absolute; top: 50%; left: calc(var(--boot-progress, 0) * 100%);
+    width: 7px; height: 7px; border-radius: 50%;
+    background: var(--accent);
+    box-shadow: 0 0 0 0 color-mix(in srgb, var(--accent) 60%, transparent);
+    transform: translate(-50%, -50%);
+    animation: boot-blip 1.6s ease-out infinite;
+  }
+  @keyframes boot-blip {
+    0% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--accent) 55%, transparent); }
+    70% { box-shadow: 0 0 0 .55rem transparent; }
+    100% { box-shadow: 0 0 0 0 transparent; }
+  }
+
+  .boot-foot {
+    display: flex; justify-content: space-between;
+    font-family: var(--mono); font-size: .54rem; letter-spacing: .14em;
+    color: var(--muted);
+  }
+
+  /* Exit: the card lifts slightly as the overlay fades. */
+  .boot-inner, .boot-ghost, .boot-corner { transition: transform .45s ease, opacity .45s ease; }
+  .boot-loader[data-done] .boot-inner { transform: translateY(-10px); opacity: 0; }
+  .boot-loader[data-done] .boot-ghost { opacity: 0; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .boot-loader { transition: opacity .15s ease, visibility .15s ease; }
+    .boot-bar i { transition: none; }
+  }
+}
+
+/* ------------------------------------------------------------------ */
+/* Ambient background: a whisper-faint dot grid plus one soft accent   */
+/* glow. No lines — just enough depth that the canvas never reads as   */
+/* flat black/empty cream. Painted behind all content, fixed, static.  */
+/* ------------------------------------------------------------------ */
+@layer hud {
+  body::before {
+    content: "";
+    position: fixed; inset: 0; z-index: -1; pointer-events: none;
+    background-image: radial-gradient(color-mix(in srgb, var(--ink) 9%, transparent) 1px, transparent 1.4px);
+    background-size: 26px 26px;
+    opacity: .5;
+  }
+  body::after {
+    content: "";
+    position: fixed; top: -24vh; right: -12vw; width: 64vw; height: 64vh;
+    z-index: -1; pointer-events: none;
+    background: radial-gradient(closest-side, color-mix(in srgb, var(--accent) 8%, transparent), transparent 72%);
+  }
+  /* A second, cooler pool low-left keeps large empty scrolls from feeling dead. */
+  @supports (background: conic-gradient(red, blue)) {
+    body::after {
+      background:
+        radial-gradient(closest-side, color-mix(in srgb, var(--accent) 8%, transparent), transparent 72%),
+        radial-gradient(closest-side, color-mix(in srgb, var(--signal) 4%, transparent), transparent 70%) 30vw 80vh / 50vw 50vh no-repeat;
+    }
+  }
+  [data-theme="light"] body::before { opacity: .34; }
+  [data-theme="light"] body::after {
+    background:
+      radial-gradient(closest-side, color-mix(in srgb, var(--accent) 10%, transparent), transparent 72%),
+      radial-gradient(closest-side, color-mix(in srgb, var(--ink) 3%, transparent), transparent 70%) 30vw 80vh / 50vw 50vh no-repeat;
   }
 }
