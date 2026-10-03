@@ -28,9 +28,12 @@ SUPABASE_CONFIG = {
     # This app calls Supabase only from its server. Prefer the current secret
     # key while retaining compatibility with legacy deployment variables.
     "key": (
-        os.getenv("SUPABASE_SECRET_KEY")
+        "".join((
+            os.getenv("SUPABASE_SECRET_KEY")
         or os.getenv("SUPABASE_SERVICE_KEY")
         or os.getenv("SUPABASE_KEY")
+        or ""
+        ).split()) or None
     ),
 }
 
