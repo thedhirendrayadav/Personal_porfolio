@@ -14,6 +14,34 @@ Give the portfolio one consistent, crawlable identity across its deployed
 pages, structured data, feeds, and Google Search Console, then improve how
 each important page explains its subject to search and answer systems.
 
+## 10/10 Quality Target
+
+Target a 10/10 reassessment for SEO, GEO, and AEO by closing every
+site-controllable issue from the full audit. A score of 10 is earned only when
+the corresponding evidence below is verified; it is not a copy or marketing
+claim.
+
+- **SEO:** all public sitemap URLs use HTTPS apex canonicals and return 200
+  directly; generated endpoints agree on the origin; sitemap XML is valid and
+  accepted by Search Console; `lastmod` is accurate or omitted; all audited
+  pages have distinct, accurate titles and descriptions, one clear H1, useful
+  internal routes, complete social metadata, descriptive image text, and
+  truthful structured data.
+- **GEO:** the named-person entity, city/country location, expertise, contact
+  route, biography, and sameAs profiles are consistent and verifiable; project
+  claims link to first-hand evidence; no unsupported credentials, service
+  areas, precise location, or third-party authority are added. If independent
+  corroboration is not available, report it as an external limit instead of
+  fabricating it or inflating the score.
+- **AEO:** priority pages answer their key questions directly and visibly;
+  answers are concise, factual, and supported by page evidence; headings and
+  lists make information easy to extract; FAQ markup matches visible FAQ
+  content; no rich-result or answer-citation outcome is promised.
+
+Reassess against these same criteria after deployment. If a Google-side delay
+or missing externally verifiable fact prevents a 10, report the evidence and
+the remaining limit plainly rather than assigning a cosmetic 10.
+
 Success means:
 
 - The apex HTTPS host is the single canonical origin because Render currently
