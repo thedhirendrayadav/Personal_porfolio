@@ -24,9 +24,10 @@ claim.
 - **SEO:** all public sitemap URLs use HTTPS apex canonicals and return 200
   directly; generated endpoints agree on the origin; sitemap XML is valid and
   accepted by Search Console; `lastmod` is accurate or omitted; all audited
-  pages have distinct, accurate titles and descriptions, one clear H1, useful
-  internal routes, complete social metadata, descriptive image text, and
-  truthful structured data.
+  indexable pages have distinct, accurate titles and descriptions, one clear
+  H1, useful internal routes, complete social metadata, descriptive image
+  text, and truthful structured data. Low-value archives must be intentionally
+  `noindex` and remain crawlable so the directive can be seen.
 - **GEO:** the named-person entity, city/country location, expertise, contact
   route, biography, and sameAs profiles are consistent and verifiable; project
   claims link to first-hand evidence; no unsupported credentials, service
@@ -68,6 +69,10 @@ Success means:
 
 - The production sitemap lists 23 routes. Each resolves to HTTP 200 after the
   `www` to apex redirect.
+- The blog index links to `/blog/category/security` and
+  `/blog/category/systems`. Both are currently indexable, use `www` canonicals,
+  are omitted from the sitemap, and contain a one-post archive. They should
+  remain crawlable but be `noindex` while their archives add no distinct value.
 - The 23 sitemap `loc` values and the pages' self-referencing canonical tags
   currently use `www`, even though `www` redirects to the apex.
 - Google Search Console already contains the verified domain property
@@ -119,6 +124,9 @@ conflicting canonical signals.
 - Continue to build the sitemap from static public routes, curated project
   pages, and published articles. Retain its graceful behavior if optional
   database content is unavailable.
+- Keep thin one-post category archives outside the sitemap and set them to
+  `noindex, follow` without blocking them in `robots.txt`. Reconsider indexing
+  only when each archive has unique content beyond its article list.
 - Omit `lastmod` when a trustworthy update date is unavailable. Preserve
   database article dates and project dates when those sources supply them;
   maintain explicit dates only for static routes whose content is actually
