@@ -142,7 +142,7 @@ def health_check():
 
 
 ASSET_VERSION = os.environ.get('ASSET_VERSION', str(int(datetime.datetime.now().timestamp())))
-SITE_URL = os.environ.get('SITE_URL', 'https://www.dhirendrayadav.site').rstrip('/')
+SITE_URL = os.environ.get('SITE_URL', 'https://dhirendrayadav.site').rstrip('/')
 SITE_NAME = 'Dhirendra Yadav'
 SITE_DESCRIPTION = 'Dhirendra Yadav builds secure automation, AI/ML systems, and practical digital products from Bhaktapur, Nepal.'
 INDEXNOW_KEY = os.environ.get('INDEXNOW_KEY', 'dy-portfolio-indexnow-20260728')
