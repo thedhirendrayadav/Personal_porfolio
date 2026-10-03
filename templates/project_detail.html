@@ -1,10 +1,10 @@
 {% extends "base.html" %}
-{% block title %}{{ project.title }} — Dhirendra Yadav{% endblock %}
-{% block description %}{{ project.description }}{% endblock %}
+{% block title %}{{ project.get('seo_title') or (project.get('title', '') ~ ' case study — Dhirendra Yadav') }}{% endblock %}
+{% block description %}{{ project.get('seo_description') or project.get('description', '') }}{% endblock %}
 {% block keywords %}{{ ((project.technologies | join(', ')) ~ ', ' if project.technologies else '') ~ (project.project_type or 'systems engineering') ~ ', project case study, Dhirendra Yadav' }}{% endblock %}
-{% block og_title %}{{ project.title }}{% endblock %}
-{% block og_description %}{{ project.description }}{% endblock %}
-{% block extra_head %}{% if project.get('image_url') %}<meta property="og:image" content="{% if project.get('image_url').startswith('static/') %}{{ site_url }}/{% endif %}{{ project.get('image_url') }}">{% endif %}<script type="application/ld+json">{{ {'@context':'https://schema.org','@type':'CreativeWork','name':project.get('title',''),'description':project.get('description',''),'url':canonical_url,'author':{'@type':'Person','name':'Dhirendra Yadav','url':site_url ~ '/about'},'image':(site_url ~ '/' ~ project.get('image_url') if project.get('image_url') and project.get('image_url').startswith('static/') else project.get('image_url')),'keywords':(project.get('technologies') | join(', ') if project.get('technologies') else none),'genre':project.get('project_type') or 'Systems Engineering'} | tojson | safe }}</script>{% endblock %}
+{% block og_image %}{% set project_image = project.get('image_url') %}{% if project_image %}{{ project_image if project_image.startswith('http') else site_url ~ '/' ~ project_image.lstrip('/') }}{% else %}{{ default_og_image }}{% endif %}{% endblock %}
+{% block twitter_image %}{{ self.og_image() }}{% endblock %}
+{% block extra_head %}<script type="application/ld+json">{{ {'@context':'https://schema.org','@type':'CreativeWork','name':project.get('title',''),'description':(project.get('seo_description') or project.get('description','')),'url':canonical_url,'author':{'@type':'Person','name':'Dhirendra Yadav','url':site_url ~ '/about'},'image':(site_url ~ '/' ~ project.get('image_url').lstrip('/') if project.get('image_url') and not project.get('image_url').startswith('http') else project.get('image_url')),'keywords':(project.get('technologies') | join(', ') if project.get('technologies') else none),'genre':project.get('project_type') or 'Systems Engineering'} | tojson | safe }}</script>{% endblock %}
 {% block content %}
 <article class="project-detail" data-section="00 — CASE STUDY">
   <header class="post-header editorial-grid"><span class="hero-doc-ref">CASE FILE / {{ (project.project_type or "SYSTEM")|upper }}</span>
