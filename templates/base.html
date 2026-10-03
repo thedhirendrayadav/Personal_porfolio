@@ -3,6 +3,20 @@
 <head>
   <meta charset="utf-8">
   <script>document.documentElement.classList.add("js")</script>
+  <script>
+    // Restore the saved theme (or the OS preference on first visit) before
+    // first paint so light/dark never flashes, and keep the mobile browser
+    // chrome color in sync.
+    try {
+      var __t = localStorage.getItem('portfolio-theme');
+      if (__t !== 'light' && __t !== 'dark') {
+        __t = window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+      }
+      document.documentElement.setAttribute('data-theme', __t);
+      document.querySelector('meta[name="theme-color"]')
+        .setAttribute('content', __t === 'light' ? '#f4f2ec' : '#0b0c0c');
+    } catch (e) {}
+  </script>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#0b0c0c">
   <link rel="icon" type="image/svg+xml" href="{{ url_for('static', filename='svg/favicon.svg') }}">
@@ -96,7 +110,7 @@
     :root{--canvas:#0b0c0c;--surface:#111313;--ink:#f1eee8;--muted:#a9aaa7;--line:rgba(241,238,232,.16);--line-strong:rgba(241,238,232,.34);--accent:#9df9f3;--signal:#ff5c4d;--display:"Rubik",Arial,sans-serif;--mono:"IBM Plex Mono",Consolas,monospace;--header-h:64px;--spine-w:36px;--gutter:clamp(1rem,3vw,2.5rem);--container:1440px}[data-theme="light"]{--canvas:#f4f2ec;--surface:#fff;--ink:#0b0c0c;--muted:#5b5d59;--line:rgba(11,12,12,.16);--line-strong:rgba(11,12,12,.34)}
     *,*::before,*::after{box-sizing:border-box}html{scroll-behavior:smooth;background:var(--canvas);color:var(--ink)}body,h1,h2,h3,p,ul,ol,figure{margin:0}ul,ol{padding:0;list-style:none}img{display:block;max-width:100%}a{color:inherit;text-decoration:none}body{min-width:320px;padding:0 var(--spine-w) 48px 0;overflow-x:hidden;background:var(--canvas);color:var(--ink);font-family:var(--display);font-size:16px;line-height:1.55;text-rendering:optimizeLegibility}main{padding-top:var(--header-h)}::selection{background:var(--accent);color:#0b0c0c}:focus-visible{outline:2px solid var(--accent);outline-offset:4px}
     .editorial-grid{width:min(100%,var(--container));margin-inline:auto;padding-inline:var(--gutter)}.eyebrow,.meta,.section-kicker{font-family:var(--mono);font-size:.68rem;line-height:1.3;letter-spacing:.14em;text-transform:uppercase}.accent{color:var(--accent)}.outline-text{color:transparent;-webkit-text-stroke:1px var(--ink)}.skip-link{position:fixed;z-index:1000;top:.75rem;left:.75rem;padding:.65rem 1rem;background:var(--accent);color:#0b0c0c;transform:translateY(-160%)}.skip-link:focus{transform:none}
-    .site-header{position:fixed;inset:0 var(--spine-w) auto 0;z-index:100;height:var(--header-h);display:grid;grid-template-columns:minmax(12rem,1fr) auto minmax(12rem,1fr);align-items:center;gap:1.5rem;padding-inline:var(--gutter);border-bottom:1px solid var(--line);background:color-mix(in srgb,var(--canvas) 88%,transparent);backdrop-filter:blur(16px)}.wordmark{display:inline-flex;align-items:center;gap:.75rem;width:max-content;font-weight:700}.wordmark-mark{display:grid;place-items:center;width:2rem;height:2rem;background:var(--accent);color:#0b0c0c}.wordmark-copy{font-family:var(--mono);font-size:.7rem;letter-spacing:.08em}.editorial-nav{display:flex;align-items:center;gap:clamp(.75rem,1.7vw,1.7rem)}.editorial-nav a{position:relative;padding-block:1rem;font-family:var(--mono);font-size:.63rem;letter-spacing:.16em;color:var(--muted)}.nav-cv-link{display:inline-flex;align-items:center;gap:.5rem;min-height:40px;padding:.55rem .75rem!important;border:1px solid var(--accent);color:var(--accent)!important;white-space:nowrap}.nav-cv-link:hover{background:var(--accent);color:#0b0c0c!important}.nav-cv-link:focus-visible{outline:2px solid var(--accent);outline-offset:4px}.nav-cv-link span{font-size:.9rem;line-height:1}.header-cta{justify-self:end;font-size:.78rem;font-weight:700}.header-cta span{color:var(--accent)}.menu-toggle{display:none;width:48px;height:48px;border:0;background:transparent;color:var(--ink)}.mobile-menu{display:none}
+    .site-header{position:fixed;inset:0 var(--spine-w) auto 0;z-index:100;height:var(--header-h);display:grid;grid-template-columns:minmax(min-content,1fr) auto minmax(min-content,1fr);align-items:center;gap:1.5rem;padding-inline:var(--gutter);border-bottom:1px solid var(--line);background:color-mix(in srgb,var(--canvas) 88%,transparent);backdrop-filter:blur(16px)}.wordmark{display:inline-flex;align-items:center;gap:.75rem;width:max-content;font-weight:700}.wordmark-mark{display:grid;place-items:center;width:2rem;height:2rem;background:var(--accent);color:#0b0c0c}.wordmark-copy{font-family:var(--mono);font-size:.7rem;letter-spacing:.08em}.editorial-nav{display:flex;align-items:center;gap:clamp(.75rem,1.7vw,1.7rem)}.editorial-nav a{position:relative;padding-block:1rem;font-family:var(--mono);font-size:.63rem;letter-spacing:.16em;color:var(--muted)}.nav-cv-link{display:inline-flex;align-items:center;gap:.5rem;min-height:40px;padding:.55rem .75rem!important;border:1px solid var(--accent);color:var(--accent)!important;white-space:nowrap}.nav-cv-link:hover{background:var(--accent);color:#0b0c0c!important}.nav-cv-link:focus-visible{outline:2px solid var(--accent);outline-offset:4px}.nav-cv-link span{font-size:.9rem;line-height:1}.header-cta{justify-self:end;font-size:.78rem;font-weight:700}.header-cta span{color:var(--accent)}.menu-toggle{display:none;width:48px;height:48px;border:0;background:transparent;color:var(--ink)}.mobile-menu{display:none}
     .button-row{display:flex;flex-wrap:wrap;gap:.75rem}.button{min-height:44px;display:inline-flex;align-items:center;justify-content:center;gap:.65rem;padding:.8rem 1rem;border:1px solid var(--line-strong);font-family:var(--mono);font-size:.68rem;letter-spacing:.1em;text-transform:uppercase}.button-primary{background:var(--accent);border-color:var(--accent);color:#0b0c0c}
     .home-hero{height:calc(100svh - var(--header-h) - 3rem);min-height:0;padding-block:clamp(2rem,4vw,4rem) 3rem;display:grid;grid-template-rows:auto minmax(0,1fr) auto;gap:1.5rem}.hero-meta{display:flex;justify-content:space-between;gap:2rem}.hero-meta .meta{text-align:right}.hero-display{position:relative;min-height:0;display:flex;align-items:center}.hero-display h1{position:relative;z-index:2;max-width:58%;font-size:clamp(4.5rem,9vw,10rem);line-height:.72;letter-spacing:-.065em}.hero-display h1 span,.hero-display h1 strong{display:block}.hero-display h1 strong{position:relative;isolation:isolate;color:var(--accent);text-shadow:4px 4px 0 color-mix(in srgb,var(--accent) 20%,transparent)}.hero-accent-depth::before,.hero-accent-depth::after{content:none}.hero-name-depth{position:relative;isolation:isolate}.hero-name-depth::before{content:attr(data-text);position:absolute;inset:0;z-index:-1;color:transparent;pointer-events:none;-webkit-text-stroke:1px var(--accent);transform:translate(4px,4px);opacity:.3}.hero-name-depth::after{content:none}.hero-portrait{position:absolute;inset:0 0 0 auto;width:auto;max-width:min(39vw,34rem);height:100%;aspect-ratio:6/5}.hero-portrait-cutout{isolation:isolate;overflow:visible;background:transparent}.hero-portrait-cutout::before{content:"";position:absolute;z-index:0;inset:9% 0 3% 9%;background:linear-gradient(color-mix(in srgb,var(--accent) 13%,transparent) 1px,transparent 1px),linear-gradient(90deg,color-mix(in srgb,var(--accent) 13%,transparent) 1px,transparent 1px),color-mix(in srgb,var(--surface) 84%,var(--accent));background-size:30px 30px;border:1px solid color-mix(in srgb,var(--accent) 72%,var(--line));clip-path:polygon(8% 0,100% 0,100% 84%,84% 100%,0 100%,0 10%);box-shadow:14px 14px 0 color-mix(in srgb,var(--accent) 13%,transparent)}.hero-portrait-cutout::after{content:"";position:absolute;z-index:3;inset:9% 0 3% 9%;pointer-events:none;background:linear-gradient(color-mix(in srgb,var(--accent) 7%,transparent),color-mix(in srgb,var(--accent) 7%,transparent)),repeating-linear-gradient(0deg,transparent 0 3px,color-mix(in srgb,var(--accent) 8%,transparent) 3px 4px);clip-path:polygon(8% 0,100% 0,100% 84%,84% 100%,0 100%,0 10%);mix-blend-mode:screen}.hero-portrait-cutout img{position:relative;z-index:2;object-fit:contain;object-position:center bottom;filter:grayscale(1) contrast(1.14) brightness(.96) drop-shadow(12px 12px 0 color-mix(in srgb,var(--accent) 24%,transparent));transform:scale(1.16);transform-origin:center bottom}.hero-bottom{position:relative;z-index:3;display:grid;grid-template-columns:minmax(18rem,34rem) auto;align-items:end;justify-content:space-between;gap:2rem}.mission-brief{position:relative;max-width:34rem;padding:1.15rem 1.25rem 1.15rem 1.5rem;border-block:1px solid var(--line);border-right:1px solid var(--line);background:linear-gradient(90deg,color-mix(in srgb,var(--accent) 10%,transparent),transparent 54%),var(--surface)}.mission-brief::before{content:"";position:absolute;inset:0 auto 0 0;width:3px;background:var(--accent);box-shadow:8px 0 0 color-mix(in srgb,var(--accent) 18%,transparent)}.mission-brief-label{display:block;margin-bottom:.75rem;color:var(--accent);font-family:var(--mono);font-size:.62rem;letter-spacing:.14em}.mission-brief p{font-size:clamp(1.05rem,1.7vw,1.35rem);line-height:1.35;text-wrap:balance}
     .footer-hud{position:fixed;z-index:130;inset:auto var(--spine-w) 0 0;height:48px;display:grid;grid-template-columns:minmax(7rem,1fr) auto minmax(7rem,1fr);align-items:center;gap:1rem;padding-inline:var(--gutter);border-top:1px solid var(--line);background:var(--canvas);color:var(--muted);font-family:var(--mono);font-size:.62rem;letter-spacing:.1em}.footer-hud-scroll span,.footer-hud-section,.footer-hud-mode>span:last-child,.footer-hud-theme>span:last-child,.footer-hud-font>span:last-child{color:var(--accent)}.footer-hud-section{justify-self:center;white-space:nowrap}.footer-hud-actions{justify-self:end;display:flex;align-items:center;gap:1.25rem}.footer-hud-mode,.footer-hud-theme,.footer-hud-font{display:inline-flex;align-items:center;gap:.5rem;min-height:44px;padding:0;border:0;background:transparent;color:var(--muted);font:inherit;letter-spacing:inherit}.footer-hud-swatch{width:.625rem;height:.625rem;background:var(--accent)}.evidence-spine{position:fixed;z-index:120;inset:var(--header-h) 0 0 auto;width:var(--spine-w);display:grid;grid-template-rows:auto minmax(4rem,1fr) auto;justify-items:center;gap:1rem;padding-block:1rem;border-left:1px solid var(--line);background:var(--canvas);font-family:var(--mono);font-size:.56rem;line-height:1;letter-spacing:.1em}.evidence-spine-mark,.evidence-spine-section{writing-mode:vertical-rl;transform:rotate(180deg)}.evidence-spine-mark{color:var(--muted)}.evidence-spine-track{position:relative;width:2px;height:100%;overflow:hidden;background:var(--line)}.evidence-spine-track i{display:block;width:100%;height:100%;background:var(--accent);transform:scaleY(var(--evidence-progress,0));transform-origin:top}.evidence-spine-section{color:var(--accent)}
@@ -109,20 +123,85 @@
   {% endif %}
   {% block extra_head %}{% endblock %}
 </head>
-<body>
+<body class="page-{{ request.endpoint }}">
+  <div class="boot-loader" aria-hidden="true" data-boot-loader>
+    <span class="boot-corner boot-corner-tl">+</span>
+    <span class="boot-corner boot-corner-tr">+</span>
+    <span class="boot-corner boot-corner-bl">+</span>
+    <span class="boot-corner boot-corner-br">+</span>
+    <div class="boot-ghost" data-boot-ghost>00</div>
+    <div class="boot-inner">
+      <span class="boot-mark">DY.</span>
+      <div class="boot-log">
+        <p data-boot-line style="--boot-line:0">01 / CALIBRATING EVIDENCE STANDARDS <b>OK</b></p>
+        <p data-boot-line style="--boot-line:1">02 / INDEXING CASE FILES <b>12</b></p>
+        <p data-boot-line style="--boot-line:2">03 / SYNCING FIELD LOG 2026 <b>OK</b></p>
+      </div>
+      <div class="boot-readout"><span>INITIALIZING FIELD LOG</span><span class="boot-pct" data-boot-pct>00</span></div>
+      <div class="boot-bar"><i data-boot-bar></i><span class="boot-blip"></span></div>
+      <div class="boot-foot"><span>SECURITY FIELDWORK</span><span>27.6710°N 85.4298°E</span></div>
+    </div>
+  </div>
+  <script>
+    (function () {
+      var loader = document.querySelector('[data-boot-loader]');
+      if (!loader) return;
+      var pct = loader.querySelector('[data-boot-pct]');
+      var bar = loader.querySelector('[data-boot-bar]');
+      var ghost = loader.querySelector('[data-boot-ghost]');
+      var lines = loader.querySelectorAll('[data-boot-line]');
+      var lineAt = [12, 42, 74];   // progress thresholds that reveal each log line
+      var start = performance.now();
+      var MIN_DISPLAY = 1000;   // always give the boot animation a beat to read
+      var value = 0, finishing = false, completed = false;
+      var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      function paint() {
+        var shown = String(Math.min(100, Math.round(value))).padStart(2, '0');
+        if (pct) pct.textContent = shown;
+        if (ghost) ghost.textContent = shown;
+        if (bar) bar.style.setProperty('--boot-progress', String(Math.min(1, value / 100)));
+        lines.forEach(function (line, i) {
+          line.classList.toggle('is-on', completed || value >= lineAt[i]);
+        });
+      }
+      function complete() {
+        if (completed) return;
+        completed = true;
+        value = 100; paint();
+        requestAnimationFrame(function () {
+          loader.setAttribute('data-done', '');
+          setTimeout(function () { loader.remove(); }, 700);
+        });
+      }
+      function finish() {
+        if (finishing) return;
+        finishing = true;
+        var wait = Math.max(220, MIN_DISPLAY - (performance.now() - start));
+        setTimeout(complete, wait);
+      }
+      if (reduce) { finish(); return; }
+      var timer = setInterval(function () {
+        value = Math.min(value + Math.random() * 13 + 5, 92);
+        paint();
+      }, 130);
+      window.addEventListener('load', finish);
+      setTimeout(finish, 3200);
+      paint();
+    })();
+  </script>
   <a class="skip-link" href="#main-content">Skip to content</a>
   <header class="site-header" data-header>
     <a class="wordmark" href="{{ url_for('index') }}" aria-label="Dhirendra Yadav, home">
       <span class="wordmark-mark">DY.</span><span class="wordmark-copy">SECURITY FIELDWORK</span>
     </a>
     <nav class="editorial-nav" aria-label="Primary navigation">
-      <a href="{{ url_for('index') }}#work" {% if request.path == url_for('index') %}aria-current="page"{% endif %}>01/WORK</a>
+      <a href="{{ url_for('work_page') }}" {% if request.endpoint == 'work_page' %}aria-current="page"{% endif %}>01/WORK</a>
       <a href="{{ url_for('skills') }}" {% if request.path == url_for('skills') %}aria-current="page"{% endif %}>02/EXPERTISE</a>
       <a href="{{ url_for('blog') }}" {% if request.path.startswith('/blog') %}aria-current="page"{% endif %}>03/WRITING</a>
-      <a href="{{ url_for('index') }}#lab" {% if request.path == url_for('index') %}aria-current="page"{% endif %}>04/LAB</a>
+      <a href="{{ url_for('lab_page') }}" {% if request.endpoint == 'lab_page' %}aria-current="page"{% endif %}>04/LAB</a>
       <a href="{{ url_for('about') }}" {% if request.path == url_for('about') %}aria-current="page"{% endif %}>05/ABOUT</a>
       <a href="{{ url_for('contact') }}" {% if request.path == url_for('contact') %}aria-current="page"{% endif %}>06/CONTACT</a>
-      <a class="nav-cv-link" href="{{ url_for('download_cv') }}" aria-label="Download CV as PDF">DOWNLOAD CV <span aria-hidden="true">↓</span></a>
+      <a class="nav-cv-link" href="{{ url_for('cv_main') }}" aria-label="View CV and download as PDF">CV <span aria-hidden="true">↓</span></a>
     </nav>
     <a class="header-cta" href="mailto:thedhirendrayadav@gmail.com">LET'S TALK <span aria-hidden="true">↗</span></a>
     <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="mobile-menu">
@@ -131,18 +210,21 @@
   </header>
   <div class="mobile-menu" id="mobile-menu" aria-hidden="true">
     <nav aria-label="Mobile navigation">
-      <a href="{{ url_for('index') }}#work"><span>01</span> Work</a>
+      <a href="{{ url_for('work_page') }}"><span>01</span> Work</a>
       <a href="{{ url_for('skills') }}"><span>02</span> Expertise</a>
       <a href="{{ url_for('blog') }}"><span>03</span> Writing</a>
-      <a href="{{ url_for('index') }}#lab"><span>04</span> Lab</a>
+      <a href="{{ url_for('lab_page') }}"><span>04</span> Lab</a>
       <a href="{{ url_for('about') }}"><span>05</span> About</a>
       <a href="{{ url_for('contact') }}"><span>06</span> Contact</a>
-      <a class="mobile-menu-cv" href="{{ url_for('download_cv') }}" aria-label="Download CV as PDF"><span>CV</span><span class="mobile-menu-label">Download CV <span class="mobile-menu-arrow" aria-hidden="true">↓</span></span></a>
+      <a class="mobile-menu-cv" href="{{ url_for('cv_main') }}" aria-label="View CV and download as PDF"><span>CV</span><span class="mobile-menu-label">View CV <span class="mobile-menu-arrow" aria-hidden="true">↓</span></span></a>
     </nav>
   </div>
   <main id="main-content">{% block content %}{% endblock %}</main>
   <footer class="site-footer editorial-grid">
-    <p class="eyebrow">OPEN TO COLLABORATION</p>
+    <div class="footer-head-row">
+      <p class="eyebrow">OPEN TO COLLABORATION</p>
+      <p class="footer-stamp" aria-hidden="true">DOC DY-2026 · 27.6710°N 85.4298°E · END OF FIELD LOG ■</p>
+    </div>
     <a class="footer-email" href="mailto:thedhirendrayadav@gmail.com">THEDHIRENDRAYADAV@<br>GMAIL.COM <span aria-hidden="true">↗</span></a>
     <div class="footer-meta">
       <p>Cybersecurity · AI/ML · Systems Engineering</p>

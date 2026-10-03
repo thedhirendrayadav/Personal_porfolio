@@ -3,9 +3,19 @@
 {% block title %}Add New Project - Admin Panel{% endblock %}
 
 {% block content %}
+<div class="page-head">
+    <div>
+        <span class="page-eyebrow mono-label">CONTENT / NEW PROJECT</span>
+        <h1>Add new project.</h1>
+    </div>
+    <div class="page-actions">
+        <a href="{{ url_for('admin_projects') }}" class="btn">Back to Projects ←</a>
+    </div>
+</div>
+
 <div class="admin-card">
     <div class="admin-card-header">
-        <h2>➕ Add New Project</h2>
+        <h2>Project details</h2>
     </div>
 
     <div class="admin-card-body">
@@ -86,7 +96,7 @@
             </div>
 
             <!-- URLs Section -->
-            <div style="margin-top: 2rem; padding-top: 2rem; border-top: 1px solid #e2e8f0;">
+            <div style="margin-top: 2rem; padding-top: 2rem; border-top: 1px solid var(--line);">
                 <h3 style="margin-bottom: 1rem; color: #374151;">Project Links</h3>
                 
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
@@ -111,7 +121,7 @@
             </div>
 
             <!-- Form Actions -->
-            <div style="display: flex; gap: 1rem; justify-content: flex-end; margin-top: 2rem; padding-top: 2rem; border-top: 1px solid #e2e8f0;">
+            <div style="display: flex; gap: 1rem; justify-content: flex-end; margin-top: 2rem; padding-top: 2rem; border-top: 1px solid var(--line);">
                 <a href="{{ url_for('admin_projects') }}" class="btn btn-secondary">Cancel</a>
                 <button type="submit" class="btn btn-primary">
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">

@@ -7,7 +7,7 @@
 {% block extra_head %}{% if project.get('image_url') %}<meta property="og:image" content="{% if project.get('image_url').startswith('static/') %}{{ site_url }}/{% endif %}{{ project.get('image_url') }}">{% endif %}<script type="application/ld+json">{{ {'@context':'https://schema.org','@type':'CreativeWork','name':project.get('title',''),'description':project.get('description',''),'url':canonical_url,'author':{'@type':'Person','name':'Dhirendra Yadav','url':site_url ~ '/about'},'image':(site_url ~ '/' ~ project.get('image_url') if project.get('image_url') and project.get('image_url').startswith('static/') else project.get('image_url')),'keywords':(project.get('technologies') | join(', ') if project.get('technologies') else none),'genre':project.get('project_type') or 'Systems Engineering'} | tojson | safe }}</script>{% endblock %}
 {% block content %}
 <article class="project-detail" data-section="00 — CASE STUDY">
-  <header class="post-header editorial-grid">
+  <header class="post-header editorial-grid"><span class="hero-doc-ref">CASE FILE / {{ (project.project_type or "SYSTEM")|upper }}</span>
     <nav class="post-breadcrumb meta" aria-label="Breadcrumb"><a href="{{ url_for('portfolio') }}">SELECTED WORK</a><span>/</span><span>{{ (project.project_type or 'SYSTEM')|upper }}</span></nav>
     <div class="post-heading"><p class="eyebrow accent">{{ (project.project_type or 'SYSTEM')|upper }} / {{ (project.status or 'COMPLETED')|upper }}</p><h1>{{ project.title }}</h1><p class="post-deck">{{ project.description }}</p></div>
     <div class="post-byline meta"><span>CASE STUDY</span>{% if project.technologies %}<span>{{ project.technologies|length }} TECHNOLOG{{ 'Y' if project.technologies|length == 1 else 'IES' }}</span>{% endif %}</div>

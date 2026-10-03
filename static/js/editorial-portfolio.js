@@ -143,11 +143,16 @@
 
   const applyTheme = (theme) => {
     document.documentElement.setAttribute("data-theme", theme);
+    // Keep the mobile browser chrome in sync with the active mode.
+    document.querySelector('meta[name="theme-color"]')
+      ?.setAttribute("content", theme === "light" ? "#f4f2ec" : "#0b0c0c");
     themeToggle?.setAttribute("aria-pressed", String(theme === "light"));
     if (themeValue) themeValue.textContent = theme.toUpperCase();
   };
   const savedTheme = read("portfolio-theme");
-  applyTheme(savedTheme === "light" ? "light" : "dark");
+  // First visit follows the operating system; the toggle takes over after.
+  const systemTheme = window.matchMedia && window.matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark";
+  applyTheme(savedTheme === "light" || savedTheme === "dark" ? savedTheme : systemTheme);
   themeToggle?.addEventListener("click", () => {
     const next = document.documentElement.getAttribute("data-theme") === "light" ? "dark" : "light";
     applyTheme(next);

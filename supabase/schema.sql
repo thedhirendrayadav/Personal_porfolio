@@ -120,3 +120,15 @@ grant usage, select on sequence public.blog_categories_id_seq to service_role;
 grant usage, select on sequence public.blog_comments_id_seq to service_role;
 grant usage, select on sequence public.contact_messages_id_seq to service_role;
 grant usage, select on sequence public.site_visits_id_seq to service_role;
+
+-- CV content: single-row JSON document edited from the admin panel and
+-- rendered by the public /cv page and the PDF download.
+create table if not exists public.cv_content (
+    id int primary key,
+    data jsonb not null,
+    updated_at timestamptz not null default now()
+);
+
+alter table public.cv_content enable row level security;
+revoke all on table public.cv_content from public, anon, authenticated;
+grant all privileges on table public.cv_content to service_role;

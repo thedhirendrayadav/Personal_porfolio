@@ -1,0 +1,148 @@
+{% extends "base.html" %}
+{% block title %}Curriculum Vitae — Dhirendra Yadav{% endblock %}
+{% block description %}Curriculum vitae of Dhirendra Yadav — cybersecurity, AI/ML systems, and secure automation. Experience, selected projects, education, and technical toolkit. Download the PDF version.{% endblock %}
+{% block content %}
+<header class="page-hero editorial-grid cv-masthead">
+  <p class="eyebrow accent">CV / CURRICULUM VITAE</p><span class="hero-doc-ref">DOC DY-CV / REV {{ cv.basics.updated_label|upper }}</span>
+  <h1><span class="outline-text">CURRICULUM</span><br><span class="accent">VITAE.</span></h1>
+  <p class="cv-tagline">{{ cv.basics.tagline }}</p>
+  <div class="cv-hero-foot">
+    <div class="button-row">
+      <a class="button button-primary" href="{{ url_for('download_cv') }}" download>Download PDF ↓</a>
+      <a class="button" href="{{ url_for('contact') }}">Start a conversation ↗</a>
+    </div>
+    <p class="meta">LAST UPDATED {{ cv.basics.updated_label }} · PDF GENERATED ON REQUEST</p>
+  </div>
+</header>
+
+<nav class="editorial-grid cv-section-nav" aria-label="CV sections"><a class="chip" href="#cv-profile">01 / PROFILE</a><a class="chip" href="#cv-experience">02 / FIELD RECORD</a><a class="chip" href="#cv-projects">03 / CASE STUDIES</a><a class="chip" href="#cv-toolkit">04 / TOOLKIT</a><a class="chip" href="#cv-education">05 / EDUCATION</a><a class="chip" href="#cv-principles">06 / PRINCIPLES</a><a class="chip" href="#cv-contact">07 / CONTACT</a></nav>
+
+<section class="editorial-section editorial-grid" id="cv-profile" data-section="01 — PROFILE">
+  <div class="section-head"><span class="section-index" aria-hidden="true">01</span>
+    <p class="section-kicker accent">01 / PROFILE</p>
+    <h2>Professional profile.</h2>
+    <p>{{ cv.basics.role }}</p>
+  </div>
+  <p class="cv-summary">{{ cv.basics.summary }}</p>
+</section>
+
+<section class="editorial-section editorial-grid" id="cv-experience" data-section="02 — EXPERIENCE">
+  <div class="section-head"><span class="section-index" aria-hidden="true">02</span>
+    <p class="section-kicker accent">02 / EXPERIENCE</p>
+    <h2>Field record.</h2>
+    <p>Roles across employment, coordination, freelance delivery, and operations.</p>
+  </div>
+  <div class="cv-timeline">
+    {% for item in cv.experience %}
+    <article class="timeline-row">
+      <p class="meta accent">{{ item.period }}</p>
+      <div>
+        <h3>{{ item.title }}</h3>
+        <p class="meta" style="margin-top: .35rem;">{{ item.org }}</p>
+      </div>
+      <div>
+        <ul class="cv-bullets">
+          {% for line in item.bullets %}<li>{{ line }}</li>{% endfor %}
+        </ul>
+      </div>
+    </article>
+    {% endfor %}
+  </div>
+</section>
+
+<section class="editorial-section editorial-grid" id="cv-projects" data-section="03 — SELECTED WORK">
+  <div class="section-head"><span class="section-index" aria-hidden="true">03</span>
+    <p class="section-kicker accent">03 / SELECTED WORK</p>
+    <h2>Evidence-led case studies.</h2>
+    <p>Every project states its status honestly — prototype, research system, or in development.</p>
+  </div>
+  <div class="cv-projects">
+    {% for project in cv.projects %}
+    <article class="article-row">
+      <span class="meta">{{ '%02d'|format(loop.index) }}</span>
+      <div>
+        <h3>{{ project.title }} <span class="chip" style="margin-left: .75rem;">{{ project.status }}</span></h3>
+        <p class="muted" style="max-width: 68ch; margin-top: .5rem;">{{ project.description }}</p>
+        <p class="meta" style="margin-top: .6rem;">{{ project.tech }}</p>
+      </div>
+      <span aria-hidden="true">·</span>
+    </article>
+    {% endfor %}
+  </div>
+</section>
+
+<section class="editorial-section editorial-grid" id="cv-toolkit" data-section="04 — CAPABILITIES">
+  <div class="section-head"><span class="section-index" aria-hidden="true">04</span>
+    <p class="section-kicker accent">04 / CAPABILITIES</p>
+    <h2>Technical toolkit.</h2>
+    <p>Measured by application, not by collection.</p>
+  </div>
+  <div class="cv-capabilities">
+    {% for group in cv.skill_groups %}
+    <div class="capability-row">
+      <span class="meta accent">{{ '%02d'|format(loop.index) }}</span>
+      <h3>{{ group.name }}</h3>
+      <p>{{ group.entries }}</p>
+    </div>
+    {% endfor %}
+  </div>
+</section>
+
+<section class="editorial-section editorial-grid" id="cv-education" data-section="05 — EDUCATION">
+  <div class="section-head"><span class="section-index" aria-hidden="true">05</span>
+    <p class="section-kicker accent">05 / EDUCATION</p>
+    <h2>Learning through evidence.</h2>
+  </div>
+  <div class="cv-timeline">
+    {% for item in cv.education %}
+    <article class="timeline-row">
+      <p class="meta accent">{{ item.period }}</p>
+      <div>
+        <h3>{{ item.degree }}</h3>
+        <p class="meta" style="margin-top: .35rem;">{{ item.org }}</p>
+      </div>
+      <p>{{ item.detail }}</p>
+    </article>
+    {% endfor %}
+  </div>
+</section>
+
+<section class="editorial-section editorial-grid" id="cv-principles" data-section="06 — PRINCIPLES">
+  <div class="section-head"><span class="section-index" aria-hidden="true">06</span>
+    <p class="section-kicker accent">06 / PRINCIPLES</p>
+    <h2>How I work.</h2>
+  </div>
+  <div class="manual-grid cv-principles">
+    {% for principle in cv.principles %}
+    <div class="manual-panel">
+      <h3>{{ principle.title }}</h3>
+      <p>{{ principle.detail }}</p>
+    </div>
+    {% endfor %}
+  </div>
+</section>
+
+<section class="editorial-section editorial-grid" id="cv-contact" data-section="07 — CONTACT">
+  <div class="section-head"><span class="section-index" aria-hidden="true">07</span>
+    <p class="section-kicker accent">07 / CONTACT</p>
+    <h2>Open channel.</h2>
+    <p>{{ cv.basics.availability }}</p>
+  </div>
+  <dl class="contact-ledger">
+    <div><dt class="meta">EMAIL</dt><dd><a href="mailto:{{ cv.basics.email }}">{{ cv.basics.email }} ↗</a></dd></div>
+    <div><dt class="meta">PHONE</dt><dd>{{ cv.basics.phone }}</dd></div>
+    <div><dt class="meta">BASE</dt><dd>{{ cv.basics.location }}</dd></div>
+    <div><dt class="meta">PORTFOLIO</dt><dd><a href="{{ cv.basics.site }}" target="_blank" rel="noreferrer">{{ cv.basics.site_label }} ↗</a></dd></div>
+    <div><dt class="meta">LINKEDIN</dt><dd><a href="{{ cv.basics.linkedin }}" target="_blank" rel="noreferrer">{{ cv.basics.linkedin_label }} ↗</a></dd></div>
+    <div><dt class="meta">GITHUB</dt><dd><a href="{{ cv.basics.github }}" target="_blank" rel="noreferrer">{{ cv.basics.github_label }} ↗</a></dd></div>
+  </dl>
+  <div class="constraint-note" style="margin-top: 2.5rem;">
+    <p class="meta signal" style="margin-bottom: .75rem;">EVIDENCE STANDARD</p>
+    <p>{{ cv.basics.evidence_note }}</p>
+  </div>
+  <div class="button-row" style="margin-top: 2.5rem;">
+    <a class="button button-primary" href="{{ url_for('download_cv') }}" download>Download PDF ↓</a>
+    <a class="button" href="{{ url_for('work_page') }}">Explore selected work ↗</a>
+  </div>
+</section>
+{% endblock %}
