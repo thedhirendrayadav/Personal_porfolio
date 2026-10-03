@@ -48,8 +48,6 @@
   <meta name="twitter:image" content="{% block twitter_image %}{{ default_og_image }}{% endblock %}">
   <meta name="geo.region" content="NP-P3">
   <meta name="geo.placename" content="Bhaktapur, Nepal">
-  <meta name="geo.position" content="27.6710;85.4298">
-  <meta name="ICBM" content="27.6710, 85.4298">
   {% if google_site_verification %}<meta name="google-site-verification" content="{{ google_site_verification }}">{% endif %}
   {% if bing_site_verification %}<meta name="msvalidate.01" content="{{ bing_site_verification }}">{% endif %}
   <script type="application/ld+json">{{ {
@@ -66,19 +64,6 @@
         'image': default_og_image,
         'address': {'@type': 'PostalAddress', 'addressLocality': 'Bhaktapur', 'addressCountry': 'NP'},
         'sameAs': ['https://github.com/thedhirendrayadav', 'https://www.linkedin.com/in/dhirendra-yadav-3b1387425']
-      },
-      {
-        '@type': 'ProfessionalService',
-        '@id': site_url ~ '/#service',
-        'name': 'Dhirendra Yadav — Security Fieldwork',
-        'url': site_url ~ '/',
-        'description': site_description,
-        'image': default_og_image,
-        'email': 'mailto:thedhirendrayadav@gmail.com',
-        'founder': {'@id': site_url ~ '/#person'},
-        'areaServed': ['Bhaktapur', 'Nepal', 'Worldwide'],
-        'serviceType': ['Cybersecurity engineering', 'AI/ML systems', 'Secure automation', 'Product engineering'],
-        'address': {'@type': 'PostalAddress', 'addressLocality': 'Bhaktapur', 'addressCountry': 'NP'}
       },
       {
         '@type': 'WebSite',
